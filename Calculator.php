@@ -10,8 +10,6 @@ const DEGREE = 'no';
 const HISTORY = 'history';
 const AVAILABLE_COMMANDS = ['+', '-', '*', '/', '^', 'sr', QUIT, INFO, HISTORY];
 
-//коментарии излишне
-
 while ($times < 1) {
     info('Enter ' . INFO . ' to see available commands.');
 
