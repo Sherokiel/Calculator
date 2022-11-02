@@ -1,16 +1,9 @@
 <?php
-require 'C:\PHP\calculator\libraries\constants.php';
-require 'C:\PHP\calculator\libraries\console_helpers.php';
+require 'libraries\constants.php';
+require 'libraries\console_helpers.php';
 
 $times = 0;
 $history = [];
-
-const QUIT = 'exit';
-const INFO = 'help';
-const AGREE = 'yes';
-const DEGREE = 'no';
-const HISTORY = 'history';
-const SYSTEM_COMMANDS = [QUIT, INFO, HISTORY];
 
 while ($times < 1) {
     info('Enter ' . INFO . ' to see available commands.');

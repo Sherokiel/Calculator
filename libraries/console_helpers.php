@@ -30,5 +30,3 @@ function info($result)
 {
     echo $result . PHP_EOL . PHP_EOL;
 }
-
-?>
