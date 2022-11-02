@@ -8,6 +8,7 @@ const INFO = 'help';
 const AGREE = 'yes';
 const DEGREE = 'no';
 const HISTORY = 'history';
+
 const AVAILABLE_COMMANDS = ['+', '-', '*', '/', '^', 'sr', QUIT, INFO, HISTORY];
 
 while ($times < 1) {
@@ -15,10 +16,10 @@ while ($times < 1) {
 
     $command = choose('Enter command: ', AVAILABLE_COMMANDS);
 
-    $isNoMathFunction = in_array($command, [HISTORY,INFO,QUIT]);
+    $isSystemCommand = in_array($command, [HISTORY, INFO, QUIT]);
 
-    if ($isNoMathFunction) {
-        noMathCommand($command);
+    if ($isSystemCommand) {
+        executeSystemCommand($command);
 
         continue;
     }
@@ -133,25 +134,40 @@ function info($result)
     echo $result . PHP_EOL . PHP_EOL;
 }
 
-function noMathCommand($command)
+function executeSystemCommand($command)
 {
     switch($command) {
         case(QUIT):
-            $command = choose('Are you sure to wanna quit? Yes/No ', [AGREE, DEGREE]);
-
-            if ($command == AGREE) {
-            exit();
-            }
+            finish_app();
 
             break;
 
         case(INFO):
-            info((implode(' ;  ', AVAILABLE_COMMANDS)) . ' ;');
+            show_info_block();
 
             break;
 
         case(HISTORY):
-            $history = file_get_contents('history.txt');
-            info($history);
+            show_history();
     }
+}
+
+function finish_app()
+{
+    $command = choose('Are you sure to wanna quit? Yes/No ', [AGREE, DEGREE]);
+
+    if ($command == AGREE) {
+        exit();
+    }
+}
+
+function show_info_block()
+{
+    info((implode(' ;  ', AVAILABLE_COMMANDS)) . ' ;');
+}
+
+Function show_history()
+{
+    $history = file_get_contents('history.txt');
+    info($history);
 }
