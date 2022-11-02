@@ -1,10 +1,16 @@
 <?php
+require 'C:\PHP\calculator\libraries\constants.php';
+require 'C:\PHP\calculator\libraries\console_helpers.php';
 
 $times = 0;
 $history = [];
 
-require 'Help.php';
-require 'functions.php';
+const QUIT = 'exit';
+const INFO = 'help';
+const AGREE = 'yes';
+const DEGREE = 'no';
+const HISTORY = 'history';
+const SYSTEM_COMMANDS = [QUIT, INFO, HISTORY];
 
 while ($times < 1) {
     info('Enter ' . INFO . ' to see available commands.');
@@ -61,18 +67,6 @@ function calculate($argument1, $command, $argument2)
     return $result;
 }
 
-//function str_to_number($string)
-//{
-//    $isNegative = str_starts_with($string,'-');
-//    $string = str_replace(['+', '-'], ' ', $string);
-//
-//    if ($isNegative) {
-//        $string = '-' . $string;
-//    }
-//
-//    return (string) filter_var($string, FILTER_SANITIZE_NUMBER_INT);
-//}
-
 function read_operand($message, $command, $isSecondOperand = false)
 {
     do {
@@ -107,60 +101,40 @@ function read_operand($message, $command, $isSecondOperand = false)
     return $argument;
 }
 
-//function choose($message, $availableValues)
-//{
-//    do {
-//        $command = readline($message);
-//        $command = strtolower($command);
-//        $isDataValid = in_array($command, $availableValues);
-//
-//        if (!$isDataValid) {
-//            info('Wrong command, enter ' . INFO . ' to see commands.');
-//        }
-//    } while (!$isDataValid);
-//
-//    return $command;
-//}
-//
-//function info($result)
-//{
-//    echo $result . PHP_EOL . PHP_EOL;
-//}
-//
-//function execute_system_command($command)
-//{
-//    switch($command) {
-//        case(QUIT):
-//            finish_app();
-//
-//            break;
-//
-//        case(INFO):
-//            show_info_block();
-//
-//            break;
-//
-//        case(HISTORY):
-//            show_history();
-//    }
-//}
-//
-//function finish_app()
-//{
-//    $command = choose('Are you sure to wanna quit? Yes/No ', [AGREE, DEGREE]);
-//
-//    if ($command == AGREE) {
-//        exit();
-//    }
-//}
-//
-//function show_info_block()
-//{
-//    info((implode(' ;  ', AVAILABLE_COMMANDS)) . ' ;');
-//}
-//
-//Function show_history()
-//{
-//    $history = file_get_contents('history.txt');
-//    info($history);
-//}
+function execute_system_command($command)
+{
+    switch($command) {
+        case(QUIT):
+            finish_app();
+
+            break;
+
+        case(INFO):
+            show_info_block();
+
+            break;
+
+        case(HISTORY):
+            show_history();
+    }
+}
+
+function finish_app()
+{
+    $command = choose('Are you sure to wanna quit? Yes/No ', [AGREE, DEGREE]);
+
+    if ($command == AGREE) {
+        exit();
+    }
+}
+
+function show_info_block()
+{
+    info((implode(' ;  ', AVAILABLE_COMMANDS)) . ' ;');
+}
+
+Function show_history()
+{
+    $history = file_get_contents('history.txt');
+    info($history);
+}
