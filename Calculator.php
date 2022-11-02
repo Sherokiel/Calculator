@@ -8,6 +8,7 @@ const INFO = 'help';
 const AGREE = 'yes';
 const DEGREE = 'no';
 const HISTORY = 'history';
+const SYSTEM_COMMANDS = [QUIT, INFO, HISTORY];
 
 const AVAILABLE_COMMANDS = ['+', '-', '*', '/', '^', 'sr', QUIT, INFO, HISTORY];
 
@@ -16,7 +17,7 @@ while ($times < 1) {
 
     $command = choose('Enter command: ', AVAILABLE_COMMANDS);
 
-    $isSystemCommand = in_array($command, [HISTORY, INFO, QUIT]);
+    $isSystemCommand = in_array($command, SYSTEM_COMMANDS);
 
     if ($isSystemCommand) {
         executeSystemCommand($command);
