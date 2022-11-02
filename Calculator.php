@@ -1,16 +1,9 @@
 <?php
+require 'constants.php';
+require 'libraries\console_helpers.php';
 
 $times = 0;
 $history = [];
-
-const QUIT = 'exit';
-const INFO = 'help';
-const AGREE = 'yes';
-const DEGREE = 'no';
-const HISTORY = 'history';
-const SYSTEM_COMMANDS = [QUIT, INFO, HISTORY];
-
-const AVAILABLE_COMMANDS = ['+', '-', '*', '/', '^', 'sr', QUIT, INFO, HISTORY];
 
 while ($times < 1) {
     info('Enter ' . INFO . ' to see available commands.');
@@ -67,18 +60,6 @@ function calculate($argument1, $command, $argument2)
     return $result;
 }
 
-function str_to_number($string)
-{
-    $isNegative = str_starts_with($string,'-');
-    $string = str_replace(['+', '-'], ' ', $string);
-
-    if ($isNegative) {
-        $string = '-' . $string;
-    }
-
-    return (string) filter_var($string, FILTER_SANITIZE_NUMBER_INT);
-}
-
 function read_operand($message, $command, $isSecondOperand = false)
 {
     do {
@@ -111,26 +92,6 @@ function read_operand($message, $command, $isSecondOperand = false)
     } while (!$isDataValid);
 
     return $argument;
-}
-
-function choose($message, $availableValues)
-{
-    do {
-        $command = readline($message);
-        $command = strtolower($command);
-        $isDataValid = in_array($command, $availableValues);
-
-        if (!$isDataValid) {
-            info('Wrong command, enter ' . INFO . ' to see commands.');
-        }
-    } while (!$isDataValid);
-
-    return $command;
-}
-
-function info($result)
-{
-    echo $result . PHP_EOL . PHP_EOL;
 }
 
 function execute_system_command($command)
