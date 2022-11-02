@@ -15,25 +15,10 @@ while ($times < 1) {
 
     $command = choose('Enter command: ', AVAILABLE_COMMANDS);
 
-    if ($command == INFO) {
-        info((implode(' ;  ', AVAILABLE_COMMANDS)) . ' ;');
+    $isNoMathFunction = in_array($command, [HISTORY,INFO,QUIT]);
 
-        continue;
-    }
-
-    if ($command == QUIT) {
-        $command = choose('Are you sure to wanna quit? Yes/No ', [AGREE, DEGREE]);
-
-        if ($command == AGREE) {
-            exit();
-        }
-
-        continue;
-    }
-
-    if ($command == HISTORY) {
-        $history = file_get_contents('history.txt');
-        info($history);
+    if ($isNoMathFunction) {
+        noMathCommand($command);
 
         continue;
     }
@@ -146,4 +131,27 @@ function choose($message, $availableValues)
 function info($result)
 {
     echo $result . PHP_EOL . PHP_EOL;
+}
+
+function noMathCommand($command)
+{
+    switch($command) {
+        case(QUIT):
+            $command = choose('Are you sure to wanna quit? Yes/No ', [AGREE, DEGREE]);
+
+            if ($command == AGREE) {
+            exit();
+            }
+
+            break;
+
+        case(INFO):
+            info((implode(' ;  ', AVAILABLE_COMMANDS)) . ' ;');
+
+            break;
+
+        case(HISTORY):
+            $history = file_get_contents('history.txt');
+            info($history);
+    }
 }
