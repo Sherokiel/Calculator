@@ -9,8 +9,7 @@ const AGREE = 'yes';
 const DEGREE = 'no';
 const HISTORY = 'history';
 const SYSTEM_COMMANDS = [QUIT, INFO, HISTORY];
-
-const AVAILABLE_COMMANDS = ['+', '-', '*', '/', '^', 'sr', QUIT, INFO, HISTORY];
+require 'info.php';
 
 while ($times < 1) {
     info('Enter ' . INFO . ' to see available commands.');
