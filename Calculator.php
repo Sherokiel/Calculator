@@ -17,10 +17,8 @@ while ($times < 1) {
 
     $command = choose('Enter command: ', AVAILABLE_COMMANDS);
 
-    $isSystemCommand = in_array($command, SYSTEM_COMMANDS);
-
-    if ($isSystemCommand) {
-        executeSystemCommand($command);
+    if (in_array($command, SYSTEM_COMMANDS)) {
+        execute_system_command($command);
 
         continue;
     }
@@ -135,7 +133,7 @@ function info($result)
     echo $result . PHP_EOL . PHP_EOL;
 }
 
-function executeSystemCommand($command)
+function execute_system_command($command)
 {
     switch($command) {
         case(QUIT):
