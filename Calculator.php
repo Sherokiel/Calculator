@@ -1,5 +1,5 @@
 <?php
-require 'libraries\constants.php';
+require 'constants.php';
 require 'libraries\console_helpers.php';
 
 $times = 0;

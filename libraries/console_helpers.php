@@ -1,4 +1,5 @@
 <?php
+
 function str_to_number($string)
 {
     $isNegative = str_starts_with($string, '-');

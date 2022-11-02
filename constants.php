@@ -1,4 +1,5 @@
 <?php
+
 const QUIT = 'exit';
 const INFO = 'help';
 const AGREE = 'yes';
