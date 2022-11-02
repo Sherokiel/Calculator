@@ -2,6 +2,8 @@
 require 'constants.php';
 require 'libraries\console_helpers.php';
 
+fopen('history.json', 'a');
+
 $times = 0;
 $history = [];
 
@@ -29,9 +31,9 @@ while ($times < 1) {
     info('Result: ' . $result);
     info('=====================');
 
-    $history = "{$argument1} {$command} {$argument2}  =  {$result}" . PHP_EOL;
+    $history = json_encode("{$argument1} {$command} {$argument2}  =  {$result}" . PHP_EOL);
 
-    file_put_contents('history.txt', $history, FILE_APPEND);
+    file_put_contents('history.json', $history, FILE_APPEND);
 }
 
 function calculate($argument1, $command, $argument2)
@@ -128,6 +130,10 @@ function show_info_block()
 
 Function show_history()
 {
-    $history = file_get_contents('history.txt');
+    $history = file_get_contents('history.json');
+    if($history == null)
+    {
+        info('You have no history');
+    }
     info($history);
 }
