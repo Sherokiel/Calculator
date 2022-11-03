@@ -6,18 +6,16 @@ fopen('history.json', 'a');
 
 $times = 0;
 
-
 while ($times < 1) {
-    $history = file_get_contents('history.json');
+    $savedHistory = file_get_contents('history.json');
 
-    json_decode($history);
-
+    json_decode($savedHistory);
     info('Enter ' . INFO . ' to see available commands.');
 
     $command = choose('Enter command: ', AVAILABLE_COMMANDS);
 
     if (in_array($command, SYSTEM_COMMANDS)) {
-        execute_system_command($command, $history);
+        execute_system_command($command, $savedHistory);
 
         continue;
     }
@@ -35,11 +33,11 @@ while ($times < 1) {
     info('Result: ' . $result);
     info('=====================');
 
-    $history1 = array("{$argument1} {$command} {$argument2}  =  {$result}" . PHP_EOL);
+    $history = array("{$argument1} {$command} {$argument2}  =  {$result}" . PHP_EOL);
 
-    json_encode($history1);
+    json_encode($history);
 
-    file_put_contents('history.json', $history1, FILE_APPEND);
+    file_put_contents('history.json', $history, FILE_APPEND);
 
 }
 
@@ -135,11 +133,11 @@ function show_info_block()
     info((implode(' ;  ', AVAILABLE_COMMANDS)) . ' ;');
 }
 
-Function show_history($history)
+Function show_history($savedHistory)
 {
-    if($history == null) {
+    if($savedHistory == null) {
         info('You have no history');
     }
 
-    info($history);
+    info($savedHistory);
 }
