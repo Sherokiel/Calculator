@@ -7,11 +7,9 @@ fopen('history.json', 'a+');
 $history = file_get_contents('history.json');
 $times = 0;
 
-if ($history == null) {
-    $history = [ ];
-}
-
-if ($history != null) {
+if ($history === null) {
+    $history = [];
+} else {
     $history = json_decode($history, true);
 }
 
@@ -103,7 +101,7 @@ function read_operand($message, $command, $isSecondOperand = false)
     return $argument;
 }
 
-function execute_system_command($command,$history)
+function execute_system_command($command, $history)
 {
     switch($command) {
         case(QUIT):
@@ -126,6 +124,7 @@ function finish_app($history)
     $command = choose('Are you sure to wanna quit? Yes/No ', [AGREE, DEGREE]);
 
     if ($command == AGREE) {
+
         if (!$history == NULL) {
 
             $history = json_encode($history);
