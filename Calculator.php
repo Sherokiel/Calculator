@@ -34,12 +34,12 @@ while ($times < 1) {
 
     info('Result: ' . $result);
     info('=====================');
-    
-    if($history == NULL){
-        $history = [];
+
+    if ($history == NULL) {
+        $history = [ ];
     }
 
-    array_push($history,"{$argument1} {$command} {$argument2}  =  {$result}" );
+    array_push($history, "{$argument1} {$command} {$argument2}  =  {$result}" );
 
 }
 
@@ -145,7 +145,7 @@ function show_info_block()
 Function show_history($history)
 {
 
-    if($history == null) {
+    if ($history == null) {
         info('You have no history');
     } else {
         foreach ($history as $value)
