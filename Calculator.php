@@ -2,20 +2,22 @@
 require 'constants.php';
 require 'libraries\console_helpers.php';
 
-fopen('history.json', 'a');
+fopen('history.json', 'a+');
 
+$history = file_get_contents('history.json');
 $times = 0;
 
-while ($times < 1) {
-    $savedHistory = file_get_contents('history.json');
+if (!$history == NULL) {
+    $history = json_decode($history);
+}
 
-    json_decode($savedHistory);
+while ($times < 1) {
     info('Enter ' . INFO . ' to see available commands.');
 
     $command = choose('Enter command: ', AVAILABLE_COMMANDS);
 
     if (in_array($command, SYSTEM_COMMANDS)) {
-        execute_system_command($command, $savedHistory);
+        execute_system_command($command, $history);
 
         continue;
     }
@@ -32,12 +34,12 @@ while ($times < 1) {
 
     info('Result: ' . $result);
     info('=====================');
+    
+    if($history == NULL){
+        $history = [];
+    }
 
-    $history = array("{$argument1} {$command} {$argument2}  =  {$result}" . PHP_EOL);
-
-    json_encode($history);
-
-    file_put_contents('history.json', $history, FILE_APPEND);
+    array_push($history,"{$argument1} {$command} {$argument2}  =  {$result}" );
 
 }
 
@@ -105,7 +107,7 @@ function execute_system_command($command,$history)
 {
     switch($command) {
         case(QUIT):
-            finish_app();
+            finish_app($history);
 
             break;
 
@@ -119,11 +121,18 @@ function execute_system_command($command,$history)
     }
 }
 
-function finish_app()
+function finish_app($history)
 {
     $command = choose('Are you sure to wanna quit? Yes/No ', [AGREE, DEGREE]);
 
     if ($command == AGREE) {
+
+        if(!$history == NULL) {
+
+        $history = json_encode($history);
+        file_put_contents('history.json', $history);
+        }
+
         exit();
     }
 }
@@ -133,11 +142,13 @@ function show_info_block()
     info((implode(' ;  ', AVAILABLE_COMMANDS)) . ' ;');
 }
 
-Function show_history($savedHistory)
+Function show_history($history)
 {
-    if($savedHistory == null) {
-        info('You have no history');
-    }
 
-    info($savedHistory);
+    if($history == null) {
+        info('You have no history');
+    } else {
+        foreach ($history as $value)
+            info($value);
+    }
 }
