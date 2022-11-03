@@ -5,17 +5,19 @@ require 'libraries\console_helpers.php';
 fopen('history.json', 'a');
 
 $times = 0;
-$history = [];
 
-json_decode($history);
 
 while ($times < 1) {
+    $history = file_get_contents('history.json');
+
+    json_decode($history);
+
     info('Enter ' . INFO . ' to see available commands.');
 
     $command = choose('Enter command: ', AVAILABLE_COMMANDS);
 
     if (in_array($command, SYSTEM_COMMANDS)) {
-        execute_system_command($command);
+        execute_system_command($command, $history);
 
         continue;
     }
@@ -33,11 +35,12 @@ while ($times < 1) {
     info('Result: ' . $result);
     info('=====================');
 
-    $history = array("{$argument1} {$command} {$argument2}  =  {$result}" . PHP_EOL);
+    $history1 = array("{$argument1} {$command} {$argument2}  =  {$result}" . PHP_EOL);
 
-    json_encode($history);
+    json_encode($history1);
 
-    file_put_contents('history.json', $history, FILE_APPEND);
+    file_put_contents('history.json', $history1, FILE_APPEND);
+
 }
 
 function calculate($argument1, $command, $argument2)
@@ -100,7 +103,7 @@ function read_operand($message, $command, $isSecondOperand = false)
     return $argument;
 }
 
-function execute_system_command($command)
+function execute_system_command($command,$history)
 {
     switch($command) {
         case(QUIT):
@@ -114,7 +117,7 @@ function execute_system_command($command)
             break;
 
         case(HISTORY):
-            show_history();
+            show_history($history);
     }
 }
 
@@ -132,10 +135,8 @@ function show_info_block()
     info((implode(' ;  ', AVAILABLE_COMMANDS)) . ' ;');
 }
 
-Function show_history()
+Function show_history($history)
 {
-
-    $history = file_get_contents('history.json');
     if($history == null) {
         info('You have no history');
     }
