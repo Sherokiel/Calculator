@@ -7,8 +7,12 @@ fopen('history.json', 'a+');
 $history = file_get_contents('history.json');
 $times = 0;
 
-if (!$history == NULL) {
-    $history = json_decode($history);
+if ($history == null) {
+    $history = [ ];
+}
+
+if ($history != null) {
+    $history = json_decode($history, true);
 }
 
 while ($times < 1) {
@@ -35,11 +39,7 @@ while ($times < 1) {
     info('Result: ' . $result);
     info('=====================');
 
-    if ($history == NULL) {
-        $history = [ ];
-    }
-
-    array_push($history, "{$argument1} {$command} {$argument2}  =  {$result}" );
+    array_push($history, "{$argument1} {$command} {$argument2} = {$result}");
 
 }
 
@@ -126,11 +126,10 @@ function finish_app($history)
     $command = choose('Are you sure to wanna quit? Yes/No ', [AGREE, DEGREE]);
 
     if ($command == AGREE) {
+        if (!$history == NULL) {
 
-        if(!$history == NULL) {
-
-        $history = json_encode($history);
-        file_put_contents('history.json', $history);
+            $history = json_encode($history);
+            file_put_contents('history.json', $history);
         }
 
         exit();
@@ -144,11 +143,11 @@ function show_info_block()
 
 Function show_history($history)
 {
-
-    if ($history == null) {
+    if ($history === null) {
         info('You have no history');
     } else {
-        foreach ($history as $value)
+        foreach ($history as $value) {
             info($value);
+        }
     }
 }
