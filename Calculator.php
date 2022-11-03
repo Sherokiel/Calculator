@@ -7,6 +7,8 @@ fopen('history.json', 'a');
 $times = 0;
 $history = [];
 
+json_decode($history);
+
 while ($times < 1) {
     info('Enter ' . INFO . ' to see available commands.');
 
@@ -31,7 +33,9 @@ while ($times < 1) {
     info('Result: ' . $result);
     info('=====================');
 
-    $history = json_encode("{$argument1} {$command} {$argument2}  =  {$result}" . PHP_EOL);
+    $history = array("{$argument1} {$command} {$argument2}  =  {$result}" . PHP_EOL);
+
+    json_encode($history);
 
     file_put_contents('history.json', $history, FILE_APPEND);
 }
@@ -130,10 +134,11 @@ function show_info_block()
 
 Function show_history()
 {
+
     $history = file_get_contents('history.json');
-    if($history == null)
-    {
+    if($history == null) {
         info('You have no history');
     }
+
     info($history);
 }
