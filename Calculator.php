@@ -88,7 +88,7 @@ function read_operand($message, $command, $isSecondOperand = false)
             continue;
         }
 
-        if ($isSecondOperand){
+        if ($isSecondOperand) {
             $isDataValid = ($command != '/' || $argument != 0);
 
             if (!$isDataValid) {
