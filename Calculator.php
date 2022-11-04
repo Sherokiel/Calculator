@@ -2,8 +2,16 @@
 require 'constants.php';
 require 'libraries\console_helpers.php';
 
+fopen('history.json', 'a+');
+
+$history = file_get_contents('history.json');
 $times = 0;
-$history = [];
+
+if ($history === null) {
+    $history = [];
+} else {
+    $history = json_decode($history, true);
+}
 
 while ($times < 1) {
     info('Enter ' . INFO . ' to see available commands.');
@@ -11,7 +19,7 @@ while ($times < 1) {
     $command = choose('Enter command: ', AVAILABLE_COMMANDS);
 
     if (in_array($command, SYSTEM_COMMANDS)) {
-        execute_system_command($command);
+        execute_system_command($command, $history);
 
         continue;
     }
@@ -29,9 +37,8 @@ while ($times < 1) {
     info('Result: ' . $result);
     info('=====================');
 
-    $history = "{$argument1} {$command} {$argument2}  =  {$result}" . PHP_EOL;
+    array_push($history, "{$argument1} {$command} {$argument2} = {$result}");
 
-    file_put_contents('history.txt', $history, FILE_APPEND);
 }
 
 function calculate($argument1, $command, $argument2)
@@ -81,7 +88,7 @@ function read_operand($message, $command, $isSecondOperand = false)
             continue;
         }
 
-        if ($isSecondOperand){
+        if ($isSecondOperand) {
             $isDataValid = ($command != '/' || $argument != 0);
 
             if (!$isDataValid) {
@@ -94,11 +101,11 @@ function read_operand($message, $command, $isSecondOperand = false)
     return $argument;
 }
 
-function execute_system_command($command)
+function execute_system_command($command, $history)
 {
     switch($command) {
         case(QUIT):
-            finish_app();
+            finish_app($history);
 
             break;
 
@@ -108,15 +115,20 @@ function execute_system_command($command)
             break;
 
         case(HISTORY):
-            show_history();
+            show_history($history);
     }
 }
 
-function finish_app()
+function finish_app($history)
 {
     $command = choose('Are you sure to wanna quit? Yes/No ', [AGREE, DEGREE]);
 
     if ($command == AGREE) {
+        if (!$history == NULL) {
+            $history = json_encode($history);
+            file_put_contents('history.json', $history);
+        }
+
         exit();
     }
 }
@@ -126,8 +138,13 @@ function show_info_block()
     info((implode(' ;  ', AVAILABLE_COMMANDS)) . ' ;');
 }
 
-Function show_history()
+function show_history($history)
 {
-    $history = file_get_contents('history.txt');
-    info($history);
+    if ($history === null) {
+        info('You have no history');
+    } else {
+        foreach ($history as $value) {
+            info($value);
+        }
+    }
 }
