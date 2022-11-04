@@ -124,7 +124,6 @@ function finish_app($history)
     $command = choose('Are you sure to wanna quit? Yes/No ', [AGREE, DEGREE]);
 
     if ($command == AGREE) {
-
         if (!$history == NULL) {
             $history = json_encode($history);
             file_put_contents('history.json', $history);
@@ -139,7 +138,7 @@ function show_info_block()
     info((implode(' ;  ', AVAILABLE_COMMANDS)) . ' ;');
 }
 
-Function show_history($history)
+function show_history($history)
 {
     if ($history === null) {
         info('You have no history');
