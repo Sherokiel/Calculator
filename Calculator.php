@@ -126,7 +126,6 @@ function finish_app($history)
     if ($command == AGREE) {
 
         if (!$history == NULL) {
-
             $history = json_encode($history);
             file_put_contents('history.json', $history);
         }
