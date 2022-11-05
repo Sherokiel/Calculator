@@ -1,4 +1,14 @@
 <?php
+function history_to_txt ()
+{
+    $value = file_get_contents('history.json');
+
+    $exported = readline('Enter path of save exported history:');
+
+    file_put_contents("{$exported}history.txt", $value);
+    info('History saved!');
+
+}
 
 function str_to_number($string)
 {
