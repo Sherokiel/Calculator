@@ -146,7 +146,6 @@ function show_history($history)
         info('You have no history');
     } else {
         foreach ($history as $historyItem) {
-            extract($historyItem);
             info("Date: {$historyItem['date']} function: {$historyItem['function']} ");
         }
     }
