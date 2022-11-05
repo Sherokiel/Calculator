@@ -39,8 +39,8 @@ while ($times < 1) {
     info('=====================');
 
     $history[] = [
-        "date"=>"{$date}",
-        "function" => "({$argument1} {$command} {$argument2} = {$result})"
+        'date' => $date,
+        'function' => "{$argument1} {$command} {$argument2} = {$result}"
     ];
 }
 
