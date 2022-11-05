@@ -4,6 +4,7 @@ require 'libraries\console_helpers.php';
 
 fopen('history.json', 'a+');
 
+$date = date('d-m-Y');
 $history = file_get_contents('history.json');
 $times = 0;
 
@@ -37,8 +38,10 @@ while ($times < 1) {
     info('Result: ' . $result);
     info('=====================');
 
-    array_push($history, "{$argument1} {$command} {$argument2} = {$result}");
-
+    $history[] = [
+        'date' => $date,
+        'function' => "{$argument1} {$command} {$argument2} = {$result}"
+    ];
 }
 
 function calculate($argument1, $command, $argument2)
@@ -143,8 +146,8 @@ function show_history($history)
     if ($history === null) {
         info('You have no history');
     } else {
-        foreach ($history as $value) {
-            info($value);
+        foreach ($history as $historyItem) {
+            info("Date: {$historyItem['date']} function: {$historyItem['function']} ");
         }
     }
 }
