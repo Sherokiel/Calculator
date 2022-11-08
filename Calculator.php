@@ -5,6 +5,7 @@ require 'libraries\console_helpers.php';
 fopen('history.json', 'a+');
 
 $date = date('d-m-Y');
+//$date = "06.11.2022";
 $history = file_get_contents('history.json');
 $times = 0;
 
@@ -138,7 +139,7 @@ function finish_app($history)
 
 function show_info_block()
 {
-    info((implode(' ;  ', AVAILABLE_COMMANDS)) . ' ;');
+    info((implode(' ; ', AVAILABLE_COMMANDS)) . ' ;');
 }
 
 function show_history($history)
@@ -146,8 +147,20 @@ function show_history($history)
     if ($history === null) {
         info('You have no history');
     } else {
-        foreach ($history as $historyItem) {
-            info("Date: {$historyItem['date']} function: {$historyItem['function']} ");
+        $h = [];
+
+        foreach ($history as $itemhistory) {
+            $h[$itemhistory['date']][] = [$itemhistory['function']];
+        }
+
+        foreach ($h as $dateHistory => $functionData) {
+            info ("{$dateHistory}:");
+            foreach ($functionData as $functionValue) {
+                foreach ($functionValue as $value) {
+                    echo $value . PHP_EOL;
+                }
+            }
+            info('=====================');
         }
     }
 }
