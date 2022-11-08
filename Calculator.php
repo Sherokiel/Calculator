@@ -5,7 +5,6 @@ require 'libraries\console_helpers.php';
 fopen('history.json', 'a+');
 
 $date = date('d-m-Y');
-//$date = "06.11.2022";
 $history = file_get_contents('history.json');
 $times = 0;
 
@@ -152,7 +151,7 @@ function show_history($history)
         foreach ($history as $itemhistory) {
             $h[$itemhistory['date']][] = $itemhistory['function'];
         }
-var_dump($h);
+
         foreach ($h as $dateHistory => $functionData) {
             info ("{$dateHistory}:");
             foreach ($functionData as $functionValue) {
