@@ -150,15 +150,13 @@ function show_history($history)
         $h = [];
 
         foreach ($history as $itemhistory) {
-            $h[$itemhistory['date']][] = [$itemhistory['function']];
+            $h[$itemhistory['date']][] = $itemhistory['function'];
         }
-
+var_dump($h);
         foreach ($h as $dateHistory => $functionData) {
             info ("{$dateHistory}:");
             foreach ($functionData as $functionValue) {
-                foreach ($functionValue as $value) {
-                    echo $value . PHP_EOL;
-                }
+                    echo $functionValue . PHP_EOL;
             }
             info('=====================');
         }
