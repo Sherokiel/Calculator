@@ -27,9 +27,8 @@ function choose($message, $availableValues)
     return $command;
 }
 
-function info($result, $i = 2)
+function info($result, $emptyLinesCount = 2)
 {
-    echo $result;
-    echo str_repeat(PHP_EOL, $i);
+    echo $result . str_repeat(PHP_EOL, $emptyLinesCount);
 
 }

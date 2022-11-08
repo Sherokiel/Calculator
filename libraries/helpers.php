@@ -1,9 +1,9 @@
 <?php
 
-function array_group($array, $arrayGroup)
+function array_group($array, $arrayGroup, $groupKey, $groupValue)
 {
     foreach ($array as $groupItem) {
-        $arrayGroup[$groupItem['date']][] = $groupItem['function'];
+        $arrayGroup[$groupItem["{$groupKey}"]][] = $groupItem["{$groupValue}"];
     }
 
     return $arrayGroup;
