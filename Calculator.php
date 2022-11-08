@@ -1,6 +1,7 @@
 <?php
 require 'constants.php';
 require 'libraries\console_helpers.php';
+require 'libraries\helpers.php';
 
 fopen('history.json', 'a+');
 
@@ -138,7 +139,7 @@ function finish_app($history)
 
 function show_info_block()
 {
-    info((implode(' ;  ', AVAILABLE_COMMANDS)) . ' ;');
+    info((implode(' ; ', AVAILABLE_COMMANDS)) . ' ;');
 }
 
 function show_history($history)
@@ -146,8 +147,16 @@ function show_history($history)
     if ($history === null) {
         info('You have no history');
     } else {
-        foreach ($history as $historyItem) {
-            info("Date: {$historyItem['date']} function: {$historyItem['function']} ");
+        $historyGroups = array_group($history, 'date', 'function');
+
+        foreach ($historyGroups as $date => $operations) {
+            info ("{$date}:");
+
+            foreach ($operations as $operation) {
+                info($operation, 1);
+            }
+
+            info('=====================');
         }
     }
 }
