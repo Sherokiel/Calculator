@@ -2,6 +2,7 @@
 require 'constants.php';
 require 'libraries\console_helpers.php';
 require 'libraries\helpers.php';
+
 fopen('history.json', 'a+');
 
 $date = date('d-m-Y');
@@ -146,9 +147,8 @@ function show_history($history)
     if ($history === null) {
         info('You have no history');
     } else {
-        $historyGroups = [];
 
-        $historyGroups = array_group($history, $historyGroups);
+        $historyGroups = array_group($history, 'date', 'function');
 
         foreach ($historyGroups as $date => $operations) {
             info ("{$date}:");
