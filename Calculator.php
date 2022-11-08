@@ -153,7 +153,7 @@ function show_history($history)
             info ("{$date}:");
 
             foreach ($operations as $operation) {
-                    info($operation, 1);
+                info($operation, 1);
             }
 
             info('=====================');
