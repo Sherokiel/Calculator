@@ -147,7 +147,6 @@ function show_history($history)
     if ($history === null) {
         info('You have no history');
     } else {
-
         $historyGroups = array_group($history, 'date', 'function');
 
         foreach ($historyGroups as $date => $operations) {
