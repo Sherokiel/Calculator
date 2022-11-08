@@ -27,7 +27,9 @@ function choose($message, $availableValues)
     return $command;
 }
 
-function info($result)
+function info($result, $i = 2)
 {
-    echo $result . PHP_EOL . PHP_EOL;
+    echo $result;
+    echo str_repeat(PHP_EOL, $i);
+
 }

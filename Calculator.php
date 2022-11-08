@@ -1,7 +1,7 @@
 <?php
 require 'constants.php';
 require 'libraries\console_helpers.php';
-
+require 'libraries\helpers.php';
 fopen('history.json', 'a+');
 
 $date = date('d-m-Y');
@@ -148,14 +148,13 @@ function show_history($history)
     } else {
         $historyGroups = [];
 
-        foreach ($history as $historyItem) {
-            $historyGroups[$historyItem['date']][] = $historyItem['function'];
-        }
+        $historyGroups = array_group($history, $historyGroups);
 
         foreach ($historyGroups as $date => $operations) {
             info ("{$date}:");
+
             foreach ($operations as $operation) {
-                    echo $operation . PHP_EOL;
+                    info($operation, 1);
             }
 
             info('=====================');
