@@ -1,10 +1,12 @@
 <?php
 
-function array_group($array, $groupKey, $groupValue)
+function array_group($array, $key)
 {
-    foreach ($array as $groupItem) {
-        $arrayGroup[$groupItem[$groupKey]][] = $groupItem[$groupValue];
+    $result = [];
+
+    foreach ($array as $item) {
+        $result[$item[$key]][] = $item;
     }
 
-    return $arrayGroup;
+    return $result;
 }

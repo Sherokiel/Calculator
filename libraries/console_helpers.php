@@ -30,5 +30,4 @@ function choose($message, $availableValues)
 function info($result, $emptyLinesCount = 2)
 {
     echo $result . str_repeat(PHP_EOL, $emptyLinesCount);
-
 }
