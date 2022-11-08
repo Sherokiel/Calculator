@@ -146,17 +146,18 @@ function show_history($history)
     if ($history === null) {
         info('You have no history');
     } else {
-        $h = [];
+        $historyGroups = [];
 
-        foreach ($history as $itemhistory) {
-            $h[$itemhistory['date']][] = $itemhistory['function'];
+        foreach ($history as $historyItem) {
+            $historyGroups[$historyItem['date']][] = $historyItem['function'];
         }
 
-        foreach ($h as $dateHistory => $functionData) {
-            info ("{$dateHistory}:");
-            foreach ($functionData as $functionValue) {
-                    echo $functionValue . PHP_EOL;
+        foreach ($historyGroups as $date => $operations) {
+            info ("{$date}:");
+            foreach ($operations as $operation) {
+                    echo $operation . PHP_EOL;
             }
+
             info('=====================');
         }
     }
