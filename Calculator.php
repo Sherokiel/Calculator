@@ -41,7 +41,10 @@ while ($times < 1) {
 
     $history[] = [
         'date' => $date,
-        'function' => "{$argument1} {$command} {$argument2} = {$result}"
+        'first_operand' => $argument1,
+        'second_operand' => $argument2,
+        'sign' => $command,
+        'result' => $result
     ];
 }
 
@@ -147,13 +150,19 @@ function show_history($history)
     if ($history === null) {
         info('You have no history');
     } else {
-        $historyGroups = array_group($history, 'date', 'function');
+        $historyGroups = array_group($history, 'date');
 
-        foreach ($historyGroups as $date => $operations) {
+        foreach ($historyGroups as $date => $historyItems) {
             info ("{$date}:");
 
-            foreach ($operations as $operation) {
-                info($operation, 1);
+            foreach ($historyItems as $historyItem) {
+                $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
+
+                $prefix = ($isBasicMathOperation) ? '   ' : '(!) ';
+
+                $historyFunction = "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
+
+                info($historyFunction, 1);
             }
 
             info('=====================');
