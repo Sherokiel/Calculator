@@ -127,7 +127,7 @@ function execute_system_command($command, $history)
             break;
 
         case(EXPORTHISTORY):
-            history_to_txt();
+            history_to_txt($history);
     }
 }
 
@@ -163,7 +163,7 @@ function show_history($history)
             foreach ($historyItems as $historyItem) {
                 $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
 
-                $prefix = ($isBasicMathOperation) ? '   ' : '(!) ';
+                $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
 
                 $historyFunction = "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
 

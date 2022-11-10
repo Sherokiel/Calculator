@@ -1,11 +1,29 @@
 <?php
-function history_to_txt ()
+function history_to_txt ($history)
 {
-    $value = file_get_contents('history.json');
 
-    $exported = readline('Enter path of save exported history:');
+    $historyGroups = array_group($history, 'date');
 
-    file_put_contents("{$exported}history.txt", $value);
+    $pathToFile = readline('Enter path of save exported history:');
+
+    $command = choose('Do u want to replace history? Yes/no: ',[AGREE, DEGREE]);
+
+    if($command == AGREE) {
+        file_put_contents("{$pathToFile}history.txt", ' ');
+    }
+
+    foreach ($historyGroups as $date => $historyItems) {
+        file_put_contents("{$pathToFile}history.txt", $date . PHP_EOL, FILE_APPEND);
+
+        foreach ($historyItems as $historyItem) {
+            $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
+
+            $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
+
+            $historyFunction = "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
+            file_put_contents("{$pathToFile}history.txt", $historyFunction . PHP_EOL, FILE_APPEND);
+        }
+    }
     info('History saved!');
 
 }
