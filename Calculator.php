@@ -5,8 +5,6 @@ require 'libraries\helpers.php';
 
 fopen('history.json', 'a+');
 
-
-
 $date = date('d-m-Y');
 $history = file_get_contents('history.json');
 $times = 0;
@@ -21,8 +19,6 @@ while ($times < 1) {
     info('Enter ' . INFO . ' to see available commands.');
 
     $command = choose('Enter command: ', AVAILABLE_COMMANDS);
-
-
 
     if (in_array($command, SYSTEM_COMMANDS)) {
         execute_system_command($command, $history);
@@ -155,17 +151,19 @@ function show_history($history)
     if ($history === null) {
         info('You have no history');
     } else {
-        $result = array_group($history, 'date');
+        $historyGroups = array_group($history, 'date');
 
-        foreach ($result as $key => $operations) {
-            info ("{$key}:");
+        foreach ($historyGroups as $date => $historyItems) {
+            info ("{$date}:");
 
-            foreach ($operations as $operation) {
-                $difficult = (in_array($operation['sign'], EASY_COMMANDS)) ? 'easy' : 'hard';
-                $historyFunction = "{$operation['first_operand']} {$operation['sign']} {$operation['second_operand']} = {$operation['result']}";
-                $diffMsg = ($difficult === 'hard') ? "(!) " : "    ";
+            foreach ($historyItems as $historyItem) {
+                $isHighMathOperation = (in_array($historyItem['sign'], BASIC_COMMANDS));
 
-                info("{$diffMsg}{$historyFunction}", 1);
+                $preFix = (!$isHighMathOperation) ? "(!) " : "    ";
+
+                $historyFunction = "{$preFix}{$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
+
+                info($historyFunction, 1);
             }
 
             info('=====================');
