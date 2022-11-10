@@ -126,7 +126,7 @@ function execute_system_command($command, $history)
 
             break;
 
-        case(EXPORTHISTORY):
+        case(EXPORT_HISTORY):
             history_to_txt($history);
     }
 }
@@ -178,18 +178,16 @@ function show_history($history)
 function history_to_txt($history)
 {
     $historyGroups = array_group($history, 'date');
-    $nameOfFile = readline('Enter name of created file: ' );
+    $nameOfFile = readline('Enter name of created file: ');
     $pathToFile = readline('Enter path of save exported history: ');
     $fullPathName = "{$pathToFile}{$nameOfFile}.txt";
 
     if (file_exists($fullPathName)) {
-
-        $command = choose('Do u want to replace history? Yes/no: ', [AGREE, DEGREE]);
+        $command = choose("File ${$fullPathName} already exists, do you want to replace it? Yes/no: ", [AGREE, DEGREE]);
 
         switch ($command) {
-
             case (AGREE):
-                file_put_contents($fullPathName, ' ');
+                file_put_contents($fullPathName, '');
 
                 break;
 
@@ -199,6 +197,7 @@ function history_to_txt($history)
                 return;
         }
     }
+
     foreach ($historyGroups as $date => $historyItems) {
         file_put_contents($fullPathName, $date . PHP_EOL, FILE_APPEND);
 
@@ -211,5 +210,6 @@ function history_to_txt($history)
             file_put_contents($fullPathName, $historyFunction . PHP_EOL, FILE_APPEND);
         }
     }
+
     info('History saved!');
 }
