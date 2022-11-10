@@ -123,6 +123,11 @@ function execute_system_command($command, $history)
 
         case(HISTORY):
             show_history($history);
+
+            break;
+
+        case(EXPORT_HISTORY):
+            history_to_txt($history);
     }
 }
 
@@ -158,7 +163,7 @@ function show_history($history)
             foreach ($historyItems as $historyItem) {
                 $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
 
-                $prefix = ($isBasicMathOperation) ? '   ' : '(!) ';
+                $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
 
                 $historyFunction = "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
 
@@ -168,4 +173,43 @@ function show_history($history)
             info('=====================');
         }
     }
+}
+
+function history_to_txt($history)
+{
+    $historyGroups = array_group($history, 'date');
+    $nameOfFile = readline('Enter name of created file: ');
+    $pathToFile = readline('Enter path of save exported history: ');
+    $fullPathName = "{$pathToFile}{$nameOfFile}.txt";
+
+    if (file_exists($fullPathName)) {
+        $command = choose("File ${$fullPathName} already exists, do you want to replace it? Yes/no: ", [AGREE, DEGREE]);
+
+        switch ($command) {
+            case (AGREE):
+                file_put_contents($fullPathName, '');
+
+                break;
+
+            case (DEGREE):
+                echo PHP_EOL;
+
+                return;
+        }
+    }
+
+    foreach ($historyGroups as $date => $historyItems) {
+        file_put_contents($fullPathName, $date . PHP_EOL, FILE_APPEND);
+
+        foreach ($historyItems as $historyItem) {
+            $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
+
+            $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
+
+            $historyFunction = "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
+            file_put_contents($fullPathName, $historyFunction . PHP_EOL, FILE_APPEND);
+        }
+    }
+
+    info('History saved!');
 }
