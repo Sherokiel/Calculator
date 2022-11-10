@@ -174,3 +174,42 @@ function show_history($history)
         }
     }
 }
+
+function history_to_txt($history)
+{
+    $historyGroups = array_group($history, 'date');
+    $nameOfFile = readline('Enter name of created file: ' );
+    $pathToFile = readline('Enter path of save exported history: ');
+    $fullPathName = "{$pathToFile}{$nameOfFile}.txt";
+
+    if (file_exists($fullPathName)) {
+
+        $command = choose('Do u want to replace history? Yes/no: ', [AGREE, DEGREE]);
+
+        switch ($command) {
+
+            case (AGREE):
+                file_put_contents($fullPathName, ' ');
+
+                break;
+
+            case (DEGREE):
+                echo PHP_EOL;
+
+                return;
+        }
+    }
+    foreach ($historyGroups as $date => $historyItems) {
+        file_put_contents($fullPathName, $date . PHP_EOL, FILE_APPEND);
+
+        foreach ($historyItems as $historyItem) {
+            $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
+
+            $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
+
+            $historyFunction = "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
+            file_put_contents($fullPathName, $historyFunction . PHP_EOL, FILE_APPEND);
+        }
+    }
+    info('History saved!');
+}
