@@ -1,10 +1,11 @@
 <?php
 require 'constants.php';
 require 'libraries\console_helpers.php';
+require 'libraries\helpers.php';
 
 fopen('history.json', 'a+');
 
-$date = date('m-d-Y');
+$date = date('d-m-Y');
 $history = file_get_contents('history.json');
 $times = 0;
 
@@ -38,8 +39,12 @@ while ($times < 1) {
     info('Result: ' . $result);
     info('=====================');
 
-    $history[] = ["date"=>"{$date}",
-                  "function" => "({$argument1} {$command} {$argument2} = {$result})"
+    $history[] = [
+        'date' => $date,
+        'first_operand' => $argument1,
+        'second_operand' => $argument2,
+        'sign' => $command,
+        'result' => $result
     ];
 }
 
@@ -142,7 +147,7 @@ function finish_app($history)
 
 function show_info_block()
 {
-    info((implode(' ;  ', AVAILABLE_COMMANDS)) . ' ;');
+    info((implode(' ; ', AVAILABLE_COMMANDS)) . ' ;');
 }
 
 function show_history($history)
@@ -150,8 +155,22 @@ function show_history($history)
     if ($history === null) {
         info('You have no history');
     } else {
-        foreach ($history as $historyItem) {
-            info("Date: {$historyItem['date']} function: {$historyItem['function']}");
+        $historyGroups = array_group($history, 'date');
+
+        foreach ($historyGroups as $date => $historyItems) {
+            info ("{$date}:");
+
+            foreach ($historyItems as $historyItem) {
+                $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
+
+                $prefix = ($isBasicMathOperation) ? '   ' : '(!) ';
+
+                $historyFunction = "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
+
+                info($historyFunction, 1);
+            }
+
+            info('=====================');
         }
     }
 }
