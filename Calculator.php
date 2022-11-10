@@ -39,7 +39,6 @@ while ($times < 1) {
     info('Result: ' . $result);
     info('=====================');
 
-
     $history[] = [
         'date' => $date,
         'first_operand' => $argument1,
@@ -157,9 +156,9 @@ function show_history($history)
             info ("{$date}:");
 
             foreach ($historyItems as $historyItem) {
-                $isHighMathOperation = (in_array($historyItem['sign'], BASIC_COMMANDS));
+                $isBasicMathOperation = (in_array($historyItem['sign'], BASIC_COMMANDS));
 
-                $preFix = (!$isHighMathOperation) ? "(!) " : "    ";
+                $preFix = (!$isBasicMathOperation) ? '(!) ' : '    ';
 
                 $historyFunction = "{$preFix}{$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
 
