@@ -5,6 +5,8 @@ require 'libraries\helpers.php';
 
 fopen('history.json', 'a+');
 
+
+
 $date = date('d-m-Y');
 $history = file_get_contents('history.json');
 $times = 0;
@@ -19,6 +21,8 @@ while ($times < 1) {
     info('Enter ' . INFO . ' to see available commands.');
 
     $command = choose('Enter command: ', AVAILABLE_COMMANDS);
+
+
 
     if (in_array($command, SYSTEM_COMMANDS)) {
         execute_system_command($command, $history);
@@ -39,9 +43,13 @@ while ($times < 1) {
     info('Result: ' . $result);
     info('=====================');
 
+
     $history[] = [
         'date' => $date,
-        'function' => "{$argument1} {$command} {$argument2} = {$result}"
+        'first_operand' => $argument1,
+        'second_operand' => $argument2,
+        'sign' => $command,
+        'result' => $result
     ];
 }
 
@@ -147,13 +155,17 @@ function show_history($history)
     if ($history === null) {
         info('You have no history');
     } else {
-        $historyGroups = array_group($history, 'date', 'function');
+        $result = array_group($history, 'date');
 
-        foreach ($historyGroups as $date => $operations) {
-            info ("{$date}:");
+        foreach ($result as $key => $operations) {
+            info ("{$key}:");
 
             foreach ($operations as $operation) {
-                info($operation, 1);
+                $difficult = (in_array($operation['sign'], EASY_COMMANDS)) ? 'easy' : 'hard';
+                $historyFunction = "{$operation['first_operand']} {$operation['sign']} {$operation['second_operand']} = {$operation['result']}";
+                $diffMsg = ($difficult === 'hard') ? "(!) " : "    ";
+
+                info("{$diffMsg}{$historyFunction}", 1);
             }
 
             info('=====================');
