@@ -156,11 +156,11 @@ function show_history($history)
             info ("{$date}:");
 
             foreach ($historyItems as $historyItem) {
-                $isBasicMathOperation = (in_array($historyItem['sign'], BASIC_COMMANDS));
+                $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
 
-                $preFix = (!$isBasicMathOperation) ? '(!) ' : '    ';
+                $prefix = ($isBasicMathOperation) ? '   ' : '(!) ';
 
-                $historyFunction = "{$preFix}{$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
+                $historyFunction = "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
 
                 info($historyFunction, 1);
             }
