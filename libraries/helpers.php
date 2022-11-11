@@ -17,7 +17,7 @@ function welcome($msg1,$msg2)
     $string = 0;
     $maxStrings = 14;
 
-    while ($string<=$maxStrings) {
+    while ($string <= $maxStrings) {
 
         if ($string < 1 || $string > $maxStrings - 1) {
             $i = 0;
