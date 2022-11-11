@@ -15,7 +15,7 @@ if ($history === null) {
     $history = json_decode($history, true);
 }
 
-welcome(' Wellcome to the calculataor app!','Print "help" to learn more about the app');
+info_box('', 'Welcome to the calculator app!', '', 'Print "help" to learn more about the app.', '');
 
 while ($times < 1) {
 
@@ -51,22 +51,26 @@ while ($times < 1) {
 
 function calculate($argument1, $command, $argument2)
 {
-    switch ($command)
-    {
+    switch ($command) {
         case '+':
             $result = $argument1 + $argument2;
+
             break;
         case '-':
             $result = $argument1 - $argument2;
+
             break;
         case '*':
             $result = $argument1 * $argument2;
+
             break;
         case '/':
             $result = $argument1 / $argument2;
+
             break;
         case '^':
             $result = pow($argument1, $argument2);
+
             break;
         case 'sr':
             $result = pow($argument1, (1 / $argument2));
@@ -160,7 +164,6 @@ function show_history($history)
 
         foreach ($historyGroups as $date => $historyItems) {
             info ("{$date}:");
-
             foreach ($historyItems as $historyItem) {
                 $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
 
@@ -170,7 +173,6 @@ function show_history($history)
 
                 info($historyFunction, 1);
             }
-
             info('=====================');
         }
     }
