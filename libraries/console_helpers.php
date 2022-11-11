@@ -31,3 +31,22 @@ function info($result, $emptyLinesCount = 2)
 {
     echo $result . str_repeat(PHP_EOL, $emptyLinesCount);
 }
+
+function info_box(...$lines)
+{
+    foreach ($lines as $maxLines) {
+        $h1 = strlen($maxLines);
+        $lineValue[] = $h1;
+    }
+
+    $length = max($lineValue) + 6;
+
+    info (str_pad('*', $length, '*'), 1);
+
+    foreach ($lines as $msg) {
+        $message = str_pad($msg, $length - 6, ' ', STR_PAD_BOTH);
+
+        info("*  {$message}  *", 1);
+    }
+    info(str_pad('*', $length, '*'), 1);
+}
