@@ -15,8 +15,9 @@ if ($history === null) {
     $history = json_decode($history, true);
 }
 
+welcome(' Wellcome to the calculataor app!','Print "help" to learn more about the app');
+
 while ($times < 1) {
-    info('Enter ' . INFO . ' to see available commands.');
 
     $command = choose('Enter command: ', AVAILABLE_COMMANDS);
 
