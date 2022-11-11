@@ -13,9 +13,9 @@ function array_group($array, $key)
 
 function welcome($msg1,$msg2)
 {
-    $length = 65;
+    $length = 45;
     $string = 0;
-    $maxStrings = 14;
+    $maxStrings = 8;
 
     while ($string <= $maxStrings) {
 
@@ -31,7 +31,7 @@ function welcome($msg1,$msg2)
         } else {
             switch ($string)
             {
-                case ($string == round($maxStrings / 3)):
+                case ($string == round($maxStrings / 4)):
                     $msg = $msg1;
                     break;
                 case ($string == round($maxStrings / 2)):
