@@ -53,25 +53,18 @@ function calculate($argument1, $command, $argument2)
 {
     switch ($command) {
         case '+':
-
             return $argument1 + $argument2;
         case '-':
-
             return $argument1 - $argument2;
         case '*':
-
             return $argument1 * $argument2;
         case '/':
-
             return $argument1 / $argument2;
         case '^':
-
             return pow($argument1, $argument2);
         case 'sr':
-
             return pow($argument1, (1 / $argument2));
         default:
-
             return $command;
     }
 }
@@ -161,6 +154,7 @@ function show_history($history)
 
         foreach ($historyGroups as $date => $historyItems) {
             info ("{$date}:");
+
             foreach ($historyItems as $historyItem) {
                 $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
 
@@ -169,6 +163,7 @@ function show_history($history)
                 $historyFunction = "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
 
                 info($historyFunction, 1);
+
             }
             info('=====================');
         }
