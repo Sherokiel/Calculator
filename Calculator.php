@@ -163,8 +163,8 @@ function show_history($history)
                 $historyFunction = "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
 
                 info($historyFunction, 1);
-
             }
+
             info('=====================');
         }
     }
