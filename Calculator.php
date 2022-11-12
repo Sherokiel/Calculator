@@ -152,15 +152,34 @@ function show_history($history)
         info('You have no history');
     } else {
         $historyGroups = array_group($history, 'date');
-        $historyCommands = ['full'];
+        $historyCommands = ['full', 'help'];
 
         foreach ($historyGroups as $mainDate => $dateGroup) {
             $historyCommands[] = $mainDate;
         }
 
-        $showDateHistory = choose('Enter date of history (date - month - year) or "full" : ', $historyCommands);
+        $showDateHistory = readline('Enter date of history (day - month - year), "full" or "Help"  : ');
+
+        $int = filter_var($showDateHistory, FILTER_SANITIZE_NUMBER_INT);
+        $isDate = ($showDateHistory === $int);
+
+        if (!$isDate && !in_array($showDateHistory, $historyCommands)) {
+            info('Dont write letters.');
+
+            return;
+        }
+
+        if ($showDateHistory == 'help') {
+            show_info_block();
+        }
 
         info('', 1);
+
+        if(!in_array($showDateHistory, $historyCommands)) {
+            info('You have no history in that day');
+
+            return;
+        }
 
         if (array_key_exists($showDateHistory, $historyGroups)) {
             info("{$showDateHistory}: ");
