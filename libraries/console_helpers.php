@@ -31,3 +31,28 @@ function info($result, $emptyLinesCount = 2)
 {
     echo $result . str_repeat(PHP_EOL, $emptyLinesCount);
 }
+
+function info_box(...$lines)
+{
+    $lineLengths = array_map(function ($line) {
+        return strlen($line);
+    }, $lines);
+
+    $indent = 6;
+    $length = max($lineLengths) + $indent;
+
+    write_symbol_line($length, '*');
+
+    foreach ($lines as $line) {
+        $message = str_pad($line, $length - 6, ' ', STR_PAD_BOTH);
+
+        info("*  {$message}  *", 1);
+    }
+
+    write_symbol_line($length, '*');
+}
+
+function write_symbol_line($length, $sybmol)
+{
+    info(str_repeat($sybmol, $length), 1);
+}

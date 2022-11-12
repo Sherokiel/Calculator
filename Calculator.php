@@ -15,8 +15,9 @@ if ($history === null) {
     $history = json_decode($history, true);
 }
 
+info_box('', 'Welcome to the calculator app!', '', 'Print "help" to learn more about the app.', '');
+
 while ($times < 1) {
-    info('Enter ' . INFO . ' to see available commands.');
 
     $command = choose('Enter command: ', AVAILABLE_COMMANDS);
 
@@ -50,28 +51,22 @@ while ($times < 1) {
 
 function calculate($argument1, $command, $argument2)
 {
-    switch ($command)
-    {
+    switch ($command) {
         case '+':
-            $result = $argument1 + $argument2;
-            break;
+            return $argument1 + $argument2;
         case '-':
-            $result = $argument1 - $argument2;
-            break;
+            return $argument1 - $argument2;
         case '*':
-            $result = $argument1 * $argument2;
-            break;
+            return $argument1 * $argument2;
         case '/':
-            $result = $argument1 / $argument2;
-            break;
+            return $argument1 / $argument2;
         case '^':
-            $result = pow($argument1, $argument2);
-            break;
+            return pow($argument1, $argument2);
         case 'sr':
-            $result = pow($argument1, (1 / $argument2));
+            return pow($argument1, (1 / $argument2));
+        default:
+            return $command;
     }
-
-    return $result;
 }
 
 function read_operand($message, $command, $isSecondOperand = false)
