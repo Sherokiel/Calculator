@@ -154,17 +154,21 @@ function show_history($history)
         $historyGroups = array_group($history, 'date');
         $historyCommands = ['full', 'help'];
 
-        foreach ($historyGroups as $mainDate => $dateGroup) {
-            $historyCommands[] = $mainDate;
-        }
-
+        $historyCommands = array_merge($historyCommands, array_keys($historyGroups));
+var_dump($historyCommands);
         $showDateHistory = readline('Enter date of history (day - month - year), "full" or "Help"  : ');
 
         $int = filter_var($showDateHistory, FILTER_SANITIZE_NUMBER_INT);
         $isDate = ($showDateHistory === $int);
+        $dateLength = strlen($showDateHistory);
 
+        if ($isDate && $dateLength != 10) {
+            info('Please input a valid date in format DD-MM-YYYY (e.g. 25-12-2022).');
+
+            return;
+        }
         if (!$isDate && !in_array($showDateHistory, $historyCommands)) {
-            info('Dont write letters.');
+            info('Please input a valid date in format DD-MM-YYYY (e.g. 25-12-2022).');
 
             return;
         }
@@ -184,24 +188,25 @@ function show_history($history)
         if (array_key_exists($showDateHistory, $historyGroups)) {
             info("{$showDateHistory}: ");
 
-            addprefix($historyGroups[$showDateHistory]);
+            show_history_items($historyGroups[$showDateHistory]);
 
-            info('=====================');
+            write_symbol_line(15, '=');
 
         } elseif ($showDateHistory == 'full') {
             foreach ($historyGroups as $date => $historyItems) {
                 info("{$date}:");
 
-                addprefix($historyItems);
+                show_history_items($historyItems);
 
-                info('=====================');
+                write_symbol_line(15, '=');
             }
         }
     }
 }
-function addprefix ($array)
+function show_history_items ($array)
 {
         foreach ($array as $historyItem) {
+
             $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
 
             $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
