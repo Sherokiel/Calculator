@@ -41,7 +41,7 @@ function info_box(...$lines)
 
     $length = max($lineValue) + 6;
 
-    info (str_pad('*', $length, '*'), 1);
+    info(str_repeat('*', $length), 1);;
 
     foreach ($lines as $msg) {
         $message = str_pad($msg, $length - 6, ' ', STR_PAD_BOTH);
