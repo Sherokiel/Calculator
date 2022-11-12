@@ -164,35 +164,33 @@ function show_history($history)
 
         if (array_key_exists($showDateHistory, $historyGroups)) {
             info("{$showDateHistory}: ");
-            foreach ($historyGroups[$showDateHistory] as $historyItem) {
 
-                $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
+            addprefix($historyGroups[$showDateHistory]);
 
-                $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
-
-                $historyFunction = "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
-
-                info($historyFunction, 1);
-            }
             info('=====================');
 
         } elseif ($showDateHistory == 'full') {
             foreach ($historyGroups as $date => $historyItems) {
                 info("{$date}:");
-                foreach ($historyItems as $historyItem) {
-                    $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
 
-                    $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
-
-                    $historyFunction = "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
-
-                    info($historyFunction, 1);
-                }
+                addprefix($historyItems);
 
                 info('=====================');
             }
         }
     }
+}
+function addprefix ($array)
+{
+        foreach ($array as $historyItem) {
+            $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
+
+            $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
+
+            $historyFunction = "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
+
+            info($historyFunction, 1);
+        }
 }
 
 function history_to_txt($history)
