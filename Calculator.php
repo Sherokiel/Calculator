@@ -53,30 +53,27 @@ function calculate($argument1, $command, $argument2)
 {
     switch ($command) {
         case '+':
-            $result = $argument1 + $argument2;
 
-            break;
+            return $argument1 + $argument2;
         case '-':
-            $result = $argument1 - $argument2;
 
-            break;
+            return $argument1 - $argument2;
         case '*':
-            $result = $argument1 * $argument2;
 
-            break;
+            return $argument1 * $argument2;
         case '/':
-            $result = $argument1 / $argument2;
 
-            break;
+            return $argument1 / $argument2;
         case '^':
-            $result = pow($argument1, $argument2);
 
-            break;
+            return pow($argument1, $argument2);
         case 'sr':
-            $result = pow($argument1, (1 / $argument2));
-    }
 
-    return $result;
+            return pow($argument1, (1 / $argument2));
+        default:
+
+            return $command;
+    }
 }
 
 function read_operand($message, $command, $isSecondOperand = false)
@@ -152,7 +149,8 @@ function finish_app($history)
 
 function show_info_block()
 {
-    info((implode(' ; ', AVAILABLE_COMMANDS)) . ' ;');
+    info('Calculator commands: ' . (implode(' ; ', AVAILABLE_COMMANDS)) . ' ;');
+    info('History commands:' . PHP_EOL . 'Full - to see full history.' . PHP_EOL . 'Format of date "01-01-1990" - to show history of current date.');
 }
 
 function show_history($history)
@@ -161,10 +159,20 @@ function show_history($history)
         info('You have no history');
     } else {
         $historyGroups = array_group($history, 'date');
+        $historyCommands = ['full'];
 
-        foreach ($historyGroups as $date => $historyItems) {
-            info ("{$date}:");
-            foreach ($historyItems as $historyItem) {
+        foreach ($historyGroups as $mainDate => $dateGroup) {
+            $historyCommands[] = $mainDate;
+        }
+
+        $showDateHistory = choose('Enter date of history (date - month - year) or "full" : ', $historyCommands);
+
+        info('',1);
+
+        if (array_key_exists($showDateHistory, $historyGroups)) {
+            info ("{$showDateHistory}: ");
+            foreach ($historyGroups[$showDateHistory] as $historyItem){
+
                 $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
 
                 $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
@@ -174,6 +182,21 @@ function show_history($history)
                 info($historyFunction, 1);
             }
             info('=====================');
+
+        } elseif ($showDateHistory == 'full') {
+            foreach ($historyGroups as $date => $historyItems) {
+                info("{$date}:");
+                foreach ($historyItems as $historyItem) {
+                    $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
+
+                    $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
+
+                    $historyFunction = "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
+
+                    info($historyFunction, 1);
+                }
+                info('=====================');
+            }
         }
     }
 }
