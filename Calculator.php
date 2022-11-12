@@ -142,7 +142,8 @@ function finish_app($history)
 
 function show_info_block()
 {
-    info((implode(' ; ', AVAILABLE_COMMANDS)) . ' ;');
+    info('Calculator commands: ' . (implode(' ; ', AVAILABLE_COMMANDS)) . ' ;');
+    info('History commands:' . PHP_EOL . 'Full - to see full history.' . PHP_EOL . 'Format of date "01-01-1990" - to show history of current date.');
 }
 
 function show_history($history)
@@ -151,16 +152,39 @@ function show_history($history)
         info('You have no history');
     } else {
         $historyGroups = array_group($history, 'date');
+        $historyCommands = ['full'];
 
-        foreach ($historyGroups as $date => $historyItems) {
-            info ("{$date}:");
+        foreach ($historyGroups as $mainDate => $dateGroup) {
+            $historyCommands[] = $mainDate;
+        }
 
-            foreach ($historyItems as $historyItem) {
+        $showDateHistory = choose('Enter date of history (date - month - year) or "full" : ', $historyCommands);
+
+        info('',1);
+
+        if (array_key_exists($showDateHistory, $historyGroups)) {
+            info ("{$showDateHistory}: ");
+            foreach ($historyGroups[$showDateHistory] as $historyItem){
+
                 $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
 
                 $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
 
                 $historyFunction = "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
+
+                info($historyFunction, 1);
+            }
+            info('=====================');
+
+        } elseif ($showDateHistory == 'full') {
+            foreach ($historyGroups as $date => $historyItems) {
+                info("{$date}:");
+                foreach ($historyItems as $historyItem) {
+                    $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
+
+                    $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
+
+                    $historyFunction = "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
 
                 info($historyFunction, 1);
             }
