@@ -53,25 +53,18 @@ function calculate($argument1, $command, $argument2)
 {
     switch ($command) {
         case '+':
-
             return $argument1 + $argument2;
         case '-':
-
             return $argument1 - $argument2;
         case '*':
-
             return $argument1 * $argument2;
         case '/':
-
             return $argument1 / $argument2;
         case '^':
-
             return pow($argument1, $argument2);
         case 'sr':
-
             return pow($argument1, (1 / $argument2));
         default:
-
             return $command;
     }
 }
@@ -167,11 +160,11 @@ function show_history($history)
 
         $showDateHistory = choose('Enter date of history (date - month - year) or "full" : ', $historyCommands);
 
-        info('',1);
+        info('', 1);
 
         if (array_key_exists($showDateHistory, $historyGroups)) {
-            info ("{$showDateHistory}: ");
-            foreach ($historyGroups[$showDateHistory] as $historyItem){
+            info("{$showDateHistory}: ");
+            foreach ($historyGroups[$showDateHistory] as $historyItem) {
 
                 $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
 
@@ -195,6 +188,7 @@ function show_history($history)
 
                     info($historyFunction, 1);
                 }
+
                 info('=====================');
             }
         }
