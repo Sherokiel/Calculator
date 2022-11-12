@@ -52,7 +52,7 @@ function info_box(...$lines)
     write_symbol_line($length, '*');
 }
 
-function write_symbol_line($length, $sybmol)
+function write_symbol_line($length, $symbol)
 {
-    info(str_repeat($sybmol, $length), 1);
+    info(str_repeat($symbol, $length), 1);
 }

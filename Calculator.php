@@ -155,18 +155,17 @@ function show_history($history)
         $historyCommands = ['full', 'help'];
 
         $historyCommands = array_merge($historyCommands, array_keys($historyGroups));
-var_dump($historyCommands);
-        $showDateHistory = readline('Enter date of history (day - month - year), "full" or "Help"  : ');
+        $showDateHistory = readline('Enter date of history (DD-MM-YYYY), "full" or "Help"  : ');
 
         $int = filter_var($showDateHistory, FILTER_SANITIZE_NUMBER_INT);
         $isDate = ($showDateHistory === $int);
-        $dateLength = strlen($showDateHistory);
 
-        if ($isDate && $dateLength != 10) {
-            info('Please input a valid date in format DD-MM-YYYY (e.g. 25-12-2022).');
+        if($isDate && ($showDateHistory[2] !== '-' || $showDateHistory[5] !== '-')) {
+            info('Please go in HELL.');
 
             return;
         }
+
         if (!$isDate && !in_array($showDateHistory, $historyCommands)) {
             info('Please input a valid date in format DD-MM-YYYY (e.g. 25-12-2022).');
 
@@ -180,32 +179,24 @@ var_dump($historyCommands);
         info('', 1);
 
         if(!in_array($showDateHistory, $historyCommands)) {
-            info('You have no history in that day');
+            info('You have no history in that day.');
 
             return;
         }
 
         if (array_key_exists($showDateHistory, $historyGroups)) {
-            info("{$showDateHistory}: ");
-
-            show_history_items($historyGroups[$showDateHistory]);
-
-            write_symbol_line(15, '=');
-
+            show_history_items([$showDateHistory => $historyGroups[$showDateHistory]]);
         } elseif ($showDateHistory == 'full') {
-            foreach ($historyGroups as $date => $historyItems) {
-                info("{$date}:");
-
-                show_history_items($historyItems);
-
-                write_symbol_line(15, '=');
-            }
+            show_history_items($historyGroups);
         }
     }
 }
 function show_history_items ($array)
 {
-        foreach ($array as $historyItem) {
+    foreach ($array as $key => $value) {
+        info("{$key}: ");
+
+        foreach ($value as $historyItem) {
 
             $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
 
@@ -215,6 +206,8 @@ function show_history_items ($array)
 
             info($historyFunction, 1);
         }
+    }
+    write_symbol_line(15, '=');
 }
 
 function history_to_txt($history)
