@@ -34,19 +34,23 @@ function info($result, $emptyLinesCount = 2)
 
 function info_box(...$lines)
 {
-    foreach ($lines as $maxLines) {
-        $h1 = strlen($maxLines);
-        $lineValue[] = $h1;
-    }
+    $lineLengths = array_map(function ($maxLines) {
+        return strlen($maxLines);
+    }, $lines);
 
-    $length = max($lineValue) + 6;
+    $length = max($lineLengths) + 6;
 
-    info (str_pad('*', $length, '*'), 1);
+    write_symbol_line($length, '*');
 
     foreach ($lines as $msg) {
         $message = str_pad($msg, $length - 6, ' ', STR_PAD_BOTH);
 
         info("*  {$message}  *", 1);
     }
-    info(str_pad('*', $length, '*'), 1);
+    write_symbol_line($length, '*');
+}
+
+function write_symbol_line($length, $sybmol)
+{
+    info(str_repeat($sybmol, $length), 1);
 }
