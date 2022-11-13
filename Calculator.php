@@ -179,6 +179,7 @@ function show_history($history)
             show_history_items($historyGroups);
         }
     }
+
    return $history;
 }
 
