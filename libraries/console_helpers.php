@@ -29,7 +29,11 @@ function choose($message, $availableValues)
 
 function info($result, $emptyLinesCount = 2)
 {
-    echo $result . str_repeat(PHP_EOL, $emptyLinesCount);
+    $info = $result . str_repeat(PHP_EOL, $emptyLinesCount);
+
+    echo ($info);
+
+    return $info;
 }
 
 function info_box(...$lines)
@@ -52,7 +56,7 @@ function info_box(...$lines)
     write_symbol_line($length, '*');
 }
 
-function write_symbol_line($length, $sybmol)
+function write_symbol_line($length, $symbol)
 {
-    info(str_repeat($sybmol, $length), 1);
+    info(str_repeat($symbol, $length), 1);
 }
