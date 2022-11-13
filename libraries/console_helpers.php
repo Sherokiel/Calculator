@@ -34,7 +34,6 @@ function info($result, $emptyLinesCount = 2)
     echo ($info);
 
     return $info;
-
 }
 
 function info_box(...$lines)

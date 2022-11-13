@@ -160,7 +160,6 @@ function show_history($history)
         $isDate = date_create_from_format('j-m-Y', $showDateHistory);
 
         if ($isDate === false && !in_array($showDateHistory, $historyCommands)) {
-
             return info('Please input a valid date in format DD-MM-YYYY (e.g. 25-12-2022).');
         }
 
@@ -183,15 +182,22 @@ function show_history($history)
    return $history;
 }
 
-function show_history_items ($historyGroups)
+function write_history_line($historyItem)
+{
+    $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
+    $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
+    $historyFunction = "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
+
+    return $historyFunction;
+}
+
+function show_history_items($historyGroups)
 {
     foreach ($historyGroups as $date => $historyItems) {
         info("{$date}: ");
 
         foreach ($historyItems as $historyItem) {
-            $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
-            $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
-            $historyFunction = "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
+            $historyFunction = write_history_line($historyItem);
 
             info($historyFunction, 1);
         }
@@ -227,9 +233,7 @@ function history_to_txt($history)
         file_put_contents($fullPathName, $date . PHP_EOL, FILE_APPEND);
 
         foreach ($historyItems as $historyItem) {
-            $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
-            $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
-            $historyFunction = "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
+            $historyFunction = write_history_line($historyItem);
 
             file_put_contents($fullPathName, $historyFunction . PHP_EOL, FILE_APPEND);
         }
