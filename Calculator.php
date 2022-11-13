@@ -190,9 +190,7 @@ function show_history_items ($historyGroups)
 
         foreach ($historyItems as $historyItem) {
             $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
-
             $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
-
             $historyFunction = "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
 
             info($historyFunction, 1);
@@ -230,12 +228,12 @@ function history_to_txt($history)
 
         foreach ($historyItems as $historyItem) {
             $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
-
             $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
-
             $historyFunction = "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
+
             file_put_contents($fullPathName, $historyFunction . PHP_EOL, FILE_APPEND);
         }
     }
+
     info('History saved!');
 }
