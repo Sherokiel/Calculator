@@ -157,9 +157,9 @@ function show_history($history)
         $historyCommands = array_merge($historyCommands, array_keys($historyGroups));
         $showDateHistory = readline('Enter date of history (DD-MM-YYYY), "Full" or "Help"  : ');
 
-        $isDate = date_create_from_format("j-m-Y","$showDateHistory");
+        $isDate = date_create_from_format('j-m-Y', $showDateHistory);
 
-        if (!$isDate && !in_array($showDateHistory, $historyCommands)) {
+        if ($isDate === false && !in_array($showDateHistory, $historyCommands)) {
 
             return info('Please input a valid date in format DD-MM-YYYY (e.g. 25-12-2022).');
         }
@@ -171,7 +171,6 @@ function show_history($history)
         info('', 1);
 
         if (!in_array($showDateHistory, $historyCommands)) {
-
             return info('You have no history in that day.');
         }
 
@@ -183,6 +182,7 @@ function show_history($history)
     }
    return $history;
 }
+
 function show_history_items ($historyGroups)
 {
     foreach ($historyGroups as $date => $historyItems) {
