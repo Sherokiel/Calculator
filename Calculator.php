@@ -155,21 +155,13 @@ function show_history($history)
         $historyCommands = ['full', 'help'];
 
         $historyCommands = array_merge($historyCommands, array_keys($historyGroups));
-        $showDateHistory = readline('Enter date of history (DD-MM-YYYY), "full" or "Help"  : ');
+        $showDateHistory = readline('Enter date of history (DD-MM-YYYY), "Full" or "Help"  : ');
 
-        $int = filter_var($showDateHistory, FILTER_SANITIZE_NUMBER_INT);
-        $isDate = ($showDateHistory === $int);
-
-        if($isDate && ($showDateHistory[2] !== '-' || $showDateHistory[5] !== '-')) {
-            info('Please go in HELL.');
-
-            return;
-        }
+        $isDate = date_create_from_format("j-m-Y","$showDateHistory");
 
         if (!$isDate && !in_array($showDateHistory, $historyCommands)) {
-            info('Please input a valid date in format DD-MM-YYYY (e.g. 25-12-2022).');
 
-            return;
+            return info('Please input a valid date in format DD-MM-YYYY (e.g. 25-12-2022).');
         }
 
         if ($showDateHistory == 'help') {
@@ -178,10 +170,9 @@ function show_history($history)
 
         info('', 1);
 
-        if(!in_array($showDateHistory, $historyCommands)) {
-            info('You have no history in that day.');
+        if (!in_array($showDateHistory, $historyCommands)) {
 
-            return;
+            return info('You have no history in that day.');
         }
 
         if (array_key_exists($showDateHistory, $historyGroups)) {
@@ -190,14 +181,14 @@ function show_history($history)
             show_history_items($historyGroups);
         }
     }
+   return $history;
 }
-function show_history_items ($array)
+function show_history_items ($historyGroups)
 {
-    foreach ($array as $key => $value) {
-        info("{$key}: ");
+    foreach ($historyGroups as $date => $historyItems) {
+        info("{$date}: ");
 
-        foreach ($value as $historyItem) {
-
+        foreach ($historyItems as $historyItem) {
             $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
 
             $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
@@ -207,6 +198,7 @@ function show_history_items ($array)
             info($historyFunction, 1);
         }
     }
+
     write_symbol_line(15, '=');
 }
 
@@ -245,6 +237,5 @@ function history_to_txt($history)
             file_put_contents($fullPathName, $historyFunction . PHP_EOL, FILE_APPEND);
         }
     }
-
     info('History saved!');
 }
