@@ -1,7 +1,10 @@
 <?php
+
+$DS = DIRECTORY_SEPARATOR;
+
 require 'constants.php';
-require 'libraries\console_helpers.php';
-require 'libraries\helpers.php';
+require "libraries{$DS}console_helpers.php";
+require "libraries{$DS}helpers.php";
 
 fopen('history.json', 'a+');
 
