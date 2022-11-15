@@ -7,17 +7,9 @@ require "libraries{$DS}console_helpers.php";
 require "libraries{$DS}helpers.php";
 require "classes.php";
 
-$history = new Repository('data_storage');
+$historyRepository = new HistoryRepository('data_storage');
 $date = date('d-m-Y');
 $times = 0;
-
-$history->savedData = $history->fileGetContent();
-
-if ($history->savedData === null) {
-    $history->savedData = [];
-} else {
-    $history->savedData = $history->decodeJson();
-}
 
 info_box('', 'Welcome to the calculator app!', '', 'Print "help" to learn more about the app.', '');
 
@@ -26,7 +18,7 @@ while ($times < 1) {
     $command = choose('Enter command: ', AVAILABLE_COMMANDS);
 
     if (in_array($command, SYSTEM_COMMANDS)) {
-        execute_system_command($command, $history);
+        execute_system_command($command, $historyRepository);
 
         continue;
     }
@@ -44,7 +36,7 @@ while ($times < 1) {
     info('Result: ' . $result);
     info('=====================');
 
-    $history->create($date, $argument1, $argument2, $command, $result);
+    $historyRepository->create($date, $argument1, $argument2, $command, $result);
 }
 
 function calculate($argument1, $command, $argument2)
@@ -101,11 +93,11 @@ function read_operand($message, $command, $isSecondOperand = false)
     return $argument;
 }
 
-function execute_system_command($command, $history)
+function execute_system_command($command, $historyRepository)
 {
     switch($command) {
         case(QUIT):
-            finish_app($history);
+            finish_app($historyRepository);
 
             break;
 
@@ -115,23 +107,21 @@ function execute_system_command($command, $history)
             break;
 
         case(HISTORY):
-            show_history($history);
+            show_history($historyRepository);
 
             break;
 
         case(EXPORT_HISTORY):
-            history_to_txt($history);
+            history_to_txt($historyRepository);
     }
 }
 
-function finish_app($history)
+function finish_app($historyRepository)
 {
     $command = choose('Are you sure to wanna quit? Yes/No ', [AGREE, DEGREE]);
 
     if ($command == AGREE) {
-        if ($history !== null) {
-            $history->filePutContent();
-        }
+        $historyRepository->filePutContent();
 
         exit();
     }
@@ -143,12 +133,12 @@ function show_info_block()
     info('History commands:' . PHP_EOL . 'Full - to see full history.' . PHP_EOL . 'Format of date "01-01-1990" - to show history of current date.');
 }
 
-function show_history($history)
+function show_history($historyRepository)
 {
-    if ($history === null) {
+    if ($historyRepository === null) {
         info('You have no history');
     } else {
-        $historyGroups = array_group($history->savedData, 'date');
+        $historyGroups = array_group($historyRepository->all(), 'date');
         $historyCommands = ['full', 'help'];
 
         $historyCommands = array_merge($historyCommands, array_keys($historyGroups));
@@ -177,7 +167,7 @@ function show_history($history)
         }
     }
 
-    return $history;
+    return $historyRepository;
 }
 
 function write_history_line($historyItem)

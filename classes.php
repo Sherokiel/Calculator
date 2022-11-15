@@ -1,9 +1,9 @@
 <?php
 
-class Repository
+class HistoryRepository
 {
-    public $DS = DIRECTORY_SEPARATOR;
-    public $savedData;
+    protected $DS = DIRECTORY_SEPARATOR;
+    protected $savedData;
 
     public function __construct($dirname)
     {
@@ -15,6 +15,13 @@ class Repository
 
         fopen("{$this->dirname}{$this->DS}history.json", 'a+');
 
+        $this->savedData = $this->fileGetContent();
+
+        if ($this->savedData === null) {
+            $this->savedData = [];
+        } else {
+            $this->savedData = $this->decodeJson();
+        }
     }
 
     function fileGetContent()
@@ -27,19 +34,23 @@ class Repository
         return $this->savedData = json_decode($this->savedData, true);
     }
 
-    function create($date, $argument1, $argument2, $command, $result)
+    public function create($date, $argument1, $argument2, $command, $result)
     {
-        return $this->savedData[] = ['date' => $date,
-                                     'first_operand' => $argument1,
-                                     'second_operand' => $argument2,
-                                     'sign' => $command,
-                                     'result' => $result
+        $this->savedData[] = [
+            'date' => $date,
+            'first_operand' => $argument1,
+            'second_operand' => $argument2,
+            'sign' => $command,
+            'result' => $result
         ];
     }
 
     function filePutContent()
     {
-        $this->savedData = json_encode($this->savedData);
-        file_put_contents("{$this->dirname}{$this -> DS}history.json", $this->savedData);
+        if ($this->savedData !== null) {
+
+            $this->savedData = json_encode($this->savedData);
+            file_put_contents("{$this->dirname}{$this -> DS}history.json", $this->savedData);
+        }
     }
 }
