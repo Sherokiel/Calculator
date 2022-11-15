@@ -26,7 +26,7 @@ while ($times < 1) {
     $command = choose('Enter command: ', AVAILABLE_COMMANDS);
 
     if (in_array($command, SYSTEM_COMMANDS)) {
-        execute_system_command($command, $history->savedData);
+        execute_system_command($command, $history);
 
         continue;
     }
@@ -126,18 +126,14 @@ function execute_system_command($command, $history)
 
 function finish_app($history)
 {
-    var_dump($history);
     $command = choose('Are you sure to wanna quit? Yes/No ', [AGREE, DEGREE]);
 
     if ($command == AGREE) {
         if ($history !== null) {
-
-           // $history->filePutContent();
-           // $history = $history->encodeJson();
-            echo "ХУЙ";
+            $history->filePutContent();
         }
 
-        //exit();
+        exit();
     }
 }
 
@@ -152,7 +148,7 @@ function show_history($history)
     if ($history === null) {
         info('You have no history');
     } else {
-        $historyGroups = array_group($history, 'date');
+        $historyGroups = array_group($history->savedData, 'date');
         $historyCommands = ['full', 'help'];
 
         $historyCommands = array_merge($historyCommands, array_keys($historyGroups));
@@ -210,7 +206,7 @@ function show_history_items($historyGroups)
 
 function history_to_txt($history)
 {
-    $historyGroups = array_group($history, 'date');
+    $historyGroups = array_group($history->savedData, 'date');
     $nameOfFile = readline('Enter name of created file: ');
     $pathToFile = readline('Enter path of save exported history: ');
     $fullPathName = "{$pathToFile}{$nameOfFile}.txt";

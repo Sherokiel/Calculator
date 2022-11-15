@@ -30,22 +30,16 @@ class Repository
     function create($date, $argument1, $argument2, $command, $result)
     {
         return $this->savedData[] = ['date' => $date,
-            'first_operand' => $argument1,
-            'second_operand' => $argument2,
-            'sign' => $command,
-            'result' => $result
+                                     'first_operand' => $argument1,
+                                     'second_operand' => $argument2,
+                                     'sign' => $command,
+                                     'result' => $result
         ];
-    }
-
-    function encodeJson()
-    {
-        return $this->savedData = json_encode($this->savedData);
     }
 
     function filePutContent()
     {
-        //return file_put_contents("{$this->dirname}{$this -> DS}history.json", $this->savedData);
-        echo "ХУЙ2";
-        return file_put_contents("history.json", "11");
+        $this->savedData = json_encode($this->savedData);
+        file_put_contents("{$this->dirname}{$this -> DS}history.json", $this->savedData);
     }
 }
