@@ -5,17 +5,18 @@ $DS = DIRECTORY_SEPARATOR;
 require 'constants.php';
 require "libraries{$DS}console_helpers.php";
 require "libraries{$DS}helpers.php";
+require "classes.php";
 
-fopen('history.json', 'a+');
-
+$history = new Repository('data_storage');
 $date = date('d-m-Y');
-$history = file_get_contents('history.json');
 $times = 0;
 
-if ($history === null) {
-    $history = [];
+$history->savedData = $history->fileGetContent();
+
+if ($history->savedData === null) {
+    $history->savedData = [];
 } else {
-    $history = json_decode($history, true);
+    $history->savedData = $history->decodeJson();
 }
 
 info_box('', 'Welcome to the calculator app!', '', 'Print "help" to learn more about the app.', '');
@@ -25,7 +26,7 @@ while ($times < 1) {
     $command = choose('Enter command: ', AVAILABLE_COMMANDS);
 
     if (in_array($command, SYSTEM_COMMANDS)) {
-        execute_system_command($command, $history);
+        execute_system_command($command, $history->savedData);
 
         continue;
     }
@@ -43,13 +44,7 @@ while ($times < 1) {
     info('Result: ' . $result);
     info('=====================');
 
-    $history[] = [
-        'date' => $date,
-        'first_operand' => $argument1,
-        'second_operand' => $argument2,
-        'sign' => $command,
-        'result' => $result
-    ];
+    $history->create($date, $argument1, $argument2, $command, $result);
 }
 
 function calculate($argument1, $command, $argument2)
@@ -131,15 +126,18 @@ function execute_system_command($command, $history)
 
 function finish_app($history)
 {
+    var_dump($history);
     $command = choose('Are you sure to wanna quit? Yes/No ', [AGREE, DEGREE]);
 
     if ($command == AGREE) {
-        if (!$history == NULL) {
-            $history = json_encode($history);
-            file_put_contents('history.json', $history);
+        if ($history !== null) {
+
+           // $history->filePutContent();
+           // $history = $history->encodeJson();
+            echo "ХУЙ";
         }
 
-        exit();
+        //exit();
     }
 }
 
@@ -183,7 +181,7 @@ function show_history($history)
         }
     }
 
-   return $history;
+    return $history;
 }
 
 function write_history_line($historyItem)
