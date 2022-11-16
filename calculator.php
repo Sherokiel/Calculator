@@ -7,7 +7,7 @@ require "libraries{$DS}console_helpers.php";
 require "libraries{$DS}helpers.php";
 require "classes.php";
 
-$historyRepository = new HistoryRepository('data_storage', 'history.json');
+$historyRepository = new HistoryRepository();
 $date = date('d-m-Y');
 $times = 0;
 

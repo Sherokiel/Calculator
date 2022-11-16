@@ -5,12 +5,12 @@ class HistoryRepository
     protected $DS = DIRECTORY_SEPARATOR;
     protected $fileName;
 
-    public function __construct($dirname, $fileName)
+    public function __construct()
     {
-        $this->dirname = $dirname;
-        $this->fileName = $fileName;
+        $this->dirname = 'data_storage';
+        $this->fileName = 'history.json';
 
-        if (!is_dir($dirname)) {
+        if (!is_dir($this->dirname)) {
             mkdir($this->dirname);
         }
 
