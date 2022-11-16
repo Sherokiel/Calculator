@@ -97,7 +97,7 @@ function execute_system_command($command, $historyRepository)
 {
     switch($command) {
         case(QUIT):
-            finish_app($historyRepository);
+            finish_app();
 
             break;
 
@@ -116,12 +116,11 @@ function execute_system_command($command, $historyRepository)
     }
 }
 
-function finish_app($historyRepository)
+function finish_app()
 {
     $command = choose('Are you sure to wanna quit? Yes/No ', [AGREE, DEGREE]);
 
     if ($command == AGREE) {
-        $historyRepository->filePutContent();
 
         exit();
     }
@@ -135,12 +134,12 @@ function show_info_block()
 
 function show_history($historyRepository)
 {
-    $history = $historyRepository->fileGetContent();
+    $history = $historyRepository->all();
 
     if (empty($history)) {
-        return info('You have no history');
+        info('You have no history');
     } else {
-        $historyGroups = array_group($historyRepository->fileGetContent(), 'date');
+        $historyGroups = array_group($history, 'date');
         $historyCommands = ['full', 'help'];
 
         $historyCommands = array_merge($historyCommands, array_keys($historyGroups));
@@ -197,7 +196,7 @@ function show_history_items($historyGroups)
 
 function history_to_txt($historyRepository)
 {
-    $historyGroups = array_group($historyRepository->fileGetContent(), 'date');
+    $historyGroups = array_group($historyRepository->all(), 'date');
     $nameOfFile = readline('Enter name of created file: ');
     $pathToFile = readline('Enter path of save exported history: ');
     $fullPathName = "{$pathToFile}{$nameOfFile}.txt";

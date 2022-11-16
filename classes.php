@@ -3,7 +3,6 @@
 class HistoryRepository
 {
     protected $DS = DIRECTORY_SEPARATOR;
-    protected $savedData;
     protected $fileName;
 
     public function __construct($dirname, $fileName)
@@ -11,44 +10,38 @@ class HistoryRepository
         $this->dirname = $dirname;
         $this->fileName = $fileName;
 
-        if(!is_dir($dirname)) {
-            mkdir("{$this->dirname}");
+        if (!is_dir($dirname)) {
+            mkdir($this->dirname);
         }
 
         fopen("{$this->dirname}{$this->DS}{$this->fileName}", 'a+');
     }
 
-    function fileGetContent()
+    function all()
     {
-        $zaebalsya = file_get_contents("{$this->dirname}{$this -> DS}{$this->fileName}");
+        $content = file_get_contents("{$this->dirname}{$this -> DS}{$this->fileName}");
 
-        if ($zaebalsya === null) {
-
-            return $zaebalsya;
+        if ($content === null) {
+            return $content;
         }
 
-        $zaebalsya = json_decode($zaebalsya, true);
+        $content = json_decode($content, true);
 
-        return $zaebalsya;
+        return $content;
     }
 
     public function create($date, $argument1, $argument2, $command, $result)
     {
-        $this->savedData[] = [
+        $content = $this->all();
+
+        $content[] = [
             'date' => $date,
             'first_operand' => $argument1,
             'second_operand' => $argument2,
             'sign' => $command,
             'result' => $result
         ];
+        $content = json_encode($content);
+        file_put_contents("{$this->dirname}{$this->DS}{$this->fileName}", $content);
     }
-
-    function filePutContent()
-    {
-        if ($this->savedData !== null) {
-            $this->savedData = json_encode($this->savedData);
-            file_put_contents("{$this->dirname}{$this->DS}{$this->fileName}", $this->savedData);
-        }
-    }
-
 }
