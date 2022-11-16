@@ -58,5 +58,5 @@ function info_box(...$lines)
 
 function write_symbol_line($length, $symbol)
 {
-    info(str_repeat($symbol, $length), 1);
+    return info(str_repeat($symbol, $length), 1);
 }
