@@ -7,7 +7,7 @@ require "libraries{$DS}console_helpers.php";
 require "libraries{$DS}helpers.php";
 require "classes.php";
 
-$historyRepository = new HistoryRepository('data_storage');
+$historyRepository = new HistoryRepository('data_storage', 'history.json');
 $date = date('d-m-Y');
 $times = 0;
 
@@ -135,10 +135,12 @@ function show_info_block()
 
 function show_history($historyRepository)
 {
-    if ($historyRepository === null) {
-        info('You have no history');
+    $history = $historyRepository->fileGetContent();
+
+    if (empty($history)) {
+        return info('You have no history');
     } else {
-        $historyGroups = array_group($historyRepository->all(), 'date');
+        $historyGroups = array_group($historyRepository->fileGetContent(), 'date');
         $historyCommands = ['full', 'help'];
 
         $historyCommands = array_merge($historyCommands, array_keys($historyGroups));
@@ -161,12 +163,13 @@ function show_history($historyRepository)
         }
 
         if (array_key_exists($showDateHistory, $historyGroups)) {
-            show_history_items([$showDateHistory => $historyGroups[$showDateHistory]]);
-        } elseif ($showDateHistory == 'full') {
-            show_history_items($historyGroups);
+            return show_history_items([$showDateHistory => $historyGroups[$showDateHistory]]);
+        }
+
+        if ($showDateHistory == 'full') {
+            return show_history_items($historyGroups);
         }
     }
-
     return $historyRepository;
 }
 
@@ -174,9 +177,7 @@ function write_history_line($historyItem)
 {
     $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
     $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
-    $historyFunction = "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
-
-    return $historyFunction;
+    return "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
 }
 
 function show_history_items($historyGroups)
@@ -191,18 +192,18 @@ function show_history_items($historyGroups)
         }
     }
 
-    write_symbol_line(15, '=');
+    return write_symbol_line(15, '=');
 }
 
-function history_to_txt($history)
+function history_to_txt($historyRepository)
 {
-    $historyGroups = array_group($history->savedData, 'date');
+    $historyGroups = array_group($historyRepository->fileGetContent(), 'date');
     $nameOfFile = readline('Enter name of created file: ');
     $pathToFile = readline('Enter path of save exported history: ');
     $fullPathName = "{$pathToFile}{$nameOfFile}.txt";
 
     if (file_exists($fullPathName)) {
-        $command = choose("File ${$fullPathName} already exists, do you want to replace it? Yes/no: ", [AGREE, DEGREE]);
+        $command = choose("File {$fullPathName} already exists, do you want to replace it? Yes/no: ", [AGREE, DEGREE]);
 
         switch ($command) {
             case (AGREE):
