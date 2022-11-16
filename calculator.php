@@ -138,6 +138,7 @@ function show_history($historyRepository)
     if (empty($history)) {
         return info('You have no history');
     }
+
     $historyGroups = array_group($history, 'date');
 
     $historyCommands = array_merge(['full', 'help'], array_keys($historyGroups));
