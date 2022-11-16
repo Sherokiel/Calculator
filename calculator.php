@@ -121,7 +121,6 @@ function finish_app()
     $command = choose('Are you sure to wanna quit? Yes/No ', [AGREE, DEGREE]);
 
     if ($command == AGREE) {
-
         exit();
     }
 }
@@ -140,9 +139,8 @@ function show_history($historyRepository)
         return info('You have no history');
     }
     $historyGroups = array_group($history, 'date');
-    $historyCommands = ['full', 'help'];
 
-    $historyCommands = array_merge($historyCommands, array_keys($historyGroups));
+    $historyCommands = array_merge(['full', 'help'], array_keys($historyGroups));
     $showDateHistory = readline('Enter date of history (DD-MM-YYYY), "Full" or "Help"  : ');
 
     $isDate = date_create_from_format('j-m-Y', $showDateHistory);
@@ -166,13 +164,13 @@ function show_history($historyRepository)
     }
 
     return show_history_items($historyGroups);
-
 }
 
 function write_history_line($historyItem)
 {
     $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
     $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
+
     return "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
 }
 

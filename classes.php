@@ -3,13 +3,11 @@
 class HistoryRepository
 {
     protected $DS = DIRECTORY_SEPARATOR;
-    protected $fileName;
+    protected $dirname = 'data_storage';
+    protected $fileName = 'history.json';
 
     public function __construct()
     {
-        $this->dirname = 'data_storage';
-        $this->fileName = 'history.json';
-
         if (!is_dir($this->dirname)) {
             mkdir($this->dirname);
         }
@@ -19,15 +17,13 @@ class HistoryRepository
 
     function all()
     {
-        $content = file_get_contents("{$this->dirname}{$this -> DS}{$this->fileName}");
+        $content = file_get_contents("{$this->dirname}{$this->DS}{$this->fileName}");
 
         if ($content === null) {
-            return $content;
+            return [];
         }
 
-        $content = json_decode($content, true);
-
-        return $content;
+        return  json_decode($content, true);
     }
 
     public function create($date, $argument1, $argument2, $command, $result)
@@ -41,7 +37,7 @@ class HistoryRepository
             'sign' => $command,
             'result' => $result
         ];
-        $content = json_encode($content);
-        file_put_contents("{$this->dirname}{$this->DS}{$this->fileName}", $content);
+
+        file_put_contents("{$this->dirname}{$this->DS}{$this->fileName}", json_encode($content));
     }
 }
