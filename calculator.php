@@ -137,39 +137,36 @@ function show_history($historyRepository)
     $history = $historyRepository->all();
 
     if (empty($history)) {
-        info('You have no history');
-    } else {
-        $historyGroups = array_group($history, 'date');
-        $historyCommands = ['full', 'help'];
-
-        $historyCommands = array_merge($historyCommands, array_keys($historyGroups));
-        $showDateHistory = readline('Enter date of history (DD-MM-YYYY), "Full" or "Help"  : ');
-
-        $isDate = date_create_from_format('j-m-Y', $showDateHistory);
-
-        if ($isDate === false && !in_array($showDateHistory, $historyCommands)) {
-            return info('Please input a valid date in format DD-MM-YYYY (e.g. 25-12-2022).');
-        }
-
-        if ($showDateHistory == 'help') {
-            show_info_block();
-        }
-
-        info('', 1);
-
-        if (!in_array($showDateHistory, $historyCommands)) {
-            return info('You have no history in that day.');
-        }
-
-        if (array_key_exists($showDateHistory, $historyGroups)) {
-            return show_history_items([$showDateHistory => $historyGroups[$showDateHistory]]);
-        }
-
-        if ($showDateHistory == 'full') {
-            return show_history_items($historyGroups);
-        }
+        return info('You have no history');
     }
-    return $historyRepository;
+    $historyGroups = array_group($history, 'date');
+    $historyCommands = ['full', 'help'];
+
+    $historyCommands = array_merge($historyCommands, array_keys($historyGroups));
+    $showDateHistory = readline('Enter date of history (DD-MM-YYYY), "Full" or "Help"  : ');
+
+    $isDate = date_create_from_format('j-m-Y', $showDateHistory);
+
+    if ($isDate === false && !in_array($showDateHistory, $historyCommands)) {
+        return info('Please input a valid date in format DD-MM-YYYY (e.g. 25-12-2022).');
+    }
+
+    if ($showDateHistory == 'help') {
+        show_info_block();
+    }
+
+    info('', 1);
+
+    if (!in_array($showDateHistory, $historyCommands)) {
+        return info('You have no history in that day.');
+    }
+
+    if (array_key_exists($showDateHistory, $historyGroups)) {
+        return show_history_items([$showDateHistory => $historyGroups[$showDateHistory]]);
+    }
+
+    return show_history_items($historyGroups);
+
 }
 
 function write_history_line($historyItem)
