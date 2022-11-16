@@ -38,9 +38,7 @@ function info($result, $emptyLinesCount = 2)
 
 function info_box(...$lines)
 {
-    $lineLengths = array_map(function ($line) {
-        return strlen($line);
-    }, $lines);
+    $lineLengths = string_length($lines);
 
     $indent = 6;
     $length = max($lineLengths) + $indent;
@@ -65,17 +63,16 @@ function show_info_block()
 {
     $info = INFO_BLOCK;
 
-    $lineLengths = array_map(function ($info) {
-        return strlen($info);
-    }, $info);
+    $lineLengths = string_length($info);
     $length = max($lineLengths) + 19;
-    echo str_repeat('*', $length) . PHP_EOL;
-    echo str_pad('Avaliable Commands in calculator', $length,' ',STR_PAD_BOTH) . PHP_EOL;
+
+    write_symbol_line($length,'*');
+    info(str_pad('Avaliable Commands in calculator', $length,' ',STR_PAD_BOTH),1);
     foreach ($info as $key => $value) {
         $b = strlen($value);
         $a = 50 - $b;
         echo str_pad($key, $a, '_') . "{$value}" . PHP_EOL;
     }
 
-    echo str_repeat('*', $length) . PHP_EOL;
+    return write_symbol_line($length,'*');
 }

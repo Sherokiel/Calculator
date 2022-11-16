@@ -125,11 +125,11 @@ function finish_app()
     }
 }
 
-function show_info_block_show_history()
+function show_info_block_history()
 {
-    $fullDescription = "'Full'....................Show full history of all time.";
-    $dateFormat = "Format of date must be DD-MM-YYYY (example: 21-10-1990).";
-    return info_box('', $fullDescription, '', $dateFormat);
+    $info = INFO_BLOCK;
+
+    return show_info_block($info);
 }
 
 function show_history($historyRepository)
@@ -152,7 +152,7 @@ function show_history($historyRepository)
     }
 
     if ($showDateHistory == 'help') {
-        return show_info_block_show_history();
+        return show_info_block_history();
     }
 
     info('', 1);
