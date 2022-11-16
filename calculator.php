@@ -132,12 +132,6 @@ function show_info_block_show_history()
     return info_box('', $fullDescription, '', $dateFormat);
 }
 
-//function show_info_block()
-//{
-//    info('Calculator commands: ' . (implode(' ; ', AVAILABLE_COMMANDS)) . ' ;');
-//    info('History commands:' . PHP_EOL . 'Full - to see full history.' . PHP_EOL . 'Format of date "01-01-1990" - to show history of current date.');
-//}
-
 function show_history($historyRepository)
 {
     $history = $historyRepository->all();
