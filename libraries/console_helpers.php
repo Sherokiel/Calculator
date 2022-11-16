@@ -53,10 +53,29 @@ function info_box(...$lines)
         info("*  {$message}  *", 1);
     }
 
-    write_symbol_line($length, '*');
+    return write_symbol_line($length, '*');
 }
 
 function write_symbol_line($length, $symbol)
 {
     return info(str_repeat($symbol, $length), 1);
+}
+
+function show_info_block()
+{
+    $info = INFO_BLOCK;
+
+    $lineLengths = array_map(function ($info) {
+        return strlen($info);
+    }, $info);
+    $length = max($lineLengths) + 19;
+    echo str_repeat('*', $length) . PHP_EOL;
+    echo str_pad('Avaliable Commands in calculator', $length,' ',STR_PAD_BOTH) . PHP_EOL;
+    foreach ($info as $key => $value) {
+        $b = strlen($value);
+        $a = 50 - $b;
+        echo str_pad($key, $a, '_') . "{$value}" . PHP_EOL;
+    }
+
+    echo str_repeat('*', $length) . PHP_EOL;
 }

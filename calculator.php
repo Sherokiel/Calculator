@@ -125,11 +125,18 @@ function finish_app()
     }
 }
 
-function show_info_block()
+function show_info_block_show_history()
 {
-    info('Calculator commands: ' . (implode(' ; ', AVAILABLE_COMMANDS)) . ' ;');
-    info('History commands:' . PHP_EOL . 'Full - to see full history.' . PHP_EOL . 'Format of date "01-01-1990" - to show history of current date.');
+    $fullDescription = "'Full'....................Show full history of all time.";
+    $dateFormat = "Format of date must be DD-MM-YYYY (example: 21-10-1990).";
+    return info_box('', $fullDescription, '', $dateFormat);
 }
+
+//function show_info_block()
+//{
+//    info('Calculator commands: ' . (implode(' ; ', AVAILABLE_COMMANDS)) . ' ;');
+//    info('History commands:' . PHP_EOL . 'Full - to see full history.' . PHP_EOL . 'Format of date "01-01-1990" - to show history of current date.');
+//}
 
 function show_history($historyRepository)
 {
@@ -141,7 +148,8 @@ function show_history($historyRepository)
     $historyGroups = array_group($history, 'date');
 
     $historyCommands = array_merge(['full', 'help'], array_keys($historyGroups));
-    $showDateHistory = readline('Enter date of history (DD-MM-YYYY), "Full" or "Help"  : ');
+    $showDateHistory = readline('Enter date of history (DD-MM-YYYY), "full" or "help"  : ');
+    $showDateHistory = strtolower($showDateHistory);
 
     $isDate = date_create_from_format('j-m-Y', $showDateHistory);
 
@@ -150,7 +158,7 @@ function show_history($historyRepository)
     }
 
     if ($showDateHistory == 'help') {
-        show_info_block();
+        return show_info_block_show_history();
     }
 
     info('', 1);
