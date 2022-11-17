@@ -11,9 +11,9 @@ function array_group($array, $key)
     return $result;
 }
 
-function string_lengths($string)
+function string_lengths($strings)
 {
-    return array_map(function ($string) {
-        return strlen($string);
-    }, $string);
+    return array_map(function ($strings) {
+        return strlen($strings);
+    }, $strings);
 }

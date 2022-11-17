@@ -138,10 +138,7 @@ function show_history($historyRepository)
 
         $historyCommands = array_merge(['full', 'help', 'back'], array_keys($historyGroups));
         $showDateHistory = ask('Enter date in format DD-MM-YYYY or "full" to show full history: ');
-
-        $isDate = is_Date('j-m-Y', $showDateHistory);
-
-        $isDataValid = ($isDate || in_array($showDateHistory, $historyCommands));
+        $isDataValid = (is_date($showDateHistory) || in_array($showDateHistory, $historyCommands));
 
         if (!$isDataValid) {
             info('Please input a valid date in format DD-MM-YYYY (e.g. 25-12-2022).');
@@ -150,6 +147,7 @@ function show_history($historyRepository)
         }
 
         $isDataValid = (in_array($showDateHistory, $historyCommands));
+
         if (!$isDataValid) {
             info('You have no history in that day.');
 
@@ -171,6 +169,7 @@ function show_history($historyRepository)
         }
 
         $isDataValid = (!array_key_exists($showDateHistory, $historyGroups));
+
         if (!$isDataValid) {
             return show_history_items([$showDateHistory => $historyGroups[$showDateHistory]]);
         }

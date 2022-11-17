@@ -58,9 +58,11 @@ function write_symbol_line($length, $symbol, $emptyLinesCount = 2)
 {
     return info(str_repeat($symbol, $length), $emptyLinesCount);
 }
+
 /**
  * @param array $data associative array of strings, keys as items and values as item description
  */
+
 function show_info_block($title, $info, $widthOfBox = 19, $lineWidthRatio = 48 )
 {
     $maxLineLengths = max(string_lengths($info));
@@ -80,13 +82,12 @@ function show_info_block($title, $info, $widthOfBox = 19, $lineWidthRatio = 48 )
 
 function ask($message)
 {
-    $ask = readline($message);
-    $ask = strtolower($ask);
+    $result = readline($message);
 
-    return $ask;
+    return strtolower($result);
 }
 
-function is_Date($format, $date)
+function is_date($date, $format = 'j-m-Y')
 {
     return date_create_from_format($format, $date);
 }
