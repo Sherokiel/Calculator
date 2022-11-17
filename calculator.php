@@ -132,6 +132,7 @@ function show_history($historyRepository)
     if (empty($history)) {
         return info('You have no history');
     }
+
     do {
         $historyGroups = array_group($history, 'date');
 
@@ -157,7 +158,7 @@ function show_history($historyRepository)
         }
 
         if ($showDateHistory == 'help') {
-            show_info_block('Avaliable Commands in history viewer', HISTORY_VIEWER_COMMANDS);
+            show_info_block('Available Commands in history viewer', HISTORY_VIEWER_COMMANDS, 19, 71);
             $isDataValid = false;
 
             continue;

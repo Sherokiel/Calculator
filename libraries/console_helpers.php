@@ -38,10 +38,10 @@ function info($result, $emptyLinesCount = 2)
 
 function info_box(...$lines)
 {
-    $lineLengths = string_length($lines);
+    $maxLineLengths = max(string_length($lines));
 
     $indent = 6;
-    $length = max($lineLengths) + $indent;
+    $length = $maxLineLengths + $indent;
 
     write_symbol_line($length, '*');
 
@@ -54,23 +54,24 @@ function info_box(...$lines)
     return write_symbol_line($length, '*');
 }
 
-function write_symbol_line($length, $symbol)
+function write_symbol_line($length, $symbol, $emptyLines = 2)
 {
-    return info(str_repeat($symbol, $length), 1);
+    return info(str_repeat($symbol, $length), $emptyLines);
 }
 
-function show_info_block($title, $info)
+function show_info_block($title, $info, $widthOfBox = 19, $lineWidthRatio = 50 )
 {
-    $lineLengths = string_length($info);
-    $length = max($lineLengths) + 19;
+    $maxLineLengths = max(string_length($info));
+    $length = $maxLineLengths + $widthOfBox;
 
-    write_symbol_line($length, '*');
-    info(str_pad($title, $length,' ',STR_PAD_BOTH),1);
+    write_symbol_line($length, '*', 1);
+    info(str_pad($title, $length, ' ', STR_PAD_BOTH),1);
+
     foreach ($info as $key => $value) {
-        $b = strlen($value);
-        $a = 50 - $b;
-        echo str_pad($key, $a, '_') . "{$value}" . PHP_EOL;
+        $separatorLength = $lineWidthRatio - (strlen($value));
+
+        echo str_pad($key, $separatorLength, '_') . $value . PHP_EOL;
     }
 
-    return write_symbol_line($length, '*');
+    return write_symbol_line($length, '*', 1);
 }

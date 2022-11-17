@@ -18,13 +18,13 @@ const INFO_BLOCK = [
     'sq' => 'Find root of number',
     EXPORT_HISTORY => 'Export history in file',
     QUIT => 'Exit programm',
-    HISTORY => 'Show saved history',
+    HISTORY => 'Open show history mode',
     'Full' => 'Show full history of all time',
     'Date format' => 'DD-MM-YYYY(Example: 21-10-1990)',
 ];
 
 const HISTORY_VIEWER_COMMANDS = [
-    'Fill' => 'Show full history of all time',
-    'Date format' => 'DD-MM-YYYY(Example: 21-10-1990)',
+    'Full' => 'Show full history of all time',
+    'DD-MM-YYYY' => 'Show history by particular date(Example: 21-10-1990)',
     'Back' => 'Return to main menu'
 ];
