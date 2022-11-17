@@ -10,3 +10,10 @@ function array_group($array, $key)
 
     return $result;
 }
+
+function string_lengths($strings)
+{
+    return array_map(function ($strings) {
+        return strlen($strings);
+    }, $strings);
+}
