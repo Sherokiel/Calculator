@@ -102,7 +102,7 @@ function execute_system_command($command, $historyRepository)
             break;
 
         case(INFO):
-            show_info_block();
+            show_info_block('Avaliable Commands in calculator', INFO_BLOCK);
 
             break;
 
@@ -145,7 +145,7 @@ function show_history($historyRepository)
     }
 
     if ($showDateHistory == 'help') {
-        return show_info_block();
+        return show_info_block('Avaliable Commands in calculator', INFO_BLOCK);
     }
 
     info('', 1);

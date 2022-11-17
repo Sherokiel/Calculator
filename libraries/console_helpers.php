@@ -59,15 +59,13 @@ function write_symbol_line($length, $symbol)
     return info(str_repeat($symbol, $length), 1);
 }
 
-function show_info_block()
+function show_info_block($title, $info)
 {
-    $info = INFO_BLOCK;
-
     $lineLengths = string_length($info);
     $length = max($lineLengths) + 19;
 
     write_symbol_line($length,'*');
-    info(str_pad('Avaliable Commands in calculator', $length,' ',STR_PAD_BOTH),1);
+    info(str_pad($title, $length,' ',STR_PAD_BOTH),1);
     foreach ($info as $key => $value) {
         $b = strlen($value);
         $a = 50 - $b;
