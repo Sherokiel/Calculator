@@ -175,7 +175,6 @@ function show_history($historyRepository)
         }
     } while (!$isDataValid);
 
-
     return info('You are returned to main menu');
 }
 
