@@ -26,10 +26,10 @@ class HistoryRepository
         return  json_decode($content, true);
     }
 
-    public function create($date, $argument1, $argument2, $command, $result)
+    public function create($argument1, $argument2, $command, $result)
     {
         $content = $this->all();
-
+        $date = date('d-m-Y');
         $content[] = [
             'date' => $date,
             'first_operand' => $argument1,

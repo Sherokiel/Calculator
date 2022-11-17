@@ -2,20 +2,20 @@
 
 class Application
 {
+
     protected $historyRepository;
 
-    function __construct()
+    public function __construct()
     {
+
         $this->historyRepository = new HistoryRepository();
     }
 
     public function run()
     {
-
-        $times = 0;
-        $date = date('d-m-Y');
+        $isRunning = true;
         info_box('', 'Welcome to the calculator app!', '', 'Print "help" to learn more about the app.', '');
-        while ($times < 1) {
+        while ($isRunning = true) {
 
             $command = choose('Enter command: ', AVAILABLE_COMMANDS);
 
@@ -27,21 +27,19 @@ class Application
 
             $argument1 = $this->readOperand('Enter fist number: ', $command);
 
-            if ($command != '^' && $command != 'sr' ) {
-                $argument2 = $this->readOperand('Enter second number: ', $command, true);
-            } else {
-                $argument2 = $this->readOperand('Enter exponent: ', $command);
-            }
+            $argument2 = ($command !== '^' && $command !== 'sr' )
+                ? $this->readOperand('Enter second number: ', $command, true)
+                : $this->readOperand('Enter exponent: ', $command);
 
             $result = $this->calculate($argument1, $command, $argument2);
 
             info('Result: ' . $result);
-            info('=====================');
+            write_symbol_line(25, '=');
 
-            $this->historyRepository->create($date, $argument1, $argument2, $command, $result);
+            $this->historyRepository->create($argument1, $argument2, $command, $result);
         }
     }
-    public function calculate($argument1, $command, $argument2)
+    protected function calculate($argument1, $command, $argument2)
     {
         switch ($command) {
             case '+':
@@ -74,7 +72,7 @@ class Application
                 continue;
             }
 
-            $isDataValid = ($argument != null);
+            $isDataValid = is_null($argument);
 
             if (!$isDataValid) {
                 info('Cant write space.');
@@ -83,13 +81,12 @@ class Application
             }
 
             if ($isSecondOperand) {
-                $isDataValid = ($command != '/' || $argument != 0);
+                $isDataValid = ($command !== '/' || $argument !== 0);
 
                 if (!$isDataValid) {
                     info('Cant separate on zero.');
                 }
             }
-
         } while (!$isDataValid);
 
         return $argument;
@@ -98,23 +95,16 @@ class Application
     protected function executeSystemCommand($command, $historyRepository)
     {
         switch($command) {
+            case(INFO):
+                return show_info_block('Avaliable Commands in calculator', INFO_BLOCK);
+            case(HISTORY):
+                return $this->showHistory($historyRepository);
+            case(EXPORT_HISTORY):
+                return $this->historyToTxt($historyRepository);
             case(QUIT):
                 $this->finishApp();
-
-                break;
-
-            case(INFO):
-                show_info_block('Avaliable Commands in calculator', INFO_BLOCK);
-
-                break;
-
-            case(HISTORY):
-                $this->showHistory($historyRepository);
-
-                break;
-
-            case(EXPORT_HISTORY):
-                $this->historyToTxt($historyRepository);
+            default:
+                return $command;
         }
     }
 
@@ -148,7 +138,7 @@ class Application
                 continue;
             }
 
-            $isDataValid = (in_array($showDateHistory, $historyCommands));
+            $isDataValid = in_array($showDateHistory, $historyCommands);
 
             if (!$isDataValid) {
                 info('You have no history in that day.');
@@ -156,14 +146,14 @@ class Application
                 continue;
             }
 
-            if ($showDateHistory == 'help') {
+            if ($showDateHistory === 'help') {
                 show_info_block('Available Commands in history viewer', HISTORY_VIEWER_COMMANDS, 19, 71);
                 $isDataValid = false;
 
                 continue;
             }
 
-            if ($showDateHistory == 'full') {
+            if ($showDateHistory === 'full') {
                 $this->showHistoryItems($historyGroups);
                 $isDataValid = false;
 
@@ -215,14 +205,10 @@ class Application
 
             switch ($command) {
                 case (AGREE):
-                    file_put_contents($fullPathName, '');
-
-                    break;
+                    return file_put_contents($fullPathName, '');
 
                 case (DEGREE):
-                    echo PHP_EOL;
-
-                    return;
+                    return PHP_EOL;
             }
         }
 
@@ -236,6 +222,6 @@ class Application
             }
         }
 
-        info('History saved!');
+        return info('History saved!');
     }
 }
