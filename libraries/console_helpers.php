@@ -64,7 +64,7 @@ function show_info_block($title, $info)
     $lineLengths = string_length($info);
     $length = max($lineLengths) + 19;
 
-    write_symbol_line($length,'*');
+    write_symbol_line($length, '*');
     info(str_pad($title, $length,' ',STR_PAD_BOTH),1);
     foreach ($info as $key => $value) {
         $b = strlen($value);
@@ -72,5 +72,5 @@ function show_info_block($title, $info)
         echo str_pad($key, $a, '_') . "{$value}" . PHP_EOL;
     }
 
-    return write_symbol_line($length,'*');
+    return write_symbol_line($length, '*');
 }

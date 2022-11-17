@@ -20,5 +20,11 @@ const INFO_BLOCK = [
     QUIT => 'Exit programm',
     HISTORY => 'Show saved history',
     'Full' => 'Show full history of all time',
-    'Date formate' => 'DD-MM-YYYY(Example: 21-10-1990)',
+    'Date format' => 'DD-MM-YYYY(Example: 21-10-1990)',
+];
+
+const HISTORY_VIEWER_COMMANDS = [
+    'Fill' => 'Show full history of all time',
+    'Date format' => 'DD-MM-YYYY(Example: 21-10-1990)',
+    'Back' => 'Return to main menu'
 ];

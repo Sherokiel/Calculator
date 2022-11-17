@@ -132,33 +132,52 @@ function show_history($historyRepository)
     if (empty($history)) {
         return info('You have no history');
     }
-    $historyGroups = array_group($history, 'date');
+    do {
+        $historyGroups = array_group($history, 'date');
 
-    $historyCommands = array_merge(['full', 'help'], array_keys($historyGroups));
-    $showDateHistory = readline('Enter date of history (DD-MM-YYYY), "full" or "help"  : ');
-    $showDateHistory = strtolower($showDateHistory);
+        $historyCommands = array_merge(['full', 'help', 'back'], array_keys($historyGroups));
+        $showDateHistory = readline('Enter date of history (DD-MM-YYYY), "full" or "help"  : ');
+        $showDateHistory = strtolower($showDateHistory);
 
-    $isDate = date_create_from_format('j-m-Y', $showDateHistory);
+        $isDate = date_create_from_format('j-m-Y', $showDateHistory);
 
-    if ($isDate === false && !in_array($showDateHistory, $historyCommands)) {
-        return info('Please input a valid date in format DD-MM-YYYY (e.g. 25-12-2022).');
-    }
+        $isDataValid = ($isDate == true || in_array($showDateHistory, $historyCommands));
 
-    if ($showDateHistory == 'help') {
-        return show_info_block('Avaliable Commands in calculator', INFO_BLOCK);
-    }
+        if (!$isDataValid) {
+            info('Please input a valid date in format DD-MM-YYYY (e.g. 25-12-2022).');
 
-    info('', 1);
+            continue;
+        }
 
-    if (!in_array($showDateHistory, $historyCommands)) {
-        return info('You have no history in that day.');
-    }
+        $isDataValid = (in_array($showDateHistory, $historyCommands));
+        if (!$isDataValid) {
+            info('You have no history in that day.');
 
-    if (array_key_exists($showDateHistory, $historyGroups)) {
-        return show_history_items([$showDateHistory => $historyGroups[$showDateHistory]]);
-    }
+            continue;
+        }
 
-    return show_history_items($historyGroups);
+        if ($showDateHistory == 'help') {
+            show_info_block('Avaliable Commands in history viewer', HISTORY_VIEWER_COMMANDS);
+            $isDataValid = false;
+
+            continue;
+        }
+
+        if ($showDateHistory == 'full') {
+            show_history_items($historyGroups);
+            $isDataValid = false;
+
+            continue;
+        }
+
+        $isDataValid = (!array_key_exists($showDateHistory, $historyGroups));
+        if (!$isDataValid) {
+            return show_history_items([$showDateHistory => $historyGroups[$showDateHistory]]);
+        }
+
+    } while (!$isDataValid);
+
+    return info('You are returned to main menu');
 }
 
 function write_history_line($historyItem)
