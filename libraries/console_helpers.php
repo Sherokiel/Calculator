@@ -38,7 +38,7 @@ function info($result, $emptyLinesCount = 2)
 
 function info_box(...$lines)
 {
-    $maxLineLengths = max(string_length($lines));
+    $maxLineLengths = max(string_lengths($lines));
 
     $indent = 6;
     $length = $maxLineLengths + $indent;
@@ -54,24 +54,39 @@ function info_box(...$lines)
     return write_symbol_line($length, '*');
 }
 
-function write_symbol_line($length, $symbol, $emptyLines = 2)
+function write_symbol_line($length, $symbol, $emptyLinesCount = 2)
 {
-    return info(str_repeat($symbol, $length), $emptyLines);
+    return info(str_repeat($symbol, $length), $emptyLinesCount);
 }
-
-function show_info_block($title, $info, $widthOfBox = 19, $lineWidthRatio = 50 )
+/**
+ * @param array $data associative array of strings, keys as items and values as item description
+ */
+function show_info_block($title, $info, $widthOfBox = 19, $lineWidthRatio = 48 )
 {
-    $maxLineLengths = max(string_length($info));
+    $maxLineLengths = max(string_lengths($info));
     $length = $maxLineLengths + $widthOfBox;
 
     write_symbol_line($length, '*', 1);
-    info(str_pad($title, $length, ' ', STR_PAD_BOTH),1);
+    info(str_pad($title, $length, ' ', STR_PAD_BOTH), 1);
 
     foreach ($info as $key => $value) {
-        $separatorLength = $lineWidthRatio - (strlen($value));
+        $separatorLength = $lineWidthRatio - strlen($value);
 
-        echo str_pad($key, $separatorLength, '_') . $value . PHP_EOL;
+        info (str_pad($key, $separatorLength, '_') . $value, 1);
     }
 
     return write_symbol_line($length, '*', 1);
+}
+
+function ask($message)
+{
+    $ask = readline($message);
+    $ask = strtolower($ask);
+
+    return $ask;
+}
+
+function is_Date($format, $date)
+{
+    return date_create_from_format($format, $date);
 }

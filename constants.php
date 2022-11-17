@@ -18,9 +18,7 @@ const INFO_BLOCK = [
     'sq' => 'Find root of number',
     EXPORT_HISTORY => 'Export history in file',
     QUIT => 'Exit programm',
-    HISTORY => 'Open show history mode',
-    'Full' => 'Show full history of all time',
-    'Date format' => 'DD-MM-YYYY(Example: 21-10-1990)',
+    HISTORY => 'Open show history mode'
 ];
 
 const HISTORY_VIEWER_COMMANDS = [

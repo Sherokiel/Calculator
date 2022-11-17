@@ -137,12 +137,11 @@ function show_history($historyRepository)
         $historyGroups = array_group($history, 'date');
 
         $historyCommands = array_merge(['full', 'help', 'back'], array_keys($historyGroups));
-        $showDateHistory = readline('Enter date of history (DD-MM-YYYY), "full" or "help"  : ');
-        $showDateHistory = strtolower($showDateHistory);
+        $showDateHistory = ask('Enter date in format DD-MM-YYYY or "full" to show full history: ');
 
-        $isDate = date_create_from_format('j-m-Y', $showDateHistory);
+        $isDate = is_Date('j-m-Y', $showDateHistory);
 
-        $isDataValid = ($isDate == true || in_array($showDateHistory, $historyCommands));
+        $isDataValid = ($isDate || in_array($showDateHistory, $historyCommands));
 
         if (!$isDataValid) {
             info('Please input a valid date in format DD-MM-YYYY (e.g. 25-12-2022).');

@@ -11,7 +11,7 @@ function array_group($array, $key)
     return $result;
 }
 
-function string_length($string)
+function string_lengths($string)
 {
     return array_map(function ($string) {
         return strlen($string);
