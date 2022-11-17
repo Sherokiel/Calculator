@@ -63,7 +63,7 @@ function write_symbol_line($length, $symbol, $emptyLinesCount = 2)
  * @param array $data associative array of strings, keys as items and values as item description
  */
 
-function show_info_block($title, $info, $widthOfBox = 19, $lineWidthRatio = 48 )
+function show_info_block($title, $info, $widthOfBox = 19, $lineWidthRatio = 48)
 {
     $maxLineLengths = max(string_lengths($info));
     $length = $maxLineLengths + $widthOfBox;

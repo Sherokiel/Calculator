@@ -173,7 +173,6 @@ function show_history($historyRepository)
         if (!$isDataValid) {
             return show_history_items([$showDateHistory => $historyGroups[$showDateHistory]]);
         }
-
     } while (!$isDataValid);
 
     return info('You are returned to main menu');
