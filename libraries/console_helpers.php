@@ -15,8 +15,7 @@ function str_to_number($string)
 function choose($message, $availableValues)
 {
     do {
-        $command = readline($message);
-        $command = strtolower($command);
+        $command = ask($message);
         $isDataValid = in_array($command, $availableValues);
 
         if (!$isDataValid) {
