@@ -125,13 +125,6 @@ function finish_app()
     }
 }
 
-function show_info_block_history()
-{
-    $info = INFO_BLOCK;
-
-    return show_info_block($info);
-}
-
 function show_history($historyRepository)
 {
     $history = $historyRepository->all();
@@ -152,7 +145,7 @@ function show_history($historyRepository)
     }
 
     if ($showDateHistory == 'help') {
-        return show_info_block_history();
+        return show_info_block();
     }
 
     info('', 1);
