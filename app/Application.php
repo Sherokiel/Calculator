@@ -2,11 +2,17 @@
 
 class Application
 {
-
     protected $historyRepository;
 
     public function __construct()
     {
+        $DS = DIRECTORY_SEPARATOR;
+
+        require 'constants.php';
+        require "libraries{$DS}console_helpers.php";
+        require "libraries{$DS}helpers.php";
+        require "app{$DS}HistoryRepository.php";
+
 
         $this->historyRepository = new HistoryRepository();
     }
@@ -15,6 +21,7 @@ class Application
     {
         $isRunning = true;
         info_box('', 'Welcome to the calculator app!', '', 'Print "help" to learn more about the app.', '');
+
         while ($isRunning = true) {
 
             $command = choose('Enter command: ', AVAILABLE_COMMANDS);
@@ -36,9 +43,10 @@ class Application
             info('Result: ' . $result);
             write_symbol_line(25, '=');
 
-            $this->historyRepository->create($argument1, $argument2, $command, $result);
+            $this->historyRepository->create(date('d-m-Y'),$argument1, $argument2, $command, $result);
         }
     }
+
     protected function calculate($argument1, $command, $argument2)
     {
         switch ($command) {
@@ -72,7 +80,7 @@ class Application
                 continue;
             }
 
-            $isDataValid = is_null($argument);
+            $isDataValid = ($argument != null);
 
             if (!$isDataValid) {
                 info('Cant write space.');
