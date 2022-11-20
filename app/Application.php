@@ -40,7 +40,7 @@ class Application
             info('Result: ' . $result);
             write_symbol_line(25, '=');
 
-            $this->historyRepository->create(date('d-m-Y'),$argument1, $argument2, $command, $result);
+            $this->historyRepository->create(date('d-m-Y'), $argument1, $argument2, $command, $result);
         }
     }
 
@@ -60,7 +60,7 @@ class Application
             case 'sr':
                 return pow($argument1, (1 / $argument2));
             default:
-                return $command;
+                return info("Undefined command '{$command}'");
         }
     }
 
@@ -78,7 +78,6 @@ class Application
             }
 
             $isDataValid = strlen($argument) > 0;
-
 
             if (!$isDataValid) {
                 info('Cant write space.');
@@ -100,7 +99,7 @@ class Application
 
     protected function executeSystemCommand($command)
     {
-        switch($command) {
+        switch ($command) {
             case(INFO):
                 return show_info_block('Avaliable Commands in calculator', INFO_BLOCK);
             case(HISTORY):
@@ -212,7 +211,6 @@ class Application
             switch ($command) {
                 case (AGREE):
                     return file_put_contents($fullPathName, '');
-
                 case (DEGREE):
                     return PHP_EOL;
             }
