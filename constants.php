@@ -23,6 +23,6 @@ const INFO_BLOCK = [
 
 const HISTORY_VIEWER_COMMANDS = [
     'Full' => 'Show full history of all time',
-    'DD-MM-YYYY' => 'Show history by particular date(Example: 21-10-1990)',
-    'Back' => 'Return to main menu'
+    'Back' => 'Return to main menu',
+    'DD-MM-YYYY' => 'Show history by particular date(Example: 21-10-1990)'
 ];
