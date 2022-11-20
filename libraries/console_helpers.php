@@ -42,7 +42,7 @@ function info_box(...$lines)
     $indent = 6;
     $length = $maxLineLengths + $indent;
 
-    write_symbol_line($length, '*');
+    write_symbol_line($length, '*', 1);
 
     foreach ($lines as $line) {
         $message = str_pad($line, $length - 6, ' ', STR_PAD_BOTH);

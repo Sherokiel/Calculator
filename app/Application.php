@@ -1,4 +1,10 @@
 <?php
+$DS = DIRECTORY_SEPARATOR;
+
+require 'constants.php';
+require "libraries{$DS}console_helpers.php";
+require "libraries{$DS}helpers.php";
+require "app{$DS}HistoryRepository.php";
 
 class Application
 {
@@ -6,14 +12,6 @@ class Application
 
     public function __construct()
     {
-        $DS = DIRECTORY_SEPARATOR;
-
-        require 'constants.php';
-        require "libraries{$DS}console_helpers.php";
-        require "libraries{$DS}helpers.php";
-        require "app{$DS}HistoryRepository.php";
-
-
         $this->historyRepository = new HistoryRepository();
     }
 
@@ -22,12 +20,11 @@ class Application
         $isRunning = true;
         info_box('', 'Welcome to the calculator app!', '', 'Print "help" to learn more about the app.', '');
 
-        while ($isRunning = true) {
-
+        while ($isRunning) {
             $command = choose('Enter command: ', AVAILABLE_COMMANDS);
 
             if (in_array($command, SYSTEM_COMMANDS)) {
-                $this->executeSystemCommand($command, $this->historyRepository);
+                $this->executeSystemCommand($command);
 
                 continue;
             }
@@ -80,7 +77,8 @@ class Application
                 continue;
             }
 
-            $isDataValid = ($argument != null);
+            $isDataValid = strlen($argument) > 0;
+
 
             if (!$isDataValid) {
                 info('Cant write space.');
@@ -100,19 +98,19 @@ class Application
         return $argument;
     }
 
-    protected function executeSystemCommand($command, $historyRepository)
+    protected function executeSystemCommand($command)
     {
         switch($command) {
             case(INFO):
                 return show_info_block('Avaliable Commands in calculator', INFO_BLOCK);
             case(HISTORY):
-                return $this->showHistory($historyRepository);
+                return $this->showHistory();
             case(EXPORT_HISTORY):
-                return $this->historyToTxt($historyRepository);
+                return $this->historyToTxt();
             case(QUIT):
                 $this->finishApp();
             default:
-                return $command;
+                return info("Undefined command '{$command}'");
         }
     }
 
@@ -125,9 +123,9 @@ class Application
         }
     }
 
-    protected function showHistory($historyRepository)
+    protected function showHistory()
     {
-        $history = $historyRepository->all();
+        $history = $this->historyRepository->all();
 
         if (empty($history)) {
             return info('You have no history');
@@ -201,9 +199,9 @@ class Application
         return write_symbol_line(15, '=');
     }
 
-    protected function historyToTxt($historyRepository)
+    protected function historyToTxt()
     {
-        $historyGroups = array_group($historyRepository->all(), 'date');
+        $historyGroups = array_group($this->historyRepository->all(), 'date');
         $nameOfFile = readline('Enter name of created file: ');
         $pathToFile = readline('Enter path of save exported history: ');
         $fullPathName = "{$pathToFile}{$nameOfFile}.txt";
