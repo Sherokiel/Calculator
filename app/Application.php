@@ -78,7 +78,6 @@ class Application
             }
 
             $isDataValid = strlen($argument) > 0;
-
             if (!$isDataValid) {
                 info('Cant write space.');
 
