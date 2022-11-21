@@ -241,9 +241,9 @@ class Application
         return json_decode($messages, true);
     }
 
-    protected function getText($key, $value, $replacements)
+    protected function getText($typeOfText, $text, $replacements)
     {
-        $message = str_replace('%', $replacements, $this->messages[$key][$value]);
+        $message = str_replace('%', $replacements, $this->messages[$typeOfText][$text]);
 
         return $message;
     }
