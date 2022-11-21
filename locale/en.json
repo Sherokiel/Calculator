@@ -1,0 +1,31 @@
+{
+    "questions": {
+        "quit": "Are you sure to wanna quit? % ",
+        "text_file_exist": "File % already exists, do you want to replace it? Yes/no: "
+    },
+    "info": {
+        "welcome1": "Welcome to the calculator app!",
+        "welcome2": "Print % to learn more about the app.",
+        "enter_command": "Enter command: ",
+        "enter_first": "Enter fist number: ",
+        "enter_second": "Enter second number: ",
+        "enter_exponent": "Enter exponent: ",
+        "result": "Result: ",
+        "info_block": "Avaliable Commands in calculator",
+        "no_history": "You have no history",
+        "info_history": "Enter date in format DD-MM-YYYY or % to show full history: ",
+        "no_history_day": "You have no history in that day.",
+        "history_help": "Available Commands in history viewer",
+        "history_back": "You are returned to main menu",
+        "name_of_file_create": "Enter name of created file: ",
+        "name_of_directory_create": "Enter path of save exported history: ",
+        "history_saved": "History saved!"
+    },
+    "errors": {
+        "if_letter": "Cant write letters.",
+        "if_space": "Cant write space.",
+        "if_separate_zero": "Cant separate on zero.",
+        "history_wrong_input": "Please input a valid date in format DD-MM-YYYY (e.g. 25-12-2022).",
+        "undefined_command": "Undefined command %"
+    }
+}
