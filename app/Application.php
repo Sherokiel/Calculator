@@ -25,10 +25,10 @@ class Application
     public function run()
     {
         $isRunning = true;
-        info_box('', "{$this->messages['textWelcome1']}", '', "{$this->messages['textWelcome2']}", '');
+        info_box('', $this->messages['textWelcome1'], '', $this->messages['textWelcome2'], '');
 
         while ($isRunning) {
-            $command = choose("{$this->messages['entCommand']}", AVAILABLE_COMMANDS);
+            $command = choose($this->messages['textEntCommand'], AVAILABLE_COMMANDS);
 
             if (in_array($command, SYSTEM_COMMANDS)) {
                 $this->executeSystemCommand($command);
@@ -36,15 +36,15 @@ class Application
                 continue;
             }
 
-            $argument1 = $this->readOperand("{$this->messages['textEntFirst']}", $command);
+            $argument1 = $this->readOperand($this->messages['textEntFirst'], $command);
 
             $argument2 = ($command !== '^' && $command !== 'sr' )
-                ? $this->readOperand("{$this->messages['textEntSecond']}", $command, true)
-                : $this->readOperand("{$this->messages['textEntExponent']}", $command);
+                ? $this->readOperand($this->messages['textEntSecond'], $command, true)
+                : $this->readOperand($this->messages['textEntExponent'], $command);
 
             $result = $this->calculate($argument1, $command, $argument2);
 
-            info("{$this->messages['textResult']}" . $result);
+            info($this->messages['textResult'] . $result);
             write_symbol_line(25, '=');
 
             $this->historyRepository->create(date('d-m-Y'), $argument1, $argument2, $command, $result);
@@ -69,7 +69,7 @@ class Application
             default:
                 $this->messages['textUndefinedCommand'] = str_replace('%', $command, $this->messages['textUndefinedCommand']);
 
-                return info("{$this->messages['textUndefinedCommand']}");
+                return info($this->messages['textUndefinedCommand']);
         }
     }
 
@@ -81,14 +81,14 @@ class Application
             $isDataValid = ($argument == $int1);
 
             if (!$isDataValid) {
-                info("{$this->messages['textIfLetter']}");
+                info($this->messages['textIfLetter']);
 
                 continue;
             }
 
             $isDataValid = strlen($argument) > 0;
             if (!$isDataValid) {
-                info("{$this->messages['textIfSpace']}");
+                info($this->messages['textIfSpace']);
 
                 continue;
             }
@@ -99,7 +99,7 @@ class Application
                 $isDataValid = ($command !== '/' || $argument !== 0);
 
                 if (!$isDataValid) {
-                    info("{$this->messages['textIfSeparateZero']}");
+                    info($this->messages['textIfSeparateZero']);
                 }
             }
         } while (!$isDataValid);
@@ -111,7 +111,7 @@ class Application
     {
         switch ($command) {
             case(INFO):
-                return show_info_block("{$this->messages['textInfoBlock']}", INFO_BLOCK);
+                return show_info_block($this->messages['textInfoBlock'], INFO_BLOCK);
             case(HISTORY):
                 return $this->showHistory();
             case(EXPORT_HISTORY):
@@ -121,13 +121,13 @@ class Application
             default:
                 $this->messages['textUndefinedCommand'] = str_replace('%', $command, $this->messages['textUndefinedCommand']);
 
-                return info("{$this->messages['textUndefinedCommand']}");
+                return info($this->messages['textUndefinedCommand']);
         }
     }
 
     protected function finishApp()
     {
-        $command = choose("{$this->messages['textQuit']}", [AGREE, DEGREE]);
+        $command = choose($this->messages['textQuit'], [AGREE, DEGREE]);
 
         if ($command == AGREE) {
             exit();
@@ -139,18 +139,18 @@ class Application
         $history = $this->historyRepository->all();
 
         if (empty($history)) {
-            return info("{$this->messages['textNoHistory']}");
+            return info($this->messages['textNoHistory']);
         }
 
         do {
             $historyGroups = array_group($history, 'date');
 
             $historyCommands = array_merge(['full', 'help', 'back'], array_keys($historyGroups));
-            $showDateHistory = ask("{$this->messages['textHistory']}");
+            $showDateHistory = ask($this->messages['textHistory']);
             $isDataValid = (is_date($showDateHistory) || in_array($showDateHistory, $historyCommands));
 
             if (!$isDataValid) {
-                info("{$this->messages['textHistoryWrongInput']}");
+                info($this->messages['textHistoryWrongInput']);
 
                 continue;
             }
@@ -158,13 +158,13 @@ class Application
             $isDataValid = in_array($showDateHistory, $historyCommands);
 
             if (!$isDataValid) {
-                info("{$this->messages['textNoHistoryDay']}");
+                info($this->messages['textNoHistoryDay']);
 
                 continue;
             }
 
             if ($showDateHistory === 'help') {
-                show_info_block("{$this->messages['textHistoryHelp']}", HISTORY_VIEWER_COMMANDS, 19, 71);
+                show_info_block($this->messages['textHistoryHelp'], HISTORY_VIEWER_COMMANDS, 19, 71);
                 $isDataValid = false;
 
                 continue;
@@ -184,7 +184,7 @@ class Application
             }
         } while (!$isDataValid);
 
-        return info("{$this->messages['textHistoryBack']}");
+        return info($this->messages['textHistoryBack']);
     }
 
     protected function writeHistoryLine($historyItem)
@@ -220,7 +220,7 @@ class Application
         if (file_exists($fullPathName)) {
             $this->messages['fileExist'] = str_replace("%", $fullPathName,  $this->messages['fileExist']);
 
-            $command = choose("{$this->messages['fileExist']}", [AGREE, DEGREE]);
+            $command = choose($this->messages['fileExist'], [AGREE, DEGREE]);
 
             switch ($command) {
                 case (AGREE):
@@ -240,6 +240,6 @@ class Application
             }
         }
 
-        return info("{$this->messages['textHistorySaved']}");
+        return info($this->messages['textHistorySaved']);
     }
 }
