@@ -14,13 +14,15 @@ class Application
 
     public function __construct()
     {
+        $DS = DIRECTORY_SEPARATOR;
+        $lang = file_get_contents("locale{$DS}lang.txt");
+        $this->messages = $this->loadLocale($lang);
         $this->historyRepository = new HistoryRepository();
     }
 
     public function run()
     {
         $isRunning = true;
-        $this->messages = $this->loadLocale();
 
         info_box('', $this->messages['info']['welcome1'], '', $this->getText('info', 'welcome2', INFO), '');
 
@@ -253,8 +255,9 @@ class Application
 
     protected function choice_locale()
     {
+        $DS = DIRECTORY_SEPARATOR;
         $lang = choose($this->getText('info', 'select_lang', RUS . ' or ' . ENG), LANGUAGE );
-
+        file_put_contents("locale{$DS}lang.txt", $lang);
         return $this->messages = $this->loadLocale($lang);
     }
 
