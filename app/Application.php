@@ -14,13 +14,14 @@ class Application
 
     public function __construct()
     {
-        $this->messages = $this->loadLocale();
         $this->historyRepository = new HistoryRepository();
     }
 
     public function run()
     {
         $isRunning = true;
+        $this->messages = $this->loadLocale();
+
         info_box('', $this->messages['info']['welcome1'], '', $this->getText('info', 'welcome2', INFO), '');
 
         while ($isRunning) {
@@ -110,6 +111,8 @@ class Application
                 return $this->showHistory();
             case(EXPORT_HISTORY):
                 return $this->historyToTxt();
+            case(CHOICE_LANGUAGE):
+                return $this->choice_locale();
             case(QUIT):
                 $this->finishApp();
             default:
@@ -233,10 +236,10 @@ class Application
         return info($this->messages['info']['textHistorySaved']);
     }
 
-    protected function loadLocale()
+    protected function loadLocale($lang = 'en')
     {
         $DS = DIRECTORY_SEPARATOR;
-        $messages = file_get_contents("locale{$DS}en.json");
+        $messages = file_get_contents("locale{$DS}{$lang}.json");
 
         return json_decode($messages, true);
     }
@@ -247,4 +250,12 @@ class Application
 
         return $message;
     }
+
+    protected function choice_locale()
+    {
+        $lang = choose($this->getText('info', 'select_lang', RUS . ' or ' . ENG), LANGUAGE );
+
+        return $this->messages = $this->loadLocale($lang);
+    }
+
 }
