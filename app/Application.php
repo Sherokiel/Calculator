@@ -14,11 +14,7 @@ class Application
 
     public function __construct()
     {
-        $DS = DIRECTORY_SEPARATOR;
-
-        $this->messages = file_get_contents("locale{$DS}en.json");
-        $this->messages = json_decode($this->messages, true);
-
+        $this->messages = $this->loadLocale();
         $this->historyRepository = new HistoryRepository();
     }
 
@@ -67,9 +63,7 @@ class Application
             case 'sr':
                 return pow($argument1, (1 / $argument2));
             default:
-                $this->messages['textUndefinedCommand'] = str_replace('%', $command, $this->messages['textUndefinedCommand']);
-
-                return info($this->messages['textUndefinedCommand']);
+                return info($this->getText('textUndefinedCommand', $command));
         }
     }
 
@@ -119,9 +113,7 @@ class Application
             case(QUIT):
                 $this->finishApp();
             default:
-                $this->messages['textUndefinedCommand'] = str_replace('%', $command, $this->messages['textUndefinedCommand']);
-
-                return info($this->messages['textUndefinedCommand']);
+                return info($this->getText('textUndefinedCommand', $command));
         }
     }
 
@@ -218,9 +210,7 @@ class Application
         $fullPathName = "{$pathToFile}{$nameOfFile}.txt";
 
         if (file_exists($fullPathName)) {
-            $this->messages['fileExist'] = str_replace("%", $fullPathName,  $this->messages['fileExist']);
-
-            $command = choose($this->messages['fileExist'], [AGREE, DEGREE]);
+            $command = choose($this->getText('textFileExist', $fullPathName), [AGREE, DEGREE]);
 
             switch ($command) {
                 case (AGREE):
@@ -241,5 +231,20 @@ class Application
         }
 
         return info($this->messages['textHistorySaved']);
+    }
+
+    protected function loadLocale()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+        $messages = file_get_contents("locale{$DS}en.json");
+
+        return json_decode($messages, true);
+    }
+
+    protected function getText($key, $replacements)
+    {
+        $message = str_replace('%', $replacements, $this->messages[$key]);
+
+        return $message;
     }
 }
