@@ -1,25 +1,31 @@
 {
-  "textWelcome1": "Welcome to the calculator app!",
-  "textWelcome2": "Print \"help\" to learn more about the app.",
-  "textEntCommand": "Enter command: ",
-  "textEntFirst": "Enter fist number: ",
-  "textEntSecond": "Enter second number: ",
-  "textEntExponent": "Enter exponent: ",
-  "textResult": "Result: ",
-  "textIfLetter": "Cant write letters.",
-  "textIfSpace": "Cant write space.",
-  "textIfSeparateZero": "Cant separate on zero.",
-  "textInfoBlock": "Avaliable Commands in calculator",
-  "textQuit": "Are you sure to wanna quit? Yes\/No ",
-  "textNoHistory": "You have no history",
-  "textHistory": "Enter date in format DD-MM-YYYY or \"full\" to show full history: ",
-  "textHistoryWrongInput": "Please input a valid date in format DD-MM-YYYY (e.g. 25-12-2022).",
-  "textNoHistoryDay": "You have no history in that day.",
-  "textHistoryHelp": "Available Commands in history viewer",
-  "textHistoryBack": "You are returned to main menu",
-  "textNameOfFileCreate": "Enter name of created file: ",
-  "textNameOfDirectoryCreate": "Enter path of save exported history: ",
-  "textHistorySaved": "History saved!",
-  "textFileExist": "File % already exists, do you want to replace it? Yes/no: ",
-  "textUndefinedCommand": "Undefined command %"
+    "questions": {
+        "quit": "Are you sure to wanna quit? % ",
+        "text_file_exist": "File % already exists, do you want to replace it? Yes/no: "
+    },
+    "info": {
+        "welcome1": "Welcome to the calculator app!",
+        "welcome2": "Print % to learn more about the app.",
+        "enter_command": "Enter command: ",
+        "enter_first": "Enter fist number: ",
+        "enter_second": "Enter second number: ",
+        "enter_exponent": "Enter exponent: ",
+        "result": "Result: ",
+        "info_block": "Avaliable Commands in calculator",
+        "no_history": "You have no history",
+        "info_history": "Enter date in format DD-MM-YYYY or % to show full history: ",
+        "no_history_day": "You have no history in that day.",
+        "history_help": "Available Commands in history viewer",
+        "history_back": "You are returned to main menu",
+        "name_of_file_create": "Enter name of created file: ",
+        "name_of_directory_create": "Enter path of save exported history: ",
+        "history_saved": "History saved!"
+    },
+    "errors": {
+        "if_letter": "Cant write letters.",
+        "if_space": "Cant write space.",
+        "if_separate_zero": "Cant separate on zero.",
+        "history_wrong_input": "Please input a valid date in format DD-MM-YYYY (e.g. 25-12-2022).",
+        "undefined_command": "Undefined command %"
+    }
 }
