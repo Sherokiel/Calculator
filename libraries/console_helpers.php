@@ -12,11 +12,15 @@ function str_to_number($string)
     return (string) filter_var($string, FILTER_SANITIZE_NUMBER_INT);
 }
 
-function choice($message, $availableValues, $errorText = 'Wrong command, enter ' . INFO . 'to show available commands')
+function choice($message, $availableValues, $errorText = null)
 {
     do {
         $command = ask($message);
         $isDataValid = in_array($command, $availableValues);
+
+        if (is_null($errorText)) {
+            $errorText = 'Wrong choose, please pass one of the next values: ' . implode(',', $availableValues);
+        }
 
         if (!$isDataValid) {
             info($errorText);
@@ -51,6 +55,7 @@ function info_box(...$lines)
 
     write_symbol_line($length, '*');
 }
+
 function write_symbol_line($length, $symbol, $emptyLinesCount = 2)
 {
     return info(str_repeat($symbol, $length), $emptyLinesCount);
@@ -59,7 +64,6 @@ function write_symbol_line($length, $symbol, $emptyLinesCount = 2)
 /**
  * @param array $data associative array of strings, keys as items and values as item description
  */
-
 function show_info_block($title, $info, $widthOfBox = 19, $lineWidthRatio = 48)
 {
     $maxLineLengths = max(string_lengths($info));
@@ -87,11 +91,4 @@ function ask($message)
 function is_date($date, $format = 'j-m-Y')
 {
     return date_create_from_format($format, $date);
-}
-
-function mb_str_pad($text, $mb_length, $filling = ' ', $pad_type = STR_PAD_BOTH)
-{
-    $length = strlen($text) - mb_strlen($text);
-
-    return str_pad($text, $mb_length + $length, $filling , $pad_type);
 }
