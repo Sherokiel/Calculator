@@ -14,6 +14,6 @@ function array_group($array, $key)
 function string_lengths($strings)
 {
     return array_map(function ($strings) {
-        return strlen($strings);
+        return mb_strlen($strings);
     }, $strings);
 }

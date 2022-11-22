@@ -14,8 +14,7 @@ class Application
 
     public function __construct()
     {
-        $DS = DIRECTORY_SEPARATOR;
-        $lang = file_get_contents("locale{$DS}lang.txt");
+        $lang = file_get_contents($this->prepareFilePath("locale%lang.ini"));
         $this->messages = $this->loadLocale($lang);
         $this->historyRepository = new HistoryRepository();
     }
@@ -27,7 +26,7 @@ class Application
         info_box('', $this->messages['info']['welcome1'], '', $this->getText('info', 'welcome2', INFO), '');
 
         while ($isRunning) {
-            $command = choose($this->messages['info']['enter_command'], AVAILABLE_COMMANDS);
+            $command = choice($this->messages['info']['enter_command'], AVAILABLE_COMMANDS, $this->getText('errors', 'choice_error', INFO));
 
             if (in_array($command, SYSTEM_COMMANDS)) {
                 $this->executeSystemCommand($command);
@@ -114,7 +113,7 @@ class Application
             case(EXPORT_HISTORY):
                 return $this->historyToTxt();
             case(CHOICE_LANGUAGE):
-                return $this->choice_locale();
+                return $this->choiceLocale();
             case(QUIT):
                 $this->finishApp();
             default:
@@ -124,7 +123,7 @@ class Application
 
     protected function finishApp()
     {
-        $command = choose($this->getText('questions', 'quit', AGREE . ' or ' . DEGREE), [AGREE, DEGREE]);
+        $command = choice($this->getText('questions', 'quit', AGREE . ' or ' . DEGREE), [AGREE, DEGREE], $this->getText('errors', 'choice_error', INFO));
 
         if ($command == AGREE) {
             exit();
@@ -215,7 +214,7 @@ class Application
         $fullPathName = "{$pathToFile}{$nameOfFile}.txt";
 
         if (file_exists($fullPathName)) {
-            $command = choose($this->getText('questions', 'text_file_exist', $fullPathName), [AGREE, DEGREE]);
+            $command = choice($this->getText('questions', 'text_file_exist', $fullPathName), [AGREE, DEGREE]);
 
             switch ($command) {
                 case (AGREE):
@@ -238,10 +237,9 @@ class Application
         return info($this->messages['info']['textHistorySaved']);
     }
 
-    protected function loadLocale($lang = 'en')
+    protected function loadLocale($lang)
     {
-        $DS = DIRECTORY_SEPARATOR;
-        $messages = file_get_contents("locale{$DS}{$lang}.json");
+        $messages = file_get_contents($this->prepareFilePath("locale%{$lang}.json"));
 
         return json_decode($messages, true);
     }
@@ -253,12 +251,18 @@ class Application
         return $message;
     }
 
-    protected function choice_locale()
+    protected function choiceLocale()
     {
-        $DS = DIRECTORY_SEPARATOR;
-        $lang = choose($this->getText('info', 'select_lang', RUS . ' or ' . ENG), LANGUAGE );
-        file_put_contents("locale{$DS}lang.txt", $lang);
+        $lang = choice($this->getText('info', 'select_lang', RUS . ' or ' . ENG), LANGUAGE, $this->getText('errors', 'choice_error', INFO) );
+
+        file_put_contents($this->prepareFilePath("locale%lang.ini"), $lang);
+        popen('cls', 'w');
         return $this->messages = $this->loadLocale($lang);
+    }
+
+    protected function prepareFilePath($path)
+    {
+        return str_replace('%', DIRECTORY_SEPARATOR, $path);
     }
 
 }

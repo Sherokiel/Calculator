@@ -12,14 +12,14 @@ function str_to_number($string)
     return (string) filter_var($string, FILTER_SANITIZE_NUMBER_INT);
 }
 
-function choose($message, $availableValues)
+function choice($message, $availableValues, $errorText = 'Wrong command, enter ' . INFO . 'to show available commands')
 {
     do {
         $command = ask($message);
         $isDataValid = in_array($command, $availableValues);
 
         if (!$isDataValid) {
-            info('Wrong command, enter ' . INFO . ' to see commands.');
+            info($errorText);
         }
     } while (!$isDataValid);
 
@@ -38,21 +38,19 @@ function info($result, $emptyLinesCount = 2)
 function info_box(...$lines)
 {
     $maxLineLengths = max(string_lengths($lines));
-
     $indent = 6;
     $length = $maxLineLengths + $indent;
 
     write_symbol_line($length, '*', 1);
 
     foreach ($lines as $line) {
-        $message = str_pad($line, $length - 6, ' ', STR_PAD_BOTH);
+        $message = mb_str_pad($line, $length - 6, ' ');
 
         info("*  {$message}  *", 1);
     }
 
-    return write_symbol_line($length, '*');
+    write_symbol_line($length, '*');
 }
-
 function write_symbol_line($length, $symbol, $emptyLinesCount = 2)
 {
     return info(str_repeat($symbol, $length), $emptyLinesCount);
@@ -61,6 +59,7 @@ function write_symbol_line($length, $symbol, $emptyLinesCount = 2)
 /**
  * @param array $data associative array of strings, keys as items and values as item description
  */
+
 function show_info_block($title, $info, $widthOfBox = 19, $lineWidthRatio = 48)
 {
     $maxLineLengths = max(string_lengths($info));
@@ -70,7 +69,7 @@ function show_info_block($title, $info, $widthOfBox = 19, $lineWidthRatio = 48)
     info(str_pad($title, $length, ' ', STR_PAD_BOTH), 1);
 
     foreach ($info as $key => $value) {
-        $separatorLength = $lineWidthRatio - strlen($value);
+        $separatorLength = $lineWidthRatio - mb_strlen($value);
 
         info (str_pad($key, $separatorLength, '_') . $value, 1);
     }
@@ -82,10 +81,17 @@ function ask($message)
 {
     $result = readline($message);
 
-    return strtolower($result);
+    return mb_strtolower($result);
 }
 
 function is_date($date, $format = 'j-m-Y')
 {
     return date_create_from_format($format, $date);
+}
+
+function mb_str_pad($text, $mb_length, $filling = ' ', $pad_type = STR_PAD_BOTH)
+{
+    $length = strlen($text) - mb_strlen($text);
+
+    return str_pad($text, $mb_length + $length, $filling , $pad_type);
 }
