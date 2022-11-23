@@ -1,10 +1,8 @@
 <?php
 
-$DS = DIRECTORY_SEPARATOR;
-
 require 'constants.php';
-require prepareFilePath("libraries/console_helpers.php");
-require prepareFilePath("app/HistoryRepository.php");
+require prepare_file_path("libraries/console_helpers.php");
+require prepare_file_path("app/HistoryRepository.php");
 
 class Application
 {
@@ -13,7 +11,7 @@ class Application
 
     public function __construct()
     {
-        $lang = file_get_contents(prepareFilePath("locale/lang.ini"));
+        $lang = file_get_contents(prepare_file_path("locale/lang.ini"));
         $this->messages = $this->loadLocale($lang);
         $this->historyRepository = new HistoryRepository();
     }
@@ -238,7 +236,7 @@ class Application
 
     protected function loadLocale($lang)
     {
-        $messages = file_get_contents(prepareFilePath("locale/{$lang}.json"));
+        $messages = file_get_contents(prepare_file_path("locale/{$lang}.json"));
 
         return json_decode($messages, true);
     }
@@ -252,10 +250,13 @@ class Application
 
     protected function choiceLocale()
     {
-        $lang = choice($this->getText('info', 'select_lang', RUS . ' or ' . ENG), LANGUAGE, $this->getText('errors', 'choice_error', INFO) );
+        $message = ($this->getText('info', 'select_lang', RUS . ' or ' . ENG));
+        $errorMessage = $this->getText('errors', 'choice_error', INFO);
+        $lang = choice($message , LANGUAGE , $errorMessage);
 
-        file_put_contents(prepareFilePath("locale/lang.ini"), $lang);
+        file_put_contents(prepare_file_path('locale/lang.ini'), $lang);
         popen('cls', 'w');
+
         return $this->messages = $this->loadLocale($lang);
     }
 }

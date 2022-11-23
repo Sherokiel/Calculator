@@ -18,7 +18,7 @@ function string_lengths($strings)
     }, $strings);
 }
 
-function prepareFilePath($path)
+function prepare_file_path($path)
 {
     return str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
 }

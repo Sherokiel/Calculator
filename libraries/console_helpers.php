@@ -14,13 +14,15 @@ function str_to_number($string)
 
 function choice($message, $availableValues, $errorText = null)
 {
+    if (is_null($errorText)) {
+        $errorText = 'Wrong choose, please pass one of the next values: ' . implode(',', $availableValues);
+    }
+
     do {
         $command = ask($message);
         $isDataValid = in_array($command, $availableValues);
 
-        if (is_null($errorText)) {
-            $errorText = 'Wrong choose, please pass one of the next values: ' . implode(',', $availableValues);
-        }
+
 
         if (!$isDataValid) {
             info($errorText);
