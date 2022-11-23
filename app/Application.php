@@ -1,11 +1,8 @@
 <?php
 
-$DS = DIRECTORY_SEPARATOR;
-
 require 'constants.php';
-require "libraries{$DS}console_helpers.php";
-require "libraries{$DS}helpers.php";
-require "app{$DS}HistoryRepository.php";
+require prepare_file_path('libraries/console_helpers.php');
+require prepare_file_path('app/HistoryRepository.php');
 
 class Application
 {
@@ -14,17 +11,19 @@ class Application
 
     public function __construct()
     {
-        $this->messages = $this->loadLocale();
+        $lang = file_get_contents(prepare_file_path('locale/lang.ini'));
+        $this->messages = $this->loadLocale($lang);
         $this->historyRepository = new HistoryRepository();
     }
 
     public function run()
     {
         $isRunning = true;
+
         info_box('', $this->messages['info']['welcome1'], '', $this->getText('info', 'welcome2', INFO), '');
 
         while ($isRunning) {
-            $command = choose($this->messages['info']['enter_command'], AVAILABLE_COMMANDS);
+            $command = choice($this->messages['info']['enter_command'], AVAILABLE_COMMANDS, $this->getText('errors', 'choice_error', INFO));
 
             if (in_array($command, SYSTEM_COMMANDS)) {
                 $this->executeSystemCommand($command);
@@ -110,6 +109,8 @@ class Application
                 return $this->showHistory();
             case(EXPORT_HISTORY):
                 return $this->historyToTxt();
+            case(CHOICE_LANGUAGE):
+                return $this->choiceLocale();
             case(QUIT):
                 $this->finishApp();
             default:
@@ -119,7 +120,7 @@ class Application
 
     protected function finishApp()
     {
-        $command = choose($this->getText('questions', 'quit', AGREE . ' or ' . DEGREE), [AGREE, DEGREE]);
+        $command = choice($this->getText('questions', 'quit', AGREE . ' or ' . DEGREE), [AGREE, DEGREE], $this->getText('errors', 'choice_error', INFO));
 
         if ($command == AGREE) {
             exit();
@@ -210,7 +211,7 @@ class Application
         $fullPathName = "{$pathToFile}{$nameOfFile}.txt";
 
         if (file_exists($fullPathName)) {
-            $command = choose($this->getText('questions', 'text_file_exist', $fullPathName), [AGREE, DEGREE]);
+            $command = choice($this->getText('questions', 'text_file_exist', $fullPathName), [AGREE, DEGREE]);
 
             switch ($command) {
                 case (AGREE):
@@ -233,10 +234,9 @@ class Application
         return info($this->messages['info']['textHistorySaved']);
     }
 
-    protected function loadLocale()
+    protected function loadLocale($lang)
     {
-        $DS = DIRECTORY_SEPARATOR;
-        $messages = file_get_contents("locale{$DS}en.json");
+        $messages = file_get_contents(prepare_file_path("locale/{$lang}.json"));
 
         return json_decode($messages, true);
     }
@@ -246,5 +246,17 @@ class Application
         $message = str_replace('%', $replacements, $this->messages[$typeOfText][$text]);
 
         return $message;
+    }
+
+    protected function choiceLocale()
+    {
+        $message = ($this->getText('info', 'select_lang', RUS . ' or ' . ENG));
+        $errorMessage = $this->getText('errors', 'choice_error', INFO);
+        $lang = choice($message , LANGUAGE , $errorMessage);
+
+        file_put_contents(prepare_file_path('locale/lang.ini'), $lang);
+        popen('cls', 'w');
+
+        return $this->messages = $this->loadLocale($lang);
     }
 }

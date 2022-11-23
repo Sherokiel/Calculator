@@ -11,7 +11,7 @@
         "enter_second": "Enter second number: ",
         "enter_exponent": "Enter exponent: ",
         "result": "Result: ",
-        "info_block": "Avaliable Commands in calculator",
+        "info_block": "Available Commands in calculator",
         "no_history": "You have no history",
         "info_history": "Enter date in format DD-MM-YYYY or % to show full history: ",
         "no_history_day": "You have no history in that day.",
@@ -19,13 +19,15 @@
         "history_back": "You are returned to main menu",
         "name_of_file_create": "Enter name of created file: ",
         "name_of_directory_create": "Enter path of save exported history: ",
-        "history_saved": "History saved!"
+        "history_saved": "History saved!",
+        "select_lang": "Select language %: "
     },
     "errors": {
         "if_letter": "Cant write letters.",
         "if_space": "Cant write space.",
         "if_separate_zero": "Cant separate on zero.",
         "history_wrong_input": "Please input a valid date in format DD-MM-YYYY (e.g. 25-12-2022).",
-        "undefined_command": "Undefined command %"
+        "undefined_command": "Undefined command %",
+        "choice_error": "Wrong command. enter % for show available commands"
     }
 }
