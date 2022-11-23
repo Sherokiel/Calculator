@@ -1,8 +1,8 @@
 <?php
 
 require 'constants.php';
-require prepare_file_path("libraries/console_helpers.php");
-require prepare_file_path("app/HistoryRepository.php");
+require prepare_file_path('libraries/console_helpers.php');
+require prepare_file_path('app/HistoryRepository.php');
 
 class Application
 {
@@ -11,7 +11,7 @@ class Application
 
     public function __construct()
     {
-        $lang = file_get_contents(prepare_file_path("locale/lang.ini"));
+        $lang = file_get_contents(prepare_file_path('locale/lang.ini'));
         $this->messages = $this->loadLocale($lang);
         $this->historyRepository = new HistoryRepository();
     }

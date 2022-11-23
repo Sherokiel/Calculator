@@ -22,8 +22,6 @@ function choice($message, $availableValues, $errorText = null)
         $command = ask($message);
         $isDataValid = in_array($command, $availableValues);
 
-
-
         if (!$isDataValid) {
             info($errorText);
         }
