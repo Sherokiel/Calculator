@@ -13,7 +13,7 @@ class Application
 
     public function __construct()
     {
-        $this->settingsRepository = new SettingsRepository('settings.json');
+        $this->settingsRepository = new SettingsRepository('settings.ini');
         $lang = $this->settingsRepository->getSetting('localization', 'locale');
 
         if (is_null($lang)) {

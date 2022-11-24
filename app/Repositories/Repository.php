@@ -20,12 +20,29 @@ class Repository
 
     function all()
     {
-        $settings = file_get_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"));
+        $extention = pathinfo(prepare_file_path("{$this->dirName}/{$this->fileName}"));
 
-        if (is_null($settings)) {
+        if ($extention['extension'] === 'json') {
+            $content = file_get_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"));
+
+            if (is_null($content)) {
+                return [];
+            }
+
+            return json_decode($content, true);
+        }
+        $content = file_get_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"));
+
+        if ($content === '') {
             return [];
         }
 
-        return json_decode($settings, true);
+        $content = parse_ini_file("{$this->dirName}/{$this->fileName}", true);
+
+        if (is_null($content)) {
+            return [];
+        }
+
+        return $content;
     }
 }

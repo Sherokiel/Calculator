@@ -8,7 +8,7 @@ class SettingsRepository extends Repository
     {
         $settings = $this->all();
 
-        if (is_null($settings)) {
+        if ($settings == []) {
             return $settings[$section][$subsection] = null;
         }
 
@@ -20,6 +20,13 @@ class SettingsRepository extends Repository
         $settings = $this->all();
         $settings[$section][$subsection] = $lang;
 
-        return file_put_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"), json_encode($settings));
+        file_put_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"), '');
+
+        foreach ($settings as $setting => $settingsItems) {
+            file_put_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"), "[{$setting}]" . "\n" , FILE_APPEND);
+            foreach ($settingsItems as $settingsKey => $settingsItem) {
+                file_put_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"), "{$settingsKey} = '{$settingsItem}'" . "\n", FILE_APPEND);
+            }
+        }
     }
 }
