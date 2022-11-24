@@ -1,10 +1,9 @@
 <?php
 
-require 'constants.php';
-require prepare_file_path('libraries/console_helpers.php');
-require prepare_file_path('app/Repositories/HistoryRepository.php');
-require prepare_file_path('app/Repositories/SettingsRepository.php');
-require prepare_file_path('app/Repositories/Class.php');
+namespace App;
+
+use App\Repositories\HistoryRepository;
+use App\Repositories\SettingsRepository;
 
 class Application
 {

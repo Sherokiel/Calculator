@@ -1,5 +1,6 @@
 <?php
-require "Class.php";
+
+namespace App\Repositories;
 
 class HistoryRepository extends Repository
 {

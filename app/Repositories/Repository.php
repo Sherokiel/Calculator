@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Repositories;
+
 class Repository
 {
     protected $dirName = 'data_storage';
