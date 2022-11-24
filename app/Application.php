@@ -15,6 +15,11 @@ class Application
     {
         $this->settingsRepository = new SettingsRepository('settings.json');
         $lang = $this->settingsRepository->getSetting('localization', 'locale');
+
+        if (is_null($lang)) {
+            $lang = 'en';
+        }
+
         $this->messages = $this->loadLocale($lang);
         $this->historyRepository = new HistoryRepository('history.json');
     }
@@ -23,9 +28,7 @@ class Application
     {
         $isRunning = true;
 
-        $userName = $this->settingsRepository->getSetting('username', 'name');
-
-        info_box($this->getText('info', 'welcome_user', $userName), $this->messages['info']['welcome1'], '', $this->getText('info', 'welcome2', INFO), '');
+        info_box('', $this->messages['info']['welcome1'], '', $this->getText('info', 'welcome2', INFO), '');
 
         while ($isRunning) {
             $command = choice($this->messages['info']['enter_command'], AVAILABLE_COMMANDS, $this->getText('errors', 'choice_error', INFO));
@@ -239,7 +242,7 @@ class Application
         return info($this->messages['info']['textHistorySaved']);
     }
 
-    protected function loadLocale($lang)
+    protected function loadLocale($lang = 'en')
     {
         $messages = file_get_contents(prepare_file_path("locale/{$lang}.json"));
 
