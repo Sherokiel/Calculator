@@ -3,15 +3,18 @@
 require 'constants.php';
 require prepare_file_path('libraries/console_helpers.php');
 require prepare_file_path('app/HistoryRepository.php');
+require prepare_file_path('app/Settings.php');
 
 class Application
 {
     protected $messages;
     protected $historyRepository;
+    protected $settings;
 
     public function __construct()
     {
-        $lang = file_get_contents(prepare_file_path('locale/lang.ini'));
+        $this->settings = new Settings();
+        $lang = $this->settings->get_settings('localization','locale');
         $this->messages = $this->loadLocale($lang);
         $this->historyRepository = new HistoryRepository();
     }
@@ -243,9 +246,7 @@ class Application
 
     protected function getText($typeOfText, $text, $replacements)
     {
-        $message = str_replace('%', $replacements, $this->messages[$typeOfText][$text]);
-
-        return $message;
+        return str_replace('%', $replacements, $this->messages[$typeOfText][$text]);
     }
 
     protected function choiceLocale()
@@ -253,8 +254,8 @@ class Application
         $message = ($this->getText('info', 'select_lang', RUS . ' or ' . ENG));
         $errorMessage = $this->getText('errors', 'choice_error', INFO);
         $lang = choice($message , LANGUAGE , $errorMessage);
+        $this->settings->save_settings($lang, 'localization', 'locale');
 
-        file_put_contents(prepare_file_path('locale/lang.ini'), $lang);
         popen('cls', 'w');
 
         return $this->messages = $this->loadLocale($lang);
