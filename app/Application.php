@@ -2,8 +2,8 @@
 
 require 'constants.php';
 require prepare_file_path('libraries/console_helpers.php');
-require prepare_file_path('app/HistoryRepository.php');
-require prepare_file_path('app/Settings.php');
+require prepare_file_path('app/Repositories/HistoryRepository.php');
+require prepare_file_path('app/Repositories/SettingsRepository.php');
 
 class Application
 {
@@ -13,8 +13,8 @@ class Application
 
     public function __construct()
     {
-        $this->settings = new Settings();
-        $lang = $this->settings->get_settings('localization','locale');
+        $this->settings = new SettingsRepository();
+        $lang = $this->settings->getSettings('localization','locale');
         $this->messages = $this->loadLocale($lang);
         $this->historyRepository = new HistoryRepository();
     }
@@ -23,7 +23,9 @@ class Application
     {
         $isRunning = true;
 
-        info_box('', $this->messages['info']['welcome1'], '', $this->getText('info', 'welcome2', INFO), '');
+        $userName = $this->settings->getSettings('username','name');
+
+        info_box($this->getText('info', 'welcome_user', $userName), $this->messages['info']['welcome1'], '', $this->getText('info', 'welcome2', INFO), '');
 
         while ($isRunning) {
             $command = choice($this->messages['info']['enter_command'], AVAILABLE_COMMANDS, $this->getText('errors', 'choice_error', INFO));
@@ -254,7 +256,7 @@ class Application
         $message = ($this->getText('info', 'select_lang', RUS . ' or ' . ENG));
         $errorMessage = $this->getText('errors', 'choice_error', INFO);
         $lang = choice($message , LANGUAGE , $errorMessage);
-        $this->settings->save_settings($lang, 'localization', 'locale');
+        $this->settings->setSettings($lang, 'localization', 'locale');
 
         popen('cls', 'w');
 

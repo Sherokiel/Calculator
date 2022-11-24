@@ -4,6 +4,7 @@
         "text_file_exist": "File % already exists, do you want to replace it? Yes/no: "
     },
     "info": {
+        "welcome_user": "Welcome %!",
         "welcome1": "Welcome to the calculator app!",
         "welcome2": "Print % to learn more about the app.",
         "enter_command": "Enter command: ",
