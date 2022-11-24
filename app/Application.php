@@ -4,26 +4,27 @@ require 'constants.php';
 require prepare_file_path('libraries/console_helpers.php');
 require prepare_file_path('app/Repositories/HistoryRepository.php');
 require prepare_file_path('app/Repositories/SettingsRepository.php');
+require prepare_file_path('app/Repositories/Class.php');
 
 class Application
 {
     protected $messages;
     protected $historyRepository;
-    protected $settings;
+    protected $settingsRepository;
 
     public function __construct()
     {
-        $this->settings = new SettingsRepository();
-        $lang = $this->settings->getSettings('localization','locale');
+        $this->settingsRepository = new SettingsRepository('settings.json');
+        $lang = $this->settingsRepository->getSetting('localization', 'locale');
         $this->messages = $this->loadLocale($lang);
-        $this->historyRepository = new HistoryRepository();
+        $this->historyRepository = new HistoryRepository('history.json');
     }
 
     public function run()
     {
         $isRunning = true;
 
-        $userName = $this->settings->getSettings('username','name');
+        $userName = $this->settingsRepository->getSetting('username', 'name');
 
         info_box($this->getText('info', 'welcome_user', $userName), $this->messages['info']['welcome1'], '', $this->getText('info', 'welcome2', INFO), '');
 
@@ -256,7 +257,7 @@ class Application
         $message = ($this->getText('info', 'select_lang', RUS . ' or ' . ENG));
         $errorMessage = $this->getText('errors', 'choice_error', INFO);
         $lang = choice($message , LANGUAGE , $errorMessage);
-        $this->settings->setSettings($lang, 'localization', 'locale');
+        $this->settingsRepository->setSetting($lang, 'localization', 'locale');
 
         popen('cls', 'w');
 

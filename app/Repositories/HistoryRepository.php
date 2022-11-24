@@ -1,23 +1,25 @@
 <?php
+require "Class.php";
 
-class HistoryRepository
+class HistoryRepository extends Repository
 {
-    protected $DS = DIRECTORY_SEPARATOR;
-    protected $dirname = 'data_storage';
-    protected $fileName = 'history.json';
-
-    public function __construct()
-    {
-        if (!is_dir($this->dirname)) {
-            mkdir($this->dirname);
-        }
-
-        fopen("{$this->dirname}{$this->DS}{$this->fileName}", 'a+');
-    }
+//    protected $dirName = 'data_storage';
+//    protected $fileName;
+//
+//    public function __construct($fileName)
+//    {
+//        $this->fileName = $fileName;
+//
+//        if (!is_dir($this->dirName)) {
+//            mkdir($this->dirName);
+//        }
+//
+//        fopen(prepare_file_path("{$this->dirName}/{$this->fileName}"), 'a+');
+//    }
 
     function all()
     {
-        $content = file_get_contents("{$this->dirname}{$this->DS}{$this->fileName}");
+        $content = file_get_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"));
 
         if ($content === null) {
             return [];
@@ -38,6 +40,6 @@ class HistoryRepository
             'result' => $result
         ];
 
-        file_put_contents("{$this->dirname}{$this->DS}{$this->fileName}", json_encode($content));
+        file_put_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"), json_encode($content));
     }
 }
