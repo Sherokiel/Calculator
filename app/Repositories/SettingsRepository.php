@@ -6,7 +6,7 @@ class SettingsRepository extends IniBaseRepository
 {
     public function __construct()
     {
-        return parent::__construct('settings');
+        return parent::__construct();
     }
 
     public function getSetting($section, $subsection)

@@ -2,20 +2,14 @@
 
 namespace App\Repositories;
 
-class IniBaseRepository
+class IniBaseRepository extends FileBaseRepository
 {
     protected $dirName = 'data_storage';
     protected $fileName;
 
-    public function __construct($fileName)
+    public function __construct()
     {
-        $this->fileName = $fileName . '.ini';
-
-        if (!is_dir($this->dirName)) {
-            mkdir($this->dirName);
-        }
-
-        fopen(prepare_file_path("{$this->dirName}/{$this->fileName}"), 'a+');
+        return parent::__construct('settings', '.ini');
     }
 
     public function all()
@@ -27,15 +21,6 @@ class IniBaseRepository
         }
 
         return $content;
-    }
-
-    public function create($item)
-    {
-        $contents = $this->all();
-
-        $contents[] = $item;
-
-        return file_put_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"), json_encode($contents));
     }
 }
 
