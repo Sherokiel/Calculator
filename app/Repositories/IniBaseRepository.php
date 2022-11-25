@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 class IniBaseRepository extends FileBaseRepository
 {
-    protected $dirName = 'data_storage';
+    protected $dirName = 'settings';
     protected $fileName;
 
     public function __construct($fileName)
@@ -16,11 +16,7 @@ class IniBaseRepository extends FileBaseRepository
     {
         $content = parse_ini_file("{$this->dirName}/{$this->fileName}", true);
 
-        if (is_null($content)) {
-            return [];
-        }
-
-        return $content;
+        return (is_null($content)) ? [] : $content;
     }
 }
 

@@ -16,11 +16,7 @@ class JsonBaseRepository extends FileBaseRepository
     {
         $content = file_get_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"));
 
-        if (is_null($content)) {
-            return [];
-        }
-
-    return json_decode($content, true);
+        return (is_null($content)) ? [] : json_decode($content, true);
     }
 
     public function create($item)
