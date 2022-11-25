@@ -7,9 +7,9 @@ class JsonBaseRepository extends FileBaseRepository
     protected $dirName = 'data_storage';
     protected $fileName;
 
-    public function __construct()
+    public function __construct($fileName)
     {
-        return parent::__construct('history', '.json');
+        return parent::__construct($fileName . '.json');
     }
 
     public function all()

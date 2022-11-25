@@ -4,9 +4,11 @@ namespace App\Repositories;
 
 class FileBaseRepository
 {
-    public function __construct($fileName, $extend)
+    protected $dirName = 'data_storage';
+
+    public function __construct($fileName, $dirName = 'data_storage')
     {
-        $this->fileName = $fileName . $extend;
+        $this->fileName = $fileName;
 
         if (!is_dir($this->dirName)) {
             mkdir($this->dirName);

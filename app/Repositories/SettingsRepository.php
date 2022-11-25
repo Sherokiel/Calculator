@@ -6,7 +6,7 @@ class SettingsRepository extends IniBaseRepository
 {
     public function __construct()
     {
-        return parent::__construct();
+        return parent::__construct('settings');
     }
 
     public function getSetting($section, $subsection)
@@ -15,7 +15,6 @@ class SettingsRepository extends IniBaseRepository
 
         if ($settings == []) {
             file_put_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"), "[{$section}]" . "\n" . "{$subsection} = 'en'");
-            //$settings = parse_ini_file(prepare_file_path("C:/PHP/calculator/app/Default/defaultSettings.ini"), true);
 
             return $settings[$section][$subsection] = 'en';
         }
