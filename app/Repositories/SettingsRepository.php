@@ -14,9 +14,10 @@ class SettingsRepository extends JsonBaseRepository
         $settings = $this->all();
 
         if ($settings == []) {
-            file_put_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"), "[{$section}]" . "\n" . "{$subsection} = 'en'");
+            //file_put_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"), "[{$section}]" . "\n" . "{$subsection} = 'en'");
+            $settings = parse_ini_file(prepare_file_path("C:/PHP/calculator/app/Default/defaultSettings.ini"), true);
 
-            return $settings[$section][$subsection] = 'en';
+            return $settings[$section][$subsection];
         }
 
         return $settings[$section][$subsection];
