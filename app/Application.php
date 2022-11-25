@@ -1,17 +1,20 @@
 <?php
 
-require 'constants.php';
-require prepare_file_path('libraries/console_helpers.php');
-require prepare_file_path('app/HistoryRepository.php');
+namespace App;
+
+use App\Repositories\HistoryRepository;
+use App\Repositories\SettingsRepository;
 
 class Application
 {
     protected $messages;
     protected $historyRepository;
+    protected $settingsRepository;
 
     public function __construct()
     {
-        $lang = file_get_contents(prepare_file_path('locale/lang.ini'));
+        $this->settingsRepository = new SettingsRepository();
+        $lang = $this->settingsRepository->getSetting('localization', 'locale');
         $this->messages = $this->loadLocale($lang);
         $this->historyRepository = new HistoryRepository();
     }
@@ -42,7 +45,13 @@ class Application
             info($this->messages['info']['result'] . $result);
             write_symbol_line(25, '=');
 
-            $this->historyRepository->create(date('d-m-Y'), $argument1, $argument2, $command, $result);
+            $this->historyRepository->create([
+                'date' => date('d-m-Y'),
+                'first_operand' => $argument1,
+                'second_operand' => $argument2,
+                'sign' => $command,
+                'result' => $result
+            ]);
         }
     }
 
@@ -243,9 +252,7 @@ class Application
 
     protected function getText($typeOfText, $text, $replacements)
     {
-        $message = str_replace('%', $replacements, $this->messages[$typeOfText][$text]);
-
-        return $message;
+        return str_replace('%', $replacements, $this->messages[$typeOfText][$text]);
     }
 
     protected function choiceLocale()
@@ -253,8 +260,8 @@ class Application
         $message = ($this->getText('info', 'select_lang', RUS . ' or ' . ENG));
         $errorMessage = $this->getText('errors', 'choice_error', INFO);
         $lang = choice($message , LANGUAGE , $errorMessage);
+        $this->settingsRepository->setSetting($lang, 'localization', 'locale');
 
-        file_put_contents(prepare_file_path('locale/lang.ini'), $lang);
         popen('cls', 'w');
 
         return $this->messages = $this->loadLocale($lang);
