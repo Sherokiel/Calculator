@@ -5,6 +5,7 @@ namespace App\Repositories;
 class FileBaseRepository
 {
     protected $dirName;
+    protected $fileName;
 
     public function __construct($fileName, $dirName)
     {
@@ -13,7 +14,8 @@ class FileBaseRepository
         if (!is_dir($dirName)) {
             mkdir($dirName);
         }
+        $this->filePath = prepare_file_path("{$dirName}/{$this->fileName}");
 
-        fopen(prepare_file_path("{$dirName}/{$this->fileName}"), 'a+');
+        fopen($this->filePath, 'a+');
     }
 }
