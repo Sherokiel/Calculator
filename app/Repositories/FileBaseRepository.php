@@ -4,8 +4,8 @@ namespace App\Repositories;
 
 class FileBaseRepository
 {
-    protected $dirName;
     protected $fileName;
+    protected $dirName;
     protected $filePath;
 
     public function __construct($fileName, $dirName)

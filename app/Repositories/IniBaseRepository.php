@@ -11,7 +11,7 @@ class IniBaseRepository extends FileBaseRepository
 
     public function all()
     {
-        $content = parse_ini_file("{$this->filePath}", true);
+        $content = parse_ini_file($this->filePath, true);
 
         return (is_null($content)) ? [] : $content;
     }
