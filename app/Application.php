@@ -45,15 +45,13 @@ class Application
             info($this->messages['info']['result'] . $result);
             write_symbol_line(25, '=');
 
-            $content = [
+            $this->historyRepository->create([
                 'date' => date('d-m-Y'),
                 'first_operand' => $argument1,
                 'second_operand' => $argument2,
                 'sign' => $command,
                 'result' => $result
-            ];
-
-            $this->historyRepository->create($content);
+            ]);
         }
     }
 
@@ -245,7 +243,7 @@ class Application
         return info($this->messages['info']['textHistorySaved']);
     }
 
-    protected function loadLocale($lang = 'en')
+    protected function loadLocale($lang)
     {
         $messages = file_get_contents(prepare_file_path("locale/{$lang}.json"));
 

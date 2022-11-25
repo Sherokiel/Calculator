@@ -9,7 +9,7 @@ class JsonBaseRepository
 
     public function __construct($fileName)
     {
-        $this->fileName = $fileName;
+        $this->fileName = $fileName . '.json';
 
         if (!is_dir($this->dirName)) {
             mkdir($this->dirName);
@@ -20,37 +20,20 @@ class JsonBaseRepository
 
     public function all()
     {
-        $extention = pathinfo(prepare_file_path("{$this->dirName}/{$this->fileName}"));
-
-        if ($extention['extension'] === 'json') {
-            $content = file_get_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"));
-
-            if (is_null($content)) {
-                return [];
-            }
-
-            return json_decode($content, true);
-        }
         $content = file_get_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"));
-
-        if ($content === '') {
-            return [];
-        }
-
-        $content = parse_ini_file("{$this->dirName}/{$this->fileName}", true);
 
         if (is_null($content)) {
             return [];
         }
 
-        return $content;
+    return json_decode($content, true);
     }
 
-    public function create($content)
+    public function create($item)
     {
         $contents = $this->all();
 
-        $contents[] = $content;
+        $contents[] = $item;
 
         return file_put_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"), json_encode($contents));
     }
