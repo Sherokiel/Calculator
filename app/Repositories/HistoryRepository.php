@@ -2,20 +2,22 @@
 
 namespace App\Repositories;
 
-class HistoryRepository extends Repository
+class HistoryRepository extends JsonBaseRepository
 {
+    public function __construct()
+    {
+        return parent::__construct('history.json');
+    }
+
     public function create($date, $argument1, $argument2, $command, $result)
     {
-        $content = $this->all();
 
-        $content[] = [
+        return parent::create([
             'date' => $date,
             'first_operand' => $argument1,
             'second_operand' => $argument2,
             'sign' => $command,
             'result' => $result
-        ];
-
-        file_put_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"), json_encode($content));
+        ]);
     }
 }

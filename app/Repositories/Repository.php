@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-class Repository
+class JsonBaseRepository
 {
     protected $dirName = 'data_storage';
     protected $fileName;
@@ -18,7 +18,7 @@ class Repository
         fopen(prepare_file_path("{$this->dirName}/{$this->fileName}"), 'a+');
     }
 
-    function all()
+    public function all()
     {
         $extention = pathinfo(prepare_file_path("{$this->dirName}/{$this->fileName}"));
 
@@ -44,5 +44,14 @@ class Repository
         }
 
         return $content;
+    }
+
+    public function create($date)
+    {
+        $content = $this->all();
+
+        $content[] = $date;
+
+        return file_put_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"), json_encode($content));
     }
 }

@@ -13,7 +13,7 @@ class Application
 
     public function __construct()
     {
-        $this->settingsRepository = new SettingsRepository('settings.ini');
+        $this->settingsRepository = new SettingsRepository();
         $lang = $this->settingsRepository->getSetting('localization', 'locale');
 
         if (is_null($lang)) {
@@ -21,7 +21,7 @@ class Application
         }
 
         $this->messages = $this->loadLocale($lang);
-        $this->historyRepository = new HistoryRepository('history.json');
+        $this->historyRepository = new HistoryRepository();
     }
 
     public function run()

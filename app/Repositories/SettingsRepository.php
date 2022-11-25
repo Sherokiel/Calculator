@@ -2,8 +2,13 @@
 
 namespace App\Repositories;
 
-class SettingsRepository extends Repository
+class SettingsRepository extends JsonBaseRepository
 {
+    public function __construct()
+    {
+        return parent::__construct('settings.ini');
+    }
+
     public function getSetting($section, $subsection)
     {
         $settings = $this->all();
@@ -19,14 +24,14 @@ class SettingsRepository extends Repository
     {
         $settings = $this->all();
         $settings[$section][$subsection] = $lang;
-
-        file_put_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"), '');
+        $personalSettigns = null;
 
         foreach ($settings as $setting => $settingsItems) {
-            file_put_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"), "[{$setting}]" . "\n" , FILE_APPEND);
+            $personalSettigns = $personalSettigns . "[{$setting}]" . "\n";
             foreach ($settingsItems as $settingsKey => $settingsItem) {
-                file_put_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"), "{$settingsKey} = '{$settingsItem}'" . "\n", FILE_APPEND);
+                $personalSettigns = $personalSettigns . "{$settingsKey} = '{$settingsItem}'" . "\n";
             }
         }
+        file_put_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"), $personalSettigns);
     }
 }
