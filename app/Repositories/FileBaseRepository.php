@@ -4,16 +4,16 @@ namespace App\Repositories;
 
 class FileBaseRepository
 {
-    protected $dirName = 'data_storage';
+    protected $dirName;
 
-    public function __construct($fileName, $dirName = 'data_storage')
+    public function __construct($fileName, $dirName)
     {
         $this->fileName = $fileName;
 
-        if (!is_dir($this->dirName)) {
-            mkdir($this->dirName);
+        if (!is_dir($dirName)) {
+            mkdir($dirName);
         }
 
-        fopen(prepare_file_path("{$this->dirName}/{$this->fileName}"), 'a+');
+        fopen(prepare_file_path("{$dirName}/{$this->fileName}"), 'a+');
     }
 }

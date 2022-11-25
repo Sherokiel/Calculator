@@ -29,3 +29,14 @@ function mb_str_pad($text, $length, $filling = ' ', $padType = STR_PAD_BOTH)
 
     return str_pad($text, $length + $lengthDifferent, $filling , $padType);
 }
+
+function ini_encode($iniArray)
+{
+    foreach ($iniArray as $setting => $settingsItems) {
+        $iniData = $iniData . "[{$setting}]" . "\n";
+        foreach ($settingsItems as $settingsKey => $settingsItem) {
+            $iniData = $iniData . "{$settingsKey} = '{$settingsItem}'" . "\n";
+        }
+    }
+    return $iniData;
+}

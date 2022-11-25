@@ -4,12 +4,9 @@ namespace App\Repositories;
 
 class JsonBaseRepository extends FileBaseRepository
 {
-    protected $dirName = 'data_storage';
-    protected $fileName;
-
     public function __construct($fileName)
     {
-        return parent::__construct($fileName . '.json');
+        return parent::__construct($fileName . '.json', 'data_storage');
     }
 
     public function all()

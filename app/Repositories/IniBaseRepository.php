@@ -4,12 +4,9 @@ namespace App\Repositories;
 
 class IniBaseRepository extends FileBaseRepository
 {
-    protected $dirName = 'settings';
-    protected $fileName;
-
     public function __construct($fileName)
     {
-        return parent::__construct($fileName . '.ini');
+        return parent::__construct($fileName . '.ini', 'settings');
     }
 
     public function all()
