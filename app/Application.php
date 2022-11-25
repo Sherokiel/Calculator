@@ -15,11 +15,6 @@ class Application
     {
         $this->settingsRepository = new SettingsRepository();
         $lang = $this->settingsRepository->getSetting('localization', 'locale');
-
-        if (is_null($lang)) {
-            $lang = 'en';
-        }
-
         $this->messages = $this->loadLocale($lang);
         $this->historyRepository = new HistoryRepository();
     }
@@ -50,7 +45,15 @@ class Application
             info($this->messages['info']['result'] . $result);
             write_symbol_line(25, '=');
 
-            $this->historyRepository->create(date('d-m-Y'), $argument1, $argument2, $command, $result);
+            $content = [
+                'date' => date('d-m-Y'),
+                'first_operand' => $argument1,
+                'second_operand' => $argument2,
+                'sign' => $command,
+                'result' => $result
+            ];
+
+            $this->historyRepository->create($content);
         }
     }
 

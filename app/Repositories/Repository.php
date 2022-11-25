@@ -46,12 +46,12 @@ class JsonBaseRepository
         return $content;
     }
 
-    public function create($date)
+    public function create($content)
     {
-        $content = $this->all();
+        $contents = $this->all();
 
-        $content[] = $date;
+        $contents[] = $content;
 
-        return file_put_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"), json_encode($content));
+        return file_put_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"), json_encode($contents));
     }
 }

@@ -14,7 +14,9 @@ class SettingsRepository extends JsonBaseRepository
         $settings = $this->all();
 
         if ($settings == []) {
-            return $settings[$section][$subsection] = null;
+            file_put_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"), "[{$section}]" . "\n" . "{$subsection} = 'en'");
+
+            return $settings[$section][$subsection] = 'en';
         }
 
         return $settings[$section][$subsection];
