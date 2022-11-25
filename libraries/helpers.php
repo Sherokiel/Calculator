@@ -35,10 +35,10 @@ function ini_encode(array $data)
     $iniData = '';
 
     foreach ($data as $settingGroup => $settings) {
-        $iniData = $iniData . "[{$settingGroup}]" . "\n";
+        $iniData .= "[{$settingGroup}]" . "\n";
 
-        foreach ($settings as $settingsKey => $settingsItem) {
-            $iniData = $iniData . "{$settingsKey} = '{$settingsItem}'" . "\n";
+        foreach ($settings as $settingsKey => $settingsValue) {
+            $iniData .= "{$settingsKey} = '{$settingsValue}'" . "\n";
         }
     }
 

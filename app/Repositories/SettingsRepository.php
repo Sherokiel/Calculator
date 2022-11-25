@@ -14,10 +14,10 @@ class SettingsRepository extends IniBaseRepository
         $settings = $this->all();
 
         if ($settings == []) {
+            $settings = $this->getDefaultSettings();
+            file_put_contents(prepare_file_path("{$this->filePath}"), ini_encode($settings));
 
-            file_put_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"), ini_encode($settings));
-
-            return $settings[$section][$subsection] = 'en';
+            //return $settings[$section][$subsection] = 'en';
         }
 
         return $settings[$section][$subsection];
@@ -28,6 +28,12 @@ class SettingsRepository extends IniBaseRepository
         $settings = $this->all();
         $settings[$section][$subsection] = $lang;
 
-        file_put_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"), ini_encode($settings));
+        file_put_contents(prepare_file_path("{$this->filePath}"), ini_encode($settings));
+    }
+
+    public function getDefaultSettings()
+    {
+        return ['localization' => ['locale' => 'en']
+        ];
     }
 }

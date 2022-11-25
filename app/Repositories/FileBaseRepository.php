@@ -11,10 +11,11 @@ class FileBaseRepository
     {
         $this->fileName = $fileName;
 
+        $this->filePath = prepare_file_path("{$dirName}/{$fileName}");
+
         if (!is_dir($dirName)) {
             mkdir($dirName);
         }
-        $this->filePath = prepare_file_path("{$dirName}/{$this->fileName}");
 
         fopen($this->filePath, 'a+');
     }

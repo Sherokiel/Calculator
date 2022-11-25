@@ -11,7 +11,7 @@ class JsonBaseRepository extends FileBaseRepository
 
     public function all()
     {
-        $content = file_get_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"));
+        $content = file_get_contents(prepare_file_path("{$this->filePath}"));
 
         return (is_null($content)) ? [] : json_decode($content, true);
     }
@@ -22,6 +22,6 @@ class JsonBaseRepository extends FileBaseRepository
 
         $contents[] = $item;
 
-        return file_put_contents(prepare_file_path("{$this->dirName}/{$this->fileName}"), json_encode($contents));
+        return file_put_contents(prepare_file_path("{$this->filePath}"), json_encode($contents));
     }
 }
