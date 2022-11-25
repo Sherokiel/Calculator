@@ -11,7 +11,7 @@ class FileBaseRepository
     public function __construct($fileName, $dirName)
     {
         $this->fileName = $fileName;
-
+        $this->dirName = $dirName;
         $this->filePath = prepare_file_path("{$dirName}/{$fileName}");
 
         if (!is_dir($dirName)) {
