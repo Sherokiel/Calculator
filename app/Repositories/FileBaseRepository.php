@@ -6,6 +6,7 @@ class FileBaseRepository
 {
     protected $dirName;
     protected $fileName;
+    protected $filePath;
 
     public function __construct($fileName, $dirName)
     {
