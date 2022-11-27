@@ -45,12 +45,12 @@ class Application
             info($this->messages['info']['result'] . $result);
             write_symbol_line(25, '=');
 
-            $this->historyRepository->create([
+            $this->historyRepository->createDataItem([
                 'date' => date('d-m-Y'),
                 'first_operand' => $argument1,
                 'second_operand' => $argument2,
                 'sign' => $command,
-                'result' => $result
+                'result' => $result,
             ]);
         }
     }
