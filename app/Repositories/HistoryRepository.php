@@ -2,8 +2,6 @@
 
 namespace App\Repositories;
 
-use Exception;
-
 class HistoryRepository extends JsonBaseRepository
 {
     public function __construct()
@@ -11,15 +9,13 @@ class HistoryRepository extends JsonBaseRepository
         return parent::__construct('history');
     }
 
-    public function create($dataContent)
+    protected function getEntityFields()
     {
-        $defaultHistory = ["date", "first_operand", "second_operand", "sign", "result"];
-        $dataContentValid = array_intersect_key($dataContent, array_flip($defaultHistory));
+        return $defaultJson = ["date", "first_operand", "second_operand", "sign", "result"];
+    }
 
-        if (count($dataContentValid) !== count($defaultHistory)) {
-            throw new Exception('Всё сломалось');
-        }
-
-        return parent::create($dataContent);
+    public function create($item)
+    {
+        return parent::create($item);
     }
 }

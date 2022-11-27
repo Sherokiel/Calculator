@@ -146,7 +146,6 @@ class Application
 
         do {
             $historyGroups = array_group($history, 'date');
-
             $historyCommands = array_merge([FULL, 'help', 'back'], array_keys($historyGroups));
             $showDateHistory = ask($this->getText('info', 'info_history', FULL));
             $isDataValid = (is_date($showDateHistory) || in_array($showDateHistory, $historyCommands));
