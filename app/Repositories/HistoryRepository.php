@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use Exception;
+
 class HistoryRepository extends JsonBaseRepository
 {
     public function __construct()
@@ -15,7 +17,7 @@ class HistoryRepository extends JsonBaseRepository
         $dataContentValid = array_intersect_key($dataContent, array_flip($defaultHistory));
 
         if (count($dataContentValid) !== count($defaultHistory)) {
-            die;
+            throw new Exception('Всё сломалось');
         }
 
         return parent::create($dataContent);
