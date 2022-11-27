@@ -9,13 +9,8 @@ class HistoryRepository extends JsonBaseRepository
         return parent::__construct('history');
     }
 
-    protected function getEntityFields()
+    protected function getEntityFields(): array
     {
-        return $defaultJson = ["date", "first_operand", "second_operand", "sign", "result"];
-    }
-
-    public function create($item)
-    {
-        return parent::create($item);
+        return ['date', 'first_operand', 'second_operand', 'sign', 'result'];
     }
 }

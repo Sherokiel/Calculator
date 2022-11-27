@@ -18,15 +18,13 @@ abstract class JsonBaseRepository extends FileBaseRepository
         return (is_null($content)) ? [] : json_decode($content, true);
     }
 
-    abstract protected function getEntityFields();
-
     public function create($item)
     {
-        $defaultJson = $this->getEntityFields();
-        $dataContentValid = array_intersect_key($item, array_flip($defaultJson));
+        $entityFields = $this->getEntityFields();
+        $fieldsToInsert = array_intersect_key($item, array_flip($entityFields));
 
-        if (count($dataContentValid) !== count($defaultJson)) {
-            throw new Exception('Всё сломалось');
+        if (count($fieldsToInsert) !== count($entityFields)) {
+            throw new Exception('One of required fields does not filled.');
         }
 
         $contents = $this->all();
@@ -34,4 +32,6 @@ abstract class JsonBaseRepository extends FileBaseRepository
 
         return file_put_contents($this->filePath, json_encode($contents));
     }
+
+    abstract protected function getEntityFields(): array;
 }
