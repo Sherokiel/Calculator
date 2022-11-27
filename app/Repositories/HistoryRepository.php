@@ -11,9 +11,10 @@ class HistoryRepository extends JsonBaseRepository
 
     public function create($dataContent)
     {
-        $dataContentValid = array_intersect_key($dataContent, array_flip(["date", "first_operand", "second_operand", "sign", "result"]));
+        $defaultHistory = ["date", "first_operand", "second_operand", "sign", "result"];
+        $dataContentValid = array_intersect_key($dataContent, array_flip($defaultHistory));
 
-        if (count($dataContentValid) <= 5) {
+        if (count($dataContentValid) !== count($defaultHistory)) {
             die;
         }
 
