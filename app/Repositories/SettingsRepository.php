@@ -30,7 +30,7 @@ class SettingsRepository extends IniBaseRepository
         file_put_contents($this->filePath, ini_encode($settings));
     }
 
-    public function getDefaultSettings()
+    protected function getDefaultSettings()
     {
         return [
             'localization' => [
