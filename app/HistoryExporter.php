@@ -23,54 +23,13 @@ class HistoryExporter
         $this->messages = $this->loadLocale($this->lang);
     }
 
-    public function export()
+    public function export($exportedData)
     {
         if (empty($this->data)) {
             return info($this->messages['info']['no_history']);
         }
 
-        do {
-            $historyGroups = array_group($this->data, 'date');
-            $historyCommands = array_merge([FULL, 'help', 'back'], array_keys($historyGroups));
-            $showDateHistory = ask($this->getText('info', 'info_history', FULL));
-            $isDataValid = (is_date($showDateHistory) || in_array($showDateHistory, $historyCommands));
-
-            if (!$isDataValid) {
-                info($this->messages['errors']['history_wrong_input']);
-
-                continue;
-            }
-
-            $isDataValid = in_array($showDateHistory, $historyCommands);
-
-            if (!$isDataValid) {
-                info($this->messages['info']['no_history_day']);
-
-                continue;
-            }
-
-            if ($showDateHistory === 'help') {
-                show_info_block($this->messages['info']['history_help'], HISTORY_VIEWER_COMMANDS, 19, 71);
-                $isDataValid = false;
-
-                continue;
-            }
-
-            if ($showDateHistory === FULL) {
-                $this->showHistoryItems($historyGroups);
-                $isDataValid = false;
-
-                continue;
-            }
-
-            $isDataValid = (!array_key_exists($showDateHistory, $historyGroups));
-
-            if (!$isDataValid) {
-                return $this->showHistoryItems([$showDateHistory => $historyGroups[$showDateHistory]]);
-            }
-        } while (!$isDataValid);
-
-        return info($this->messages['info']['history_back']);
+        return $this->showHistoryItems($exportedData);
     }
 
     protected function writeHistoryLine($historyItem)
@@ -92,18 +51,13 @@ class HistoryExporter
                 info($historyFunction, 1);
             }
         }
-
         return write_symbol_line(15, '=');
     }
+
     protected function loadLocale($lang)
     {
-        $this->messages = file_get_contents(prepare_file_path("locale/{$lang}.json"));
+        $messages = file_get_contents(prepare_file_path("locale/{$lang}.json"));
 
-        return json_decode($this->messages, true);
-    }
-
-    protected function getText($typeOfText, $text, $replacements)
-    {
-        return str_replace('%', $replacements, $this->messages[$typeOfText][$text]);
+        return json_decode($messages, true);
     }
 }
