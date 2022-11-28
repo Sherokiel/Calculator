@@ -50,7 +50,7 @@ class Application
                 'first_operand' => $argument1,
                 'second_operand' => $argument2,
                 'sign' => $command,
-                'result' => $result
+                'result' => $result,
             ]);
         }
     }
@@ -146,7 +146,6 @@ class Application
 
         do {
             $historyGroups = array_group($history, 'date');
-
             $historyCommands = array_merge([FULL, 'help', 'back'], array_keys($historyGroups));
             $showDateHistory = ask($this->getText('info', 'info_history', FULL));
             $isDataValid = (is_date($showDateHistory) || in_array($showDateHistory, $historyCommands));

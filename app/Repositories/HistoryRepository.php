@@ -8,4 +8,9 @@ class HistoryRepository extends JsonBaseRepository
     {
         return parent::__construct('history');
     }
+
+    protected function getEntityFields(): array
+    {
+        return ['date', 'first_operand', 'second_operand', 'sign', 'result'];
+    }
 }

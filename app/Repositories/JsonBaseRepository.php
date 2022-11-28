@@ -2,7 +2,9 @@
 
 namespace App\Repositories;
 
-class JsonBaseRepository extends FileBaseRepository
+use Exception;
+
+abstract class JsonBaseRepository extends FileBaseRepository
 {
     public function __construct($fileName)
     {
@@ -18,10 +20,18 @@ class JsonBaseRepository extends FileBaseRepository
 
     public function create($item)
     {
-        $contents = $this->all();
+        $entityFields = $this->getEntityFields();
+        $fieldsToInsert = array_intersect_key($item, array_flip($entityFields));
 
+        if (count($fieldsToInsert) !== count($entityFields)) {
+            throw new Exception('One of required fields does not filled.');
+        }
+
+        $contents = $this->all();
         $contents[] = $item;
 
         return file_put_contents($this->filePath, json_encode($contents));
     }
+
+    abstract protected function getEntityFields(): array;
 }
