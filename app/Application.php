@@ -177,13 +177,10 @@ class Application
             }
 
             if ($showDateHistory === FULL) {
-                $this->historyExporter->export();
-                $isDataValid = false;
-
-                continue;
+                $showDateHistory = null;
             }
 
-            $isDataValid = (!array_key_exists($showDateHistory, $historyGroups));
+            $isDataValid = (!array_key_exists($showDateHistory, $historyGroups) && $showDateHistory !== null);
 
             if (!$isDataValid) {
                 return $this->historyExporter->export($showDateHistory);
