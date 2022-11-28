@@ -4,19 +4,24 @@ namespace App;
 
 use App\Repositories\HistoryRepository;
 use App\Repositories\SettingsRepository;
+use App\Exporter\HistoryExporter;
 
 class Application
 {
     protected $messages;
     protected $historyRepository;
     protected $settingsRepository;
+    protected $showHistory;
 
     public function __construct()
     {
         $this->settingsRepository = new SettingsRepository();
+
         $lang = $this->settingsRepository->getSetting('localization', 'locale');
         $this->messages = $this->loadLocale($lang);
+
         $this->historyRepository = new HistoryRepository();
+        $this->showHistory = new HistoryExporter();
     }
 
     public function run()
@@ -115,7 +120,7 @@ class Application
             case(INFO):
                 return show_info_block($this->messages['info']['info_block'], INFO_BLOCK);
             case(HISTORY):
-                return $this->showHistory();
+                return $this->showHistory->export();
             case(EXPORT_HISTORY):
                 return $this->historyToTxt();
             case(CHOICE_LANGUAGE):
@@ -136,58 +141,58 @@ class Application
         }
     }
 
-    protected function showHistory()
-    {
-        $history = $this->historyRepository->all();
-
-        if (empty($history)) {
-            return info($this->messages['info']['no_history']);
-        }
-
-        do {
-            $historyGroups = array_group($history, 'date');
-            $historyCommands = array_merge([FULL, 'help', 'back'], array_keys($historyGroups));
-            $showDateHistory = ask($this->getText('info', 'info_history', FULL));
-            $isDataValid = (is_date($showDateHistory) || in_array($showDateHistory, $historyCommands));
-
-            if (!$isDataValid) {
-                info($this->messages['errors']['history_wrong_input']);
-
-                continue;
-            }
-
-            $isDataValid = in_array($showDateHistory, $historyCommands);
-
-            if (!$isDataValid) {
-                info($this->messages['info']['no_history_day']);
-
-                continue;
-            }
-
-            if ($showDateHistory === 'help') {
-                show_info_block($this->messages['info']['history_help'], HISTORY_VIEWER_COMMANDS, 19, 71);
-                $isDataValid = false;
-
-                continue;
-            }
-
-            if ($showDateHistory === FULL) {
-                $this->showHistoryItems($historyGroups);
-                $isDataValid = false;
-
-                continue;
-            }
-
-            $isDataValid = (!array_key_exists($showDateHistory, $historyGroups));
-
-            if (!$isDataValid) {
-                return $this->showHistoryItems([$showDateHistory => $historyGroups[$showDateHistory]]);
-            }
-        } while (!$isDataValid);
-
-        return info($this->messages['info']['history_back']);
-    }
-
+//    protected function showHistory()
+//    {
+//        $history = $this->historyRepository->all();
+//
+//        if (empty($history)) {
+//            return info($this->messages['info']['no_history']);
+//        }
+//
+//        do {
+//            $historyGroups = array_group($history, 'date');
+//            $historyCommands = array_merge([FULL, 'help', 'back'], array_keys($historyGroups));
+//            $showDateHistory = ask($this->getText('info', 'info_history', FULL));
+//            $isDataValid = (is_date($showDateHistory) || in_array($showDateHistory, $historyCommands));
+//
+//            if (!$isDataValid) {
+//                info($this->messages['errors']['history_wrong_input']);
+//
+//                continue;
+//            }
+//
+//            $isDataValid = in_array($showDateHistory, $historyCommands);
+//
+//            if (!$isDataValid) {
+//                info($this->messages['info']['no_history_day']);
+//
+//                continue;
+//            }
+//
+//            if ($showDateHistory === 'help') {
+//                show_info_block($this->messages['info']['history_help'], HISTORY_VIEWER_COMMANDS, 19, 71);
+//                $isDataValid = false;
+//
+//                continue;
+//            }
+//
+//            if ($showDateHistory === FULL) {
+//                $this->showHistoryItems($historyGroups);
+//                $isDataValid = false;
+//
+//                continue;
+//            }
+//
+//            $isDataValid = (!array_key_exists($showDateHistory, $historyGroups));
+//
+//            if (!$isDataValid) {
+//                return $this->showHistoryItems([$showDateHistory => $historyGroups[$showDateHistory]]);
+//            }
+//        } while (!$isDataValid);
+//
+//        return info($this->messages['info']['history_back']);
+//    }
+//
     protected function writeHistoryLine($historyItem)
     {
         $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
@@ -195,21 +200,21 @@ class Application
 
         return "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
     }
-
-    protected function showHistoryItems($historyGroups)
-    {
-        foreach ($historyGroups as $date => $historyItems) {
-            info("{$date}: ");
-
-            foreach ($historyItems as $historyItem) {
-                $historyFunction = $this->writeHistoryLine($historyItem);
-
-                info($historyFunction, 1);
-            }
-        }
-
-        return write_symbol_line(15, '=');
-    }
+//
+//    protected function showHistoryItems($historyGroups)
+//    {
+//        foreach ($historyGroups as $date => $historyItems) {
+//            info("{$date}: ");
+//
+//            foreach ($historyItems as $historyItem) {
+//                $historyFunction = $this->writeHistoryLine($historyItem);
+//
+//                info($historyFunction, 1);
+//            }
+//        }
+//
+//        return write_symbol_line(15, '=');
+//    }
 
     protected function historyToTxt()
     {
