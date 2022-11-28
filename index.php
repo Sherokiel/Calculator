@@ -5,6 +5,7 @@ use App\Application;
 require 'libraries' . DIRECTORY_SEPARATOR . 'helpers.php';
 
 require prepare_file_path('app/Application.php');
+require prepare_file_path('app/HistoryExporter.php');
 require prepare_file_path('app/Repositories/FileBaseRepository.php');
 require prepare_file_path('app/Repositories/IniBaseRepository.php');
 require prepare_file_path('app/Repositories/JsonBaseRepository.php');
@@ -13,5 +14,11 @@ require prepare_file_path('app/Repositories/SettingsRepository.php');
 require prepare_file_path('libraries/console_helpers.php');
 require prepare_file_path('constants.php');
 
-$calculator = new Application();
-$calculator->run();
+try {
+    $calculator = new Application();
+    $calculator->run();
+} catch (Error $a) {
+    echo $a;
+
+    readline();
+}
