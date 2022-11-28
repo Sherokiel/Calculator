@@ -4,14 +4,14 @@ namespace App;
 
 use App\Repositories\HistoryRepository;
 use App\Repositories\SettingsRepository;
-use App\Exporter\HistoryExporter;
+use App\Exporters\HistoryExporter;
 
 class Application
 {
     protected $messages;
     protected $historyRepository;
     protected $settingsRepository;
-    protected $showHistory;
+    protected $historyExporter;
 
     public function __construct()
     {
@@ -21,7 +21,7 @@ class Application
         $this->messages = $this->loadLocale($lang);
 
         $this->historyRepository = new HistoryRepository();
-        $this->showHistory = new HistoryExporter();
+        $this->historyExporter = new HistoryExporter();
     }
 
     public function run()
@@ -177,7 +177,7 @@ class Application
             }
 
             if ($showDateHistory === FULL) {
-                $this->showHistory->export($historyGroups);
+                $this->historyExporter->export();
                 $isDataValid = false;
 
                 continue;
@@ -186,7 +186,7 @@ class Application
             $isDataValid = (!array_key_exists($showDateHistory, $historyGroups));
 
             if (!$isDataValid) {
-                return $this->showHistory->export([$showDateHistory => $historyGroups[$showDateHistory]]);
+                return $this->historyExporter->export($showDateHistory);
             }
 
         } while (!$isDataValid);

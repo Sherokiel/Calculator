@@ -17,8 +17,8 @@ require prepare_file_path('constants.php');
 try {
     $calculator = new Application();
     $calculator->run();
-} catch (Error $a) {
-    echo $a;
+} catch (Error $error) {
+    echo $error;
 
     readline();
 }
