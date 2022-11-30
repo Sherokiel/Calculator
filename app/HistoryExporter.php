@@ -6,7 +6,7 @@ use App\Repositories\HistoryRepository;
 
 class HistoryExporter
 {
-    protected $data;
+
     protected $historyRepository;
 
     public function __construct()
@@ -16,13 +16,10 @@ class HistoryExporter
 
     public function export($date = null)
     {
-        $this->data = array_group($this->historyRepository->all(), 'date');
+        $data = $this->historyRepository->allGroupedBy('date');
+        $item = ($date === null) ? $data : [$date => $data[$date]];
 
-        if ($date === null) {
-            return $this->showHistoryItems($this->data);
-        }
-
-        return $this->showHistoryItems([$date => $this->data[$date]]);
+        return $this->showHistoryItems($item);
     }
 
     protected function writeHistoryLine($historyItem)

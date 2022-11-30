@@ -33,5 +33,14 @@ abstract class JsonBaseRepository extends FileBaseRepository
         return file_put_contents($this->filePath, json_encode($contents));
     }
 
+    public function allGroupedBy($group)
+    {
+        if (!in_array($group, $this->getEntityFields())) {
+            return throw new Exception('No this key in repository');
+        }
+
+        return array_group($this->all(), $group);
+    }
+
     abstract protected function getEntityFields(): array;
 }

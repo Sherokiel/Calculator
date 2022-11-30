@@ -199,21 +199,6 @@ class Application
         return "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
     }
 
-//    protected function showHistoryItems($historyGroups)
-//    {
-//        foreach ($historyGroups as $date => $historyItems) {
-//            info("{$date}: ");
-//
-//            foreach ($historyItems as $historyItem) {
-//                $historyFunction = $this->writeHistoryLine($historyItem);
-//
-//                info($historyFunction, 1);
-//            }
-//        }
-//
-//        return write_symbol_line(15, '=');
-//    }
-
     protected function historyToTxt()
     {
         $historyGroups = array_group($this->historyRepository->all(), 'date');
