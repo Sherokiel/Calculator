@@ -33,13 +33,25 @@ abstract class JsonBaseRepository extends FileBaseRepository
         return file_put_contents($this->filePath, json_encode($contents));
     }
 
-    public function allGroupedBy($group)
+    public function allGroupedBy($field)
     {
-        if (!in_array($group, $this->getEntityFields())) {
-            return throw new Exception('No this key in repository');
+        if (!in_array($field, $this->getEntityFields())) {
+            return throw new Exception("Field {$field} is not valid.");
         }
 
-        return array_group($this->all(), $group);
+        return array_group($this->all(), $field);
+    }
+
+    public function isExist()
+    {
+        $keys = $this->allGroupedBy('date');
+
+        foreach ($keys as $key => $value) {
+            $groupKeys[] = $key;
+
+        }
+
+        return $isExist = in_array( '21-11-2022', $groupKeys);
     }
 
     abstract protected function getEntityFields(): array;

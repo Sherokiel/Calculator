@@ -26,6 +26,8 @@ class Application
 
     public function run()
     {
+        $isExist = $this->historyRepository->isExist();
+        var_dump($isExist);
         $isRunning = true;
 
         info_box('', $this->messages['info']['welcome1'], '', $this->getText('info', 'welcome2', INFO), '');

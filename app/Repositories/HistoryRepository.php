@@ -2,8 +2,6 @@
 
 namespace App\Repositories;
 
-use Exception;
-
 class HistoryRepository extends JsonBaseRepository
 {
     public function __construct()

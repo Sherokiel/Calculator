@@ -6,7 +6,6 @@ use App\Repositories\HistoryRepository;
 
 class HistoryExporter
 {
-
     protected $historyRepository;
 
     public function __construct()
