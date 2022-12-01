@@ -151,7 +151,7 @@ class Application
 
         do {
             $showDateHistory = ask($this->getText('info', 'info_history', FULL));
-            $isDataExist = $this->historyRepository->isExist($showDateHistory, 'date');
+            $isDataExist = $this->historyRepository->isExist(['date' => $showDateHistory]);
 
             $isDataValid = (is_date($showDateHistory) || in_array($showDateHistory, HISTORY_COMMANDS) || $isDataExist);
 
