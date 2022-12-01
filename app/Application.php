@@ -151,17 +151,13 @@ class Application
 
         do {
             $showDateHistory = ask($this->getText('info', 'info_history', FULL));
-            $isDataExist = $this->historyRepository->isExist(['date' => $showDateHistory]);
-
-            $isDataValid = (is_date($showDateHistory) || in_array($showDateHistory, HISTORY_COMMANDS) || $isDataExist);
+            $isDataValid = (is_date($showDateHistory) || in_array($showDateHistory, HISTORY_COMMANDS));
 
             if (!$isDataValid) {
                 info($this->messages['errors']['history_wrong_input']);
 
                 continue;
             }
-
-            $isDataValid = $isDataExist || in_array($showDateHistory, HISTORY_COMMANDS);
 
             if ($showDateHistory === 'help') {
                 show_info_block($this->messages['info']['history_help'], HISTORY_VIEWER_COMMANDS, 19, 71);
@@ -170,25 +166,20 @@ class Application
                 continue;
             }
 
+            if ($showDateHistory === 'back') {
+                return info($this->messages['info']['history_back']);
+            }
+
             if ($showDateHistory === FULL) {
                 $showDateHistory = null;
-            }
-
-            if (!$isDataValid) {
+            } elseif (!($this->historyRepository->isExist(['date' => $showDateHistory]))) {
                 info($this->messages['info']['no_history_day']);
 
-                continue;
-            }
-
-            $isDataValid = (!$isDataExist && !is_null($showDateHistory));
-
-            if (!$isDataValid) {
-                return $this->historyExporter->export($showDateHistory);
-            }
-
+                $isDataValid = false;
+                }
         } while (!$isDataValid);
 
-        return info($this->messages['info']['history_back']);
+        return $this->historyExporter->export($showDateHistory);
     }
 
     protected function writeHistoryLine($historyItem)
