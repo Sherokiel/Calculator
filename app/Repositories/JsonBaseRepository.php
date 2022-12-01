@@ -44,13 +44,15 @@ abstract class JsonBaseRepository extends FileBaseRepository
 
     public function isExist($searchValue, $groupedBy)
     {
-        $groupKeys = $this->allGroupedBy($groupedBy);
+        $groupKeys = [$groupedBy => $searchValue];
 
-        foreach ($groupKeys as $keys => $value) {
-            $groupKeysArray[] = $keys;
+        foreach ($this->all() as $value) {
+            if (count(array_intersect_assoc($groupKeys, $value)) > 0) {
+                return true;
+            }
         }
 
-        return in_array($searchValue, $groupKeysArray);
+        return false;
     }
 
     abstract protected function getEntityFields(): array;
