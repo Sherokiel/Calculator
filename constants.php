@@ -14,6 +14,7 @@ const SYSTEM_COMMANDS = [QUIT, INFO, HISTORY, EXPORT_HISTORY, CHOICE_LANGUAGE];
 const BASIC_COMMANDS = ['+', '-', '*', '/'];
 const AVAILABLE_COMMANDS = [...BASIC_COMMANDS, '^', 'sr', ...SYSTEM_COMMANDS, CHOICE_LANGUAGE];
 const FULL = 'full';
+const HISTORY_COMMANDS = [FULL, 'help', 'back'];
 const INFO_BLOCK = [
     '+' => 'Addition operation',
     '-' => 'Subtraction operation',

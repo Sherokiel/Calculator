@@ -16,7 +16,7 @@ class HistoryExporter
     public function export($date = null)
     {
         $data = $this->historyRepository->allGroupedBy('date');
-        $item = ($date === null) ? $data : [$date => $data[$date]];
+        $item = (is_null($date)) ? $data : [$date => $data[$date]];
 
         return $this->showHistoryItems($item);
     }

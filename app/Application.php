@@ -26,8 +26,6 @@ class Application
 
     public function run()
     {
-        $isExist = $this->historyRepository->isExist();
-        var_dump($isExist);
         $isRunning = true;
 
         info_box('', $this->messages['info']['welcome1'], '', $this->getText('info', 'welcome2', INFO), '');
@@ -153,7 +151,7 @@ class Application
 
         do {
             $historyGroups = array_group($history, 'date');
-            $historyCommands = array_merge([FULL, 'help', 'back'], array_keys($historyGroups));
+            $historyCommands = array_merge(HISTORY_COMMANDS, array_keys($historyGroups));
             $showDateHistory = ask($this->getText('info', 'info_history', FULL));
             $isDataValid = (is_date($showDateHistory) || in_array($showDateHistory, $historyCommands));
 
@@ -163,7 +161,7 @@ class Application
                 continue;
             }
 
-            $isDataValid = in_array($showDateHistory, $historyCommands);
+            $isDataValid = $this->historyRepository->isExist($showDateHistory, 'date') || in_array($showDateHistory, HISTORY_COMMANDS);
 
             if (!$isDataValid) {
                 info($this->messages['info']['no_history_day']);

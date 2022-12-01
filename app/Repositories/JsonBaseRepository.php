@@ -42,16 +42,15 @@ abstract class JsonBaseRepository extends FileBaseRepository
         return array_group($this->all(), $field);
     }
 
-    public function isExist()
+    public function isExist($searchValue, $groupedBy)
     {
-        $keys = $this->allGroupedBy('date');
+        $groupKeys = $this->allGroupedBy($groupedBy);
 
-        foreach ($keys as $key => $value) {
-            $groupKeys[] = $key;
-
+        foreach ($groupKeys as $keys => $value) {
+            $groupKeysArray[] = $keys;
         }
 
-        return $isExist = in_array( '21-11-2022', $groupKeys);
+        return in_array($searchValue, $groupKeysArray);
     }
 
     abstract protected function getEntityFields(): array;
