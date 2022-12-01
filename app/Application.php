@@ -163,12 +163,6 @@ class Application
 
             $isDataValid = $isDataExist || in_array($showDateHistory, HISTORY_COMMANDS);
 
-            if (!$isDataValid) {
-                info($this->messages['info']['no_history_day']);
-
-                continue;
-            }
-
             if ($showDateHistory === 'help') {
                 show_info_block($this->messages['info']['history_help'], HISTORY_VIEWER_COMMANDS, 19, 71);
                 $isDataValid = false;
@@ -178,6 +172,12 @@ class Application
 
             if ($showDateHistory === FULL) {
                 $showDateHistory = null;
+            }
+
+            if (!$isDataValid) {
+                info($this->messages['info']['no_history_day']);
+
+                continue;
             }
 
             $isDataValid = (!$isDataExist && !is_null($showDateHistory));
