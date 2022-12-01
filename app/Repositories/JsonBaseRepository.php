@@ -15,7 +15,7 @@ abstract class JsonBaseRepository extends FileBaseRepository
     {
         $content = file_get_contents($this->filePath);
 
-        return (is_null($content)) ? [] : json_decode($content, true);
+        return ($content === '') ? [] : json_decode($content, true);
     }
 
     public function create($item)
@@ -42,7 +42,7 @@ abstract class JsonBaseRepository extends FileBaseRepository
         return array_group($this->all(), $field);
     }
 
-    public function isExist($condition)
+    public function isExist($condition = [])
     {
         foreach ($this->all() as $value) {
             if (array_intersect_assoc($condition, $value) === $condition) {

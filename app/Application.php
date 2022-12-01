@@ -143,9 +143,9 @@ class Application
 
     protected function showHistory()
     {
-        $history = $this->historyRepository->all();
+        //$history = $this->historyRepository->all();
 
-        if (empty($history)) {
+        if (!($this->historyRepository->isExist())) {
             return info($this->messages['info']['no_history']);
         }
 
