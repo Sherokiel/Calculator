@@ -150,10 +150,10 @@ class Application
         }
 
         do {
-            $historyGroups = array_group($history, 'date');
-            $historyCommands = array_merge(HISTORY_COMMANDS, array_keys($historyGroups));
             $showDateHistory = ask($this->getText('info', 'info_history', FULL));
-            $isDataValid = (is_date($showDateHistory) || in_array($showDateHistory, $historyCommands));
+            $isDataExist = $this->historyRepository->isExist($showDateHistory, 'date');
+
+            $isDataValid = (is_date($showDateHistory) || in_array($showDateHistory, HISTORY_COMMANDS) || $isDataExist);
 
             if (!$isDataValid) {
                 info($this->messages['errors']['history_wrong_input']);
@@ -161,7 +161,7 @@ class Application
                 continue;
             }
 
-            $isDataValid = $this->historyRepository->isExist($showDateHistory, 'date') || in_array($showDateHistory, HISTORY_COMMANDS);
+            $isDataValid = $isDataExist || in_array($showDateHistory, HISTORY_COMMANDS);
 
             if (!$isDataValid) {
                 info($this->messages['info']['no_history_day']);
@@ -180,7 +180,7 @@ class Application
                 $showDateHistory = null;
             }
 
-            $isDataValid = (!array_key_exists($showDateHistory, $historyGroups) && $showDateHistory !== null);
+            $isDataValid = (!$isDataExist && !is_null($showDateHistory));
 
             if (!$isDataValid) {
                 return $this->historyExporter->export($showDateHistory);
