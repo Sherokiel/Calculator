@@ -53,12 +53,12 @@ abstract class JsonBaseRepository extends FileBaseRepository
         return false;
     }
 
-    public function get($data)
+    public function get($condition)
     {
         $grouped = array_filter(
             $this->all(),
-            function ($value) use ($data) {
-                return (array_intersect_assoc($data, $value) === $data);
+            function ($value) use ($condition) {
+                return (array_intersect_assoc($condition, $value) === $condition);
             }
         );
 

@@ -50,7 +50,8 @@ class HistoryExporter
         return $this->showHistoryItems([$date => $data]);
     }
 
-    public function exportAll() {
+    public function exportAll()
+    {
         $data = $this->historyRepository->allGroupedBy('date');
 
         return $this->showHistoryItems($data);
