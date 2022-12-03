@@ -5,6 +5,8 @@ namespace App;
 use App\Repositories\HistoryRepository;
 use App\Repositories\SettingsRepository;
 use App\Exporters\HistoryExporter;
+use App\Exporters\TxtExporter;
+
 
 class Application
 {
@@ -12,6 +14,7 @@ class Application
     protected $historyRepository;
     protected $settingsRepository;
     protected $historyExporter;
+    protected $txtExporter;
 
     public function __construct()
     {
@@ -22,6 +25,7 @@ class Application
 
         $this->historyRepository = new HistoryRepository();
         $this->historyExporter = new HistoryExporter();
+        $this->txtExporter = new TxtExporter();
     }
 
     public function run()
@@ -121,8 +125,6 @@ class Application
                 return show_info_block($this->messages['info']['info_block'], INFO_BLOCK);
             case(HISTORY):
                 return $this->showHistory();
-            case(EXPORT_HISTORY):
-                return $this->historyToTxt();
             case(CHOICE_LANGUAGE):
                 return $this->choiceLocale();
             case(QUIT):
@@ -168,6 +170,10 @@ class Application
                 return info($this->messages['info']['history_back']);
             }
 
+            if ($showDateHistory === 'export') {
+                return $this->historyToTxt();
+            }
+
             if ($showDateHistory === FULL) {
                 $showDateHistory = null;
             } elseif (!($this->historyRepository->isExist(['date' => $showDateHistory]))) {
@@ -180,43 +186,51 @@ class Application
         return $this->historyExporter->export($showDateHistory);
     }
 
-    protected function writeHistoryLine($historyItem)
-    {
-        $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
-        $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
-
-        return "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
-    }
-
     protected function historyToTxt()
     {
-        $historyGroups = array_group($this->historyRepository->all(), 'date');
+        if (!($this->historyRepository->isExist())) {
+            return info($this->messages['info']['no_history']);
+        }
+
         $nameOfFile = readline("{$this->messages['info']['name_of_file_create']}");
         $pathToFile = readline("{$this->messages['info']['name_of_directory_create']}");
-        $fullPathName = "{$pathToFile}{$nameOfFile}.txt";
 
-        if (file_exists($fullPathName)) {
-            $command = choice($this->getText('questions', 'text_file_exist', $fullPathName), [AGREE, DEGREE]);
+        do {
+            $showDateHistory = ask($this->messages['questions']['export_question']);
 
-            switch ($command) {
-                case (AGREE):
-                    return file_put_contents($fullPathName, '');
-                case (DEGREE):
-                    return PHP_EOL;
+            $isDataValid = (is_date($showDateHistory) || in_array($showDateHistory, HISTORY_COMMANDS));
+
+            if (!$isDataValid) {
+                info($this->messages['errors']['history_wrong_input']);
+
+                continue;
             }
-        }
 
-        foreach ($historyGroups as $date => $historyItems) {
-            file_put_contents($fullPathName, $date . PHP_EOL, FILE_APPEND);
+            if ($showDateHistory === 'help') {
+                show_info_block($this->messages['info']['history_help'], HISTORY_VIEWER_COMMANDS, 19, 71);
+                $isDataValid = false;
 
-            foreach ($historyItems as $historyItem) {
-                $historyFunction = $this->writeHistoryLine($historyItem);
-
-                file_put_contents($fullPathName, $historyFunction . PHP_EOL, FILE_APPEND);
+                continue;
             }
-        }
 
-        return info($this->messages['info']['textHistorySaved']);
+            if ($showDateHistory === 'back') {
+                return info($this->messages['info']['history_back']);
+            }
+
+            if ($showDateHistory === 'export') {
+                return $this->historyToTxt();
+            }
+
+            if ($showDateHistory === FULL) {
+                $showDateHistory = null;
+            } elseif (!($this->historyRepository->isExist(['date' => $showDateHistory]))) {
+                info($this->messages['info']['no_history_day']);
+
+                $isDataValid = false;
+            }
+        } while (!$isDataValid);
+
+        return $this->txtExporter->saveToTxt($pathToFile, $nameOfFile, $showDateHistory);
     }
 
     protected function loadLocale($lang)
