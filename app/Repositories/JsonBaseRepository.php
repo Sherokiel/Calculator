@@ -55,14 +55,10 @@ abstract class JsonBaseRepository extends FileBaseRepository
 
     public function get($condition)
     {
-        $grouped = array_filter(
-            $this->all(),
-            function ($value) use ($condition) {
+        return array_filter($this->all(), function ($value) use ($condition) {
                 return (array_intersect_assoc($condition, $value) === $condition);
             }
         );
-
-       return $grouped;
     }
 
     abstract protected function getEntityFields(): array;
