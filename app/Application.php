@@ -174,7 +174,7 @@ class Application
                 info($this->messages['info']['no_history_day']);
 
                 $isDataValid = false;
-                }
+            }
         } while (!$isDataValid);
 
         return $this->historyExporter->export($showDateHistory);

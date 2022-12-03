@@ -53,5 +53,17 @@ abstract class JsonBaseRepository extends FileBaseRepository
         return false;
     }
 
+    public function get($data)
+    {
+        $grouped = array_filter(
+            $this->all(),
+            function ($value) use ($data) {
+                return (array_intersect_assoc($data, $value) === $data);
+            }
+        );
+
+       return $grouped;
+    }
+
     abstract protected function getEntityFields(): array;
 }

@@ -15,10 +15,9 @@ class HistoryExporter
 
     public function export($date = null)
     {
-        $data = $this->historyRepository->allGroupedBy('date');
-        $item = (is_null($date)) ? $data : [$date => $data[$date]];
-
-        return $this->showHistoryItems($item);
+        return (is_null($date))
+            ? $this->exportAll()
+            : $this->exportByDate($date);
     }
 
     protected function writeHistoryLine($historyItem)
@@ -42,5 +41,18 @@ class HistoryExporter
         }
 
         return write_symbol_line(15, '=');
+    }
+
+    public function exportByDate($date)
+    {
+        $data = $this->historyRepository->get(['date' => $date]);
+
+        return $this->showHistoryItems([$date => $data]);
+    }
+
+    public function exportAll() {
+        $data = $this->historyRepository->allGroupedBy('date');
+
+        return $this->showHistoryItems($data);
     }
 }
