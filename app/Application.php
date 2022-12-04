@@ -12,7 +12,7 @@ class Application
     protected $messages;
     protected $historyRepository;
     protected $settingsRepository;
-    protected $historyExporter;
+    protected $historyConsoleExporter;
     protected $historyTxtExporter;
 
     public function __construct()
@@ -23,8 +23,8 @@ class Application
         $this->messages = $this->loadLocale($lang);
 
         $this->historyRepository = new HistoryRepository();
-        $this->historyExporter = new HistoryConsoleExporter();
-        $this->historyTxtExporter = new HistoryTxtExporter();
+        $this->historyConsoleExporter = new HistoryConsoleExporter();
+
     }
 
     public function run()
@@ -182,7 +182,7 @@ class Application
             }
         } while (!$isDataValid);
 
-        return $this->historyExporter->export($showDateHistory);
+        return $this->historyConsoleExporter->export($showDateHistory);
     }
 
     protected function historyToTxt()
@@ -193,7 +193,10 @@ class Application
 
         $nameOfFile = readline("{$this->messages['info']['name_of_file_create']}");
         $pathToFile = readline("{$this->messages['info']['name_of_directory_create']}");
+
         $fullPathName = "{$pathToFile}{$nameOfFile}.txt";
+
+        $this->historyTxtExporter = new HistoryTxtExporter($fullPathName);
 
         do {
             $showDateHistory = ask($this->messages['questions']['export_question']);
@@ -243,7 +246,7 @@ class Application
             }
         }
 
-        file_put_contents($fullPathName, $this->historyTxtExporter->export($showDateHistory));
+        $this->historyTxtExporter->export($showDateHistory);
 
         return info($this->messages['info']['history_saved']);
     }

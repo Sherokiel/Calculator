@@ -2,29 +2,27 @@
 
 namespace App\Exporters;
 
-class HistoryTxtExporter extends HistoryExporter
+class HistoryTxtExporter extends BaseHistoryExporter
 {
-    public function __construct()
+    protected $savedData;
+    protected $fullPathName;
+
+    public function __construct($fullPathName)
     {
+        $this->fullPathName = $fullPathName;
         return parent::__construct();
+
     }
 
-    protected function writeSaveText($data)
+    protected function output($historyLine)
     {
-        $savedData = '';
-
-        foreach ($data as $savedGroup => $saved) {
-            $savedData .= "[{$savedGroup}]\n";
-
-            foreach ($saved as $savedValue1) {
-                $savedData .= $this->writeHistoryLine($savedValue1) . "\n";
-            }
-        }
-        return $savedData;
+        $this->savedData.= $historyLine . "\n";
     }
 
-    protected function output($date)
+    public function export($date = null)
     {
-        return $this->writeSaveText($date);
+        parent::export($date);
+
+        return file_put_contents($this->fullPathName, $this->savedData);
     }
 }

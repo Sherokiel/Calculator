@@ -2,7 +2,7 @@
 
 namespace App\Exporters;
 
-class HistoryConsoleExporter extends HistoryExporter
+class HistoryConsoleExporter extends BaseHistoryExporter
 {
     protected $historyRepository;
 
@@ -11,8 +11,8 @@ class HistoryConsoleExporter extends HistoryExporter
         return parent::__construct();
     }
 
-    protected function output($date)
+    protected function output($historyLine)
     {
-        return $this->showHistoryItems($date);
+        return info($historyLine, 1);
     }
 }

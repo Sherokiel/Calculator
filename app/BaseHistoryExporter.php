@@ -4,7 +4,7 @@ namespace App\Exporters;
 
 use App\Repositories\HistoryRepository;
 
-abstract  class  HistoryExporter
+abstract  class BaseHistoryExporter
 {
     protected $historyRepository;
 
@@ -16,8 +16,20 @@ abstract  class  HistoryExporter
     public function export($date = null)
     {
         return (is_null($date))
-            ? $this->saveAll()
-            : $this->saveByDate($date);
+            ? $this->exportAll()
+            : $this->exportByDate($date);
+    }
+
+    public function exportByDate($date)
+    {
+        $data = $this->historyRepository->get(['date' => $date]);
+
+        return $this->showHistoryItems([$date => $data]);
+    }
+
+    public function exportAll()
+    {
+        return $this->showHistoryItems($this->historyRepository->allGroupedBy('date'));
     }
 
     protected function writeHistoryLine($historyItem)
@@ -31,29 +43,17 @@ abstract  class  HistoryExporter
     protected function showHistoryItems($data)
     {
         foreach ($data as $date => $historyItems) {
-            info("{$date}: ");
+            $this->output("{$date}: ");
 
             foreach ($historyItems as $historyItem) {
-                $historyFunction = $this->writeHistoryLine($historyItem);
+                $historyLine = $this->writeHistoryLine($historyItem);
 
-                info($historyFunction, 1);
+                $this->output($historyLine);
             }
         }
 
         return write_symbol_line(15, '=');
     }
 
-    public function saveAll()
-    {
-        return $this->output($this->historyRepository->allGroupedBy('date'));
-    }
-
-    public function saveByDate($date)
-    {
-        $data = $this->historyRepository->get(['date' => $date]);
-
-        return $this->output([$date => $data]);
-    }
-
-    abstract protected function output($date);
+    abstract protected  function output($historyLine);
 }

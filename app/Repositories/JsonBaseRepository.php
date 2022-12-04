@@ -57,8 +57,8 @@ abstract class JsonBaseRepository extends FileBaseRepository
     {
         return array_filter($this->all(), function ($value) use ($condition) {
                 return (array_intersect_assoc($condition, $value) === $condition);
-            }
-        );}
+        });
+    }
 
     abstract protected function getEntityFields(): array;
 }
