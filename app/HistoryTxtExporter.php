@@ -2,16 +2,14 @@
 
 namespace App\Exporters;
 
-class HistoryTxtExporter extends DataExporter
+class HistoryTxtExporter extends HistoryExporter
 {
-    protected $historyRepository;
-
     public function __construct()
     {
         return parent::__construct();
     }
 
-    public function saveToTxt($fullPathName, $date = null)
+    public function exportToTxt($fullPathName, $date = null)
     {
         $content = (is_null($date))
             ? $this->saveAllToTxt()
@@ -28,9 +26,8 @@ class HistoryTxtExporter extends DataExporter
     protected function saveByDateTxt($date)
     {
         $data = $this->historyRepository->get(['date' => $date]);
-        $dateByData = [$date => $data];
 
-        return $this->writeSaveText($dateByData) ;
+        return $this->writeSaveText([$date => $data]);
     }
 
     protected function writeSaveText($data)
