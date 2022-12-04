@@ -4,7 +4,7 @@ namespace App\Exporters;
 
 use App\Repositories\HistoryRepository;
 
-class HistoryExporter
+class HistoryConsoleExporter
 {
     protected $historyRepository;
 

@@ -4,9 +4,8 @@ namespace App;
 
 use App\Repositories\HistoryRepository;
 use App\Repositories\SettingsRepository;
-use App\Exporters\HistoryExporter;
-use App\Exporters\TxtExporter;
-
+use App\Exporters\HistoryConsoleExporter;
+use App\Exporters\HistoryTxtExporter;
 
 class Application
 {
@@ -14,7 +13,7 @@ class Application
     protected $historyRepository;
     protected $settingsRepository;
     protected $historyExporter;
-    protected $txtExporter;
+    protected $historyTxtExporter;
 
     public function __construct()
     {
@@ -24,8 +23,8 @@ class Application
         $this->messages = $this->loadLocale($lang);
 
         $this->historyRepository = new HistoryRepository();
-        $this->historyExporter = new HistoryExporter();
-        $this->txtExporter = new TxtExporter();
+        $this->historyExporter = new HistoryConsoleExporter();
+        $this->historyTxtExporter = new HistoryTxtExporter();
     }
 
     public function run()
@@ -194,6 +193,7 @@ class Application
 
         $nameOfFile = readline("{$this->messages['info']['name_of_file_create']}");
         $pathToFile = readline("{$this->messages['info']['name_of_directory_create']}");
+        $fullPathName = "{$pathToFile}{$nameOfFile}.txt";
 
         do {
             $showDateHistory = ask($this->messages['questions']['export_question']);
@@ -230,7 +230,22 @@ class Application
             }
         } while (!$isDataValid);
 
-        return $this->txtExporter->saveToTxt($pathToFile, $nameOfFile, $showDateHistory);
+        if (file_exists($fullPathName)) {
+            $command = choice($this->getText('questions', 'text_file_exist', $fullPathName), [AGREE, DEGREE]);
+
+            switch ($command) {
+                case (AGREE):
+                    file_put_contents($fullPathName, '');
+
+                    break;
+                case (DEGREE):
+                    return PHP_EOL;
+            }
+        }
+
+        $this->historyTxtExporter->saveToTxt($fullPathName, $showDateHistory);
+
+        return info($this->messages['info']['history_saved']);
     }
 
     protected function loadLocale($lang)
