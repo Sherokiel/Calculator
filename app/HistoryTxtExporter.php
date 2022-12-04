@@ -10,8 +10,8 @@ class HistoryTxtExporter extends BaseHistoryExporter
     public function __construct($fullPathName)
     {
         $this->fullPathName = $fullPathName;
-        return parent::__construct();
 
+        return parent::__construct();
     }
 
     protected function output($historyLine)
