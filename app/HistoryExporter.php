@@ -43,7 +43,17 @@ abstract  class  HistoryExporter
         return write_symbol_line(15, '=');
     }
 
-    abstract protected  function saveAll();
+    public function saveAll()
+    {
+        return $this->output($this->historyRepository->allGroupedBy('date'));
+    }
 
-    abstract protected  function saveByDate($date);
+    public function saveByDate($date)
+    {
+        $data = $this->historyRepository->get(['date' => $date]);
+
+        return $this->output([$date => $data]);
+    }
+
+    abstract protected function output($date);
 }

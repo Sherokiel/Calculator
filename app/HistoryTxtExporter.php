@@ -9,18 +9,6 @@ class HistoryTxtExporter extends HistoryExporter
         return parent::__construct();
     }
 
-    protected function saveAll()
-    {
-        return $this->writeSaveText($this->historyRepository->allGroupedBy('date')) ;
-    }
-
-    protected function saveByDate($date)
-    {
-        $data = $this->historyRepository->get(['date' => $date]);
-
-        return $this->writeSaveText([$date => $data]);
-    }
-
     protected function writeSaveText($data)
     {
         $savedData = '';
@@ -33,5 +21,10 @@ class HistoryTxtExporter extends HistoryExporter
             }
         }
         return $savedData;
+    }
+
+    protected function output($date)
+    {
+        return $this->writeSaveText($date);
     }
 }

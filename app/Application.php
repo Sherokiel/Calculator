@@ -243,7 +243,7 @@ class Application
             }
         }
 
-        $this->historyTxtExporter->exportToTxt($fullPathName, $showDateHistory);
+        file_put_contents($fullPathName, $this->historyTxtExporter->export($showDateHistory));
 
         return info($this->messages['info']['history_saved']);
     }
