@@ -4,13 +4,20 @@ namespace App\Exporters;
 
 use App\Repositories\HistoryRepository;
 
-class HistoryExporter
+abstract  class  HistoryExporter
 {
     protected $historyRepository;
 
     public function __construct()
     {
         $this->historyRepository = new HistoryRepository();
+    }
+
+    public function export($date = null)
+    {
+        return (is_null($date))
+            ? $this->saveAll()
+            : $this->saveByDate($date);
     }
 
     protected function writeHistoryLine($historyItem)
@@ -35,4 +42,8 @@ class HistoryExporter
 
         return write_symbol_line(15, '=');
     }
+
+    abstract protected  function saveAll();
+
+    abstract protected  function saveByDate($date);
 }

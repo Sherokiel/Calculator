@@ -11,21 +11,14 @@ class HistoryConsoleExporter extends HistoryExporter
         return parent::__construct();
     }
 
-    public function export($date = null)
-    {
-        return (is_null($date))
-            ? $this->exportAll()
-            : $this->exportByDate($date);
-    }
-
-    public function exportByDate($date)
+    public function saveByDate($date)
     {
         $data = $this->historyRepository->get(['date' => $date]);
 
         return $this->showHistoryItems([$date => $data]);
     }
 
-    public function exportAll()
+    public function saveAll()
     {
         return $this->showHistoryItems($this->historyRepository->allGroupedBy('date'));
     }

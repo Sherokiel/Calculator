@@ -9,21 +9,12 @@ class HistoryTxtExporter extends HistoryExporter
         return parent::__construct();
     }
 
-    public function exportToTxt($fullPathName, $date = null)
-    {
-        $content = (is_null($date))
-            ? $this->saveAllToTxt()
-            : $this->saveByDateTxt($date);
-
-        return file_put_contents($fullPathName, $content);
-    }
-
-    protected function saveAllToTxt()
+    protected function saveAll()
     {
         return $this->writeSaveText($this->historyRepository->allGroupedBy('date')) ;
     }
 
-    protected function saveByDateTxt($date)
+    protected function saveByDate($date)
     {
         $data = $this->historyRepository->get(['date' => $date]);
 
