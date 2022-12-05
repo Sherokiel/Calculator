@@ -4,7 +4,7 @@ namespace App\Exporters;
 
 use App\Repositories\HistoryRepository;
 
-abstract  class BaseHistoryExporter
+abstract class BaseHistoryExporter
 {
     protected $historyRepository;
 
@@ -32,7 +32,7 @@ abstract  class BaseHistoryExporter
         return $this->showHistoryItems($this->historyRepository->allGroupedBy('date'));
     }
 
-    protected function writeHistoryLine($historyItem)
+    protected function generateHistoryLine($historyItem)
     {
         $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
         $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
@@ -46,14 +46,12 @@ abstract  class BaseHistoryExporter
             $this->output("{$date}: ");
 
             foreach ($historyItems as $historyItem) {
-                $historyLine = $this->writeHistoryLine($historyItem);
+                $historyLine = $this->generateHistoryLine($historyItem);
 
                 $this->output($historyLine);
             }
         }
-
-        return write_symbol_line(15, '=');
     }
 
-    abstract protected  function output($historyLine);
+    abstract protected function output($historyLine);
 }

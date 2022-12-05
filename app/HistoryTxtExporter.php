@@ -16,7 +16,7 @@ class HistoryTxtExporter extends BaseHistoryExporter
 
     protected function output($historyLine)
     {
-        $this->savedData.= $historyLine . "\n";
+        $this->savedData .= $historyLine . PHP_EOL;
     }
 
     public function export($date = null)
