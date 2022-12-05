@@ -2,7 +2,7 @@
     "questions": {
         "quit": "Are you sure to wanna quit? % ",
         "text_file_exist": "File % already exists, do you want to replace it? Yes/no: ",
-        "export_question": "Do you want to export full history or by the specific date? "
+        "export_question": "You want show history on screen or export in file (Enter %): "
     },
     "info": {
         "welcome_user": "Welcome %!",

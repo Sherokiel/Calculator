@@ -24,7 +24,6 @@ class Application
 
         $this->historyRepository = new HistoryRepository();
         $this->historyConsoleExporter = new HistoryConsoleExporter();
-
     }
 
     public function run()
@@ -144,16 +143,16 @@ class Application
 
     protected function showHistory()
     {
-        if (!($this->historyRepository->isExist())) {
+        if (!$this->historyRepository->isExist()) {
             return info($this->messages['info']['no_history']);
         }
 
         do {
-            $output = choice('You want show history on screen or export in file: ', [EXPORT_HISTORY, SCREEN]);
+            $output = choice($this->getText('questions', 'export_question', EXPORT_HISTORY . ' or ' . SCREEN), [EXPORT_HISTORY, SCREEN]);
 
             if ($output === 'export') {
-                $nameOfFile = readline("{$this->messages['info']['name_of_file_create']}");
-                $pathToFile = readline("{$this->messages['info']['name_of_directory_create']}");
+                $nameOfFile = readline($this->messages['info']['name_of_file_create']);
+                $pathToFile = readline($this->messages['info']['name_of_directory_create']);
 
                 $fullPathName = "{$pathToFile}{$nameOfFile}.txt";
 
@@ -168,7 +167,7 @@ class Application
 
                             break;
                         case (DEGREE):
-                            return PHP_EOL;
+                            return '';
                     }
                 }
             }
