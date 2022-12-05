@@ -4,19 +4,27 @@ namespace App;
 
 use App\Repositories\HistoryRepository;
 use App\Repositories\SettingsRepository;
+use App\Exporters\HistoryConsoleExporter;
+use App\Exporters\HistoryTxtExporter;
 
 class Application
 {
     protected $messages;
     protected $historyRepository;
     protected $settingsRepository;
+    protected $historyConsoleExporter;
+    protected $historyTxtExporter;
 
     public function __construct()
     {
         $this->settingsRepository = new SettingsRepository();
+
         $lang = $this->settingsRepository->getSetting('localization', 'locale');
         $this->messages = $this->loadLocale($lang);
+
         $this->historyRepository = new HistoryRepository();
+        $this->historyConsoleExporter = new HistoryConsoleExporter();
+        $this->historyTxtExporter = new HistoryTxtExporter();
     }
 
     public function run()
@@ -116,8 +124,6 @@ class Application
                 return show_info_block($this->messages['info']['info_block'], INFO_BLOCK);
             case(HISTORY):
                 return $this->showHistory();
-            case(EXPORT_HISTORY):
-                return $this->historyToTxt();
             case(CHOICE_LANGUAGE):
                 return $this->choiceLocale();
             case(QUIT):
@@ -138,28 +144,39 @@ class Application
 
     protected function showHistory()
     {
-        $history = $this->historyRepository->all();
-
-        if (empty($history)) {
+        if (!$this->historyRepository->isExist()) {
             return info($this->messages['info']['no_history']);
         }
 
         do {
-            $historyGroups = array_group($history, 'date');
-            $historyCommands = array_merge([FULL, 'help', 'back'], array_keys($historyGroups));
+            $output = choice($this->getText('questions', 'export_question', EXPORT_HISTORY . ' or ' . SCREEN), [EXPORT_HISTORY, SCREEN]);
+
+            if ($output === 'export') {
+                $nameOfFile = readline($this->messages['info']['name_of_file_create']);
+                $pathToFile = readline($this->messages['info']['name_of_directory_create']);
+
+                $fullPathName = "{$pathToFile}{$nameOfFile}.txt";
+                $this->historyTxtExporter->setFilePath($fullPathName);
+
+                if (file_exists($fullPathName)) {
+                    $command = choice($this->getText('questions', 'text_file_exist', $fullPathName), [AGREE, DEGREE]);
+
+                    switch ($command) {
+                        case (AGREE):
+                            file_put_contents($fullPathName, '');
+
+                            break;
+                        case (DEGREE):
+                            return '';
+                    }
+                }
+            }
+
             $showDateHistory = ask($this->getText('info', 'info_history', FULL));
-            $isDataValid = (is_date($showDateHistory) || in_array($showDateHistory, $historyCommands));
+            $isDataValid = (is_date($showDateHistory) || in_array($showDateHistory, HISTORY_COMMANDS));
 
             if (!$isDataValid) {
                 info($this->messages['errors']['history_wrong_input']);
-
-                continue;
-            }
-
-            $isDataValid = in_array($showDateHistory, $historyCommands);
-
-            if (!$isDataValid) {
-                info($this->messages['info']['no_history_day']);
 
                 continue;
             }
@@ -171,75 +188,26 @@ class Application
                 continue;
             }
 
-            if ($showDateHistory === FULL) {
-                $this->showHistoryItems($historyGroups);
-                $isDataValid = false;
-
-                continue;
+            if ($showDateHistory === 'back') {
+                return info($this->messages['info']['history_back']);
             }
 
-            $isDataValid = (!array_key_exists($showDateHistory, $historyGroups));
+            if ($showDateHistory === FULL) {
+                $showDateHistory = null;
+            } elseif (!$this->historyRepository->isExist(['date' => $showDateHistory])) {
+                info($this->messages['info']['no_history_day']);
 
-            if (!$isDataValid) {
-                return $this->showHistoryItems([$showDateHistory => $historyGroups[$showDateHistory]]);
+                $isDataValid = false;
             }
         } while (!$isDataValid);
 
-        return info($this->messages['info']['history_back']);
-    }
+        if ($output === 'export') {
+            $this->historyTxtExporter->export($showDateHistory);
 
-    protected function writeHistoryLine($historyItem)
-    {
-        $isBasicMathOperation = in_array($historyItem['sign'], BASIC_COMMANDS);
-        $prefix = ($isBasicMathOperation) ? '   ' : '(!)';
-
-        return "{$prefix} {$historyItem['first_operand']} {$historyItem['sign']} {$historyItem['second_operand']} = {$historyItem['result']}";
-    }
-
-    protected function showHistoryItems($historyGroups)
-    {
-        foreach ($historyGroups as $date => $historyItems) {
-            info("{$date}: ");
-
-            foreach ($historyItems as $historyItem) {
-                $historyFunction = $this->writeHistoryLine($historyItem);
-
-                info($historyFunction, 1);
-            }
+            return info($this->messages['info']['history_saved']);
         }
 
-        return write_symbol_line(15, '=');
-    }
-
-    protected function historyToTxt()
-    {
-        $historyGroups = array_group($this->historyRepository->all(), 'date');
-        $nameOfFile = readline("{$this->messages['info']['name_of_file_create']}");
-        $pathToFile = readline("{$this->messages['info']['name_of_directory_create']}");
-        $fullPathName = "{$pathToFile}{$nameOfFile}.txt";
-
-        if (file_exists($fullPathName)) {
-            $command = choice($this->getText('questions', 'text_file_exist', $fullPathName), [AGREE, DEGREE]);
-
-            switch ($command) {
-                case (AGREE):
-                    return file_put_contents($fullPathName, '');
-                case (DEGREE):
-                    return PHP_EOL;
-            }
-        }
-
-        foreach ($historyGroups as $date => $historyItems) {
-            file_put_contents($fullPathName, $date . PHP_EOL, FILE_APPEND);
-
-            foreach ($historyItems as $historyItem) {
-                $historyFunction = $this->writeHistoryLine($historyItem);
-
-                file_put_contents($fullPathName, $historyFunction . PHP_EOL, FILE_APPEND);
-            }
-        }
-
-        return info($this->messages['info']['textHistorySaved']);
+        return $this->historyConsoleExporter->export($showDateHistory);
     }
 
     protected function loadLocale($lang)
