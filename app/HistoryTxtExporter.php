@@ -7,11 +7,6 @@ class HistoryTxtExporter extends BaseHistoryExporter
     protected $savedData;
     protected $fullPathName;
 
-    public function __construct()
-    {
-        return parent::__construct();
-    }
-
     protected function output($historyLine)
     {
         $this->savedData .= $historyLine . PHP_EOL;

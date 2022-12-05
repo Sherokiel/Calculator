@@ -46,11 +46,11 @@ abstract class JsonBaseRepository extends FileBaseRepository
     {
         foreach ($this->all() as $value) {
             if ($this->isSuitableRecord($condition, $value)) {
-                return $this->isSuitableRecord($condition, $value);
+                return true;
             }
         }
 
-        return $this->isSuitableRecord($condition, $value);
+        return false;
     }
 
     public function get($condition)

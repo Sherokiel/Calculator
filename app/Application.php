@@ -194,7 +194,7 @@ class Application
 
             if ($showDateHistory === FULL) {
                 $showDateHistory = null;
-            } elseif (!($this->historyRepository->isExist(['date' => $showDateHistory]))) {
+            } elseif (!$this->historyRepository->isExist(['date' => $showDateHistory])) {
                 info($this->messages['info']['no_history_day']);
 
                 $isDataValid = false;
