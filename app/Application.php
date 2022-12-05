@@ -149,6 +149,30 @@ class Application
         }
 
         do {
+            $output = choice('You want show history on screen or export in file: ', [EXPORT_HISTORY, SCREEN]);
+
+            if ($output === 'export') {
+                $nameOfFile = readline("{$this->messages['info']['name_of_file_create']}");
+                $pathToFile = readline("{$this->messages['info']['name_of_directory_create']}");
+
+                $fullPathName = "{$pathToFile}{$nameOfFile}.txt";
+
+                $this->historyTxtExporter = new HistoryTxtExporter($fullPathName);
+
+                if (file_exists($fullPathName)) {
+                    $command = choice($this->getText('questions', 'text_file_exist', $fullPathName), [AGREE, DEGREE]);
+
+                    switch ($command) {
+                        case (AGREE):
+                            file_put_contents($fullPathName, '');
+
+                            break;
+                        case (DEGREE):
+                            return PHP_EOL;
+                    }
+                }
+            }
+
             $showDateHistory = ask($this->getText('info', 'info_history', FULL));
             $isDataValid = (is_date($showDateHistory) || in_array($showDateHistory, HISTORY_COMMANDS));
 
@@ -169,10 +193,6 @@ class Application
                 return info($this->messages['info']['history_back']);
             }
 
-            if ($showDateHistory === 'export') {
-                return $this->historyToTxt();
-            }
-
             if ($showDateHistory === FULL) {
                 $showDateHistory = null;
             } elseif (!($this->historyRepository->isExist(['date' => $showDateHistory]))) {
@@ -181,74 +201,14 @@ class Application
                 $isDataValid = false;
             }
         } while (!$isDataValid);
+
+        if ($output === 'export') {
+            $this->historyTxtExporter->export($showDateHistory);
+
+            return info($this->messages['info']['history_saved']);
+        }
 
         return $this->historyConsoleExporter->export($showDateHistory);
-    }
-
-    protected function historyToTxt()
-    {
-        if (!($this->historyRepository->isExist())) {
-            return info($this->messages['info']['no_history']);
-        }
-
-        $nameOfFile = readline("{$this->messages['info']['name_of_file_create']}");
-        $pathToFile = readline("{$this->messages['info']['name_of_directory_create']}");
-
-        $fullPathName = "{$pathToFile}{$nameOfFile}.txt";
-
-        $this->historyTxtExporter = new HistoryTxtExporter($fullPathName);
-
-        do {
-            $showDateHistory = ask($this->messages['questions']['export_question']);
-
-            $isDataValid = (is_date($showDateHistory) || in_array($showDateHistory, HISTORY_COMMANDS));
-
-            if (!$isDataValid) {
-                info($this->messages['errors']['history_wrong_input']);
-
-                continue;
-            }
-
-            if ($showDateHistory === 'help') {
-                show_info_block($this->messages['info']['history_help'], HISTORY_VIEWER_COMMANDS, 19, 71);
-                $isDataValid = false;
-
-                continue;
-            }
-
-            if ($showDateHistory === 'back') {
-                return info($this->messages['info']['history_back']);
-            }
-
-            if ($showDateHistory === 'export') {
-                return $this->historyToTxt();
-            }
-
-            if ($showDateHistory === FULL) {
-                $showDateHistory = null;
-            } elseif (!($this->historyRepository->isExist(['date' => $showDateHistory]))) {
-                info($this->messages['info']['no_history_day']);
-
-                $isDataValid = false;
-            }
-        } while (!$isDataValid);
-
-        if (file_exists($fullPathName)) {
-            $command = choice($this->getText('questions', 'text_file_exist', $fullPathName), [AGREE, DEGREE]);
-
-            switch ($command) {
-                case (AGREE):
-                    file_put_contents($fullPathName, '');
-
-                    break;
-                case (DEGREE):
-                    return PHP_EOL;
-            }
-        }
-
-        $this->historyTxtExporter->export($showDateHistory);
-
-        return info($this->messages['info']['history_saved']);
     }
 
     protected function loadLocale($lang)

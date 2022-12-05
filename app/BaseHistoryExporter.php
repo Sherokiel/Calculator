@@ -20,14 +20,14 @@ abstract class BaseHistoryExporter
             : $this->exportByDate($date);
     }
 
-    public function exportByDate($date)
+    protected function exportByDate($date)
     {
         $data = $this->historyRepository->get(['date' => $date]);
 
         return $this->showHistoryItems([$date => $data]);
     }
 
-    public function exportAll()
+    protected function exportAll()
     {
         return $this->showHistoryItems($this->historyRepository->allGroupedBy('date'));
     }

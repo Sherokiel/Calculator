@@ -7,6 +7,7 @@ const AGREE = 'yes';
 const DEGREE = 'no';
 const HISTORY = 'history';
 const EXPORT_HISTORY = 'export';
+const SCREEN = 'screen';
 const RUS = 'ru';
 const ENG = 'en';
 const LANGUAGE = [RUS, ENG];

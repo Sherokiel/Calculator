@@ -45,19 +45,29 @@ abstract class JsonBaseRepository extends FileBaseRepository
     public function isExist($condition = [])
     {
         foreach ($this->all() as $value) {
-            if (array_intersect_assoc($condition, $value) === $condition) {
-                return true;
+            if ($this->checkPresence($condition, $value)) {
+
+                return $this->checkPresence($condition, $value);
             }
         }
 
-        return false;
+        return $this->checkPresence($condition, $value);
     }
 
     public function get($condition)
     {
         return array_filter($this->all(), function ($value) use ($condition) {
-            return (array_intersect_assoc($condition, $value) === $condition);
+            return ($this->checkPresence($condition, $value));
         });
+    }
+
+    protected function checkPresence($condition, $value)
+    {
+        if (array_intersect_assoc($condition, $value) === $condition) {
+            return true;
+        }
+
+        return false;
     }
 
     abstract protected function getEntityFields(): array;
