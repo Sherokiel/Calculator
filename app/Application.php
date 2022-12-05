@@ -24,6 +24,7 @@ class Application
 
         $this->historyRepository = new HistoryRepository();
         $this->historyConsoleExporter = new HistoryConsoleExporter();
+        $this->historyTxtExporter = new HistoryTxtExporter();
     }
 
     public function run()
@@ -155,8 +156,7 @@ class Application
                 $pathToFile = readline($this->messages['info']['name_of_directory_create']);
 
                 $fullPathName = "{$pathToFile}{$nameOfFile}.txt";
-
-                $this->historyTxtExporter = new HistoryTxtExporter($fullPathName);
+                $this->historyTxtExporter->setFilePath($fullPathName);
 
                 if (file_exists($fullPathName)) {
                     $command = choice($this->getText('questions', 'text_file_exist', $fullPathName), [AGREE, DEGREE]);

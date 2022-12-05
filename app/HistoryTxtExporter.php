@@ -7,10 +7,8 @@ class HistoryTxtExporter extends BaseHistoryExporter
     protected $savedData;
     protected $fullPathName;
 
-    public function __construct($fullPathName)
+    public function __construct()
     {
-        $this->fullPathName = $fullPathName;
-
         return parent::__construct();
     }
 
@@ -24,5 +22,10 @@ class HistoryTxtExporter extends BaseHistoryExporter
         parent::export($date);
 
         return file_put_contents($this->fullPathName, $this->savedData);
+    }
+
+    public function setFilePath($filePath)
+    {
+        $this->fullPathName = $filePath;
     }
 }
