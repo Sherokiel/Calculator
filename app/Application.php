@@ -219,7 +219,6 @@ class Application
         } while (!$isDataValid);
 
         if (get_class($this->$exporter) == 'App\Exporters\HistoryTxtExporter') {
-            var_dump($fullPathName);
             info($this->getText('info','history_saved', ['filepath' => $fullPathName]));
         }
 
@@ -235,11 +234,13 @@ class Application
 
     protected function getText($typeOfText, $text, $replacements)
     {
+        $message = $this->messages[$typeOfText][$text];
+
         foreach ($replacements as $key => $value) {
-            $this->messages[$typeOfText][$text] = str_replace("%{$key}%", $value, $this->messages[$typeOfText][$text]);
+            $message = str_replace("%{$key}%", $value, $message);
         }
 
-        return $this->messages[$typeOfText][$text];
+        return $message;
     }
 
     protected function choiceLocale()
