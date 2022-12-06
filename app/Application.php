@@ -31,10 +31,10 @@ class Application
     {
         $isRunning = true;
 
-        info_box('', $this->messages['info']['welcome1'], '', $this->getText('info', 'welcome2', INFO), '');
+        info_box('', $this->messages['info']['welcome1'], '', $this->getText('info', 'welcome2', ['info' => INFO]), '');
 
         while ($isRunning) {
-            $command = choice($this->messages['info']['enter_command'], AVAILABLE_COMMANDS, $this->getText('errors', 'choice_error', INFO));
+            $command = choice($this->messages['info']['enter_command'], AVAILABLE_COMMANDS, $this->getText('errors', 'choice_error', ['info' => INFO]));
 
             if (in_array($command, SYSTEM_COMMANDS)) {
                 $this->executeSystemCommand($command);
@@ -79,7 +79,7 @@ class Application
             case 'sr':
                 return pow($argument1, (1 / $argument2));
             default:
-                return info($this->getText('errors', 'undefined_command', $command));
+                return info($this->getText('errors', 'undefined_command', ['command' => $command]));
         }
     }
 
@@ -129,13 +129,13 @@ class Application
             case(QUIT):
                 $this->finishApp();
             default:
-                return info($this->getText('errors', 'undefined_command', $command));
+                return info($this->getText('errors', 'undefined_command', ['command' => $command]));
         }
     }
 
     protected function finishApp()
     {
-        $command = choice($this->getText('questions', 'quit', AGREE . ' or ' . DEGREE), [AGREE, DEGREE], $this->getText('errors', 'choice_error', INFO));
+        $command = choice($this->getText('questions', 'quit', ['yes' => AGREE, 'no' => DEGREE]), [AGREE, DEGREE], $this->getText('errors', 'choice_error', ['info' => INFO]));
 
         if ($command == AGREE) {
             exit();
@@ -149,7 +149,7 @@ class Application
         }
 
         do {
-            $output = choice($this->getText('questions', 'export_question', EXPORT_HISTORY . ' or ' . SCREEN), [EXPORT_HISTORY, SCREEN]);
+            $output = choice($this->getText('questions', 'export_question', ['export' => EXPORT_HISTORY, 'screen' => SCREEN]), [EXPORT_HISTORY, SCREEN]);
 
             if ($output === 'export') {
                 $nameOfFile = readline($this->messages['info']['name_of_file_create']);
@@ -159,7 +159,7 @@ class Application
                 $this->historyTxtExporter->setFilePath($fullPathName);
 
                 if (file_exists($fullPathName)) {
-                    $command = choice($this->getText('questions', 'text_file_exist', $fullPathName), [AGREE, DEGREE]);
+                    $command = choice($this->getText('questions', 'text_file_exist', ['filepath' => $fullPathName, 'yes' => AGREE, 'no' => DEGREE]), [AGREE, DEGREE]);
 
                     switch ($command) {
                         case (AGREE):
@@ -172,7 +172,7 @@ class Application
                 }
             }
 
-            $showDateHistory = ask($this->getText('info', 'info_history', FULL));
+            $showDateHistory = ask($this->getText('info', 'info_history', ['full' => FULL]));
             $isDataValid = (is_date($showDateHistory) || in_array($showDateHistory, HISTORY_COMMANDS));
 
             if (!$isDataValid) {
@@ -219,13 +219,17 @@ class Application
 
     protected function getText($typeOfText, $text, $replacements)
     {
-        return str_replace('%', $replacements, $this->messages[$typeOfText][$text]);
+        foreach ($replacements as $key => $value) {
+            $this->messages[$typeOfText][$text] = str_replace("%{$key}%", $value, $this->messages[$typeOfText][$text]);
+        }
+
+        return $this->messages[$typeOfText][$text];
     }
 
     protected function choiceLocale()
     {
-        $message = ($this->getText('info', 'select_lang', RUS . ' or ' . ENG));
-        $errorMessage = $this->getText('errors', 'choice_error', INFO);
+        $message = ($this->getText('info', 'select_lang', ['ru' => RUS, 'en' => ENG]));
+        $errorMessage = $this->getText('errors', 'choice_error', ['info' => INFO]);
         $lang = choice($message , LANGUAGE , $errorMessage);
         $this->settingsRepository->setSetting($lang, 'localization', 'locale');
 

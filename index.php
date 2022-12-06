@@ -4,9 +4,9 @@ use App\Application;
 
 require 'libraries' . DIRECTORY_SEPARATOR . 'helpers.php';
 require prepare_file_path('app/Application.php');
-require prepare_file_path('app/BaseHistoryExporter.php');
-require prepare_file_path('app/HistoryConsoleExporter.php');
-require prepare_file_path('app/HistoryTxtExporter.php');
+require prepare_file_path('app/Exporters/BaseHistoryExporter.php');
+require prepare_file_path('app/Exporters/HistoryConsoleExporter.php');
+require prepare_file_path('app/Exporters/HistoryTxtExporter.php');
 require prepare_file_path('app/Repositories/FileBaseRepository.php');
 require prepare_file_path('app/Repositories/IniBaseRepository.php');
 require prepare_file_path('app/Repositories/JsonBaseRepository.php');
