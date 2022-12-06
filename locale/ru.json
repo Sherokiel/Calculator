@@ -19,7 +19,7 @@
         "no_history_day": "История за этот день пуста.",
         "history_help": "Доступные команды меню история",
         "history_back": "Вы вернулись в главное меню",
-        "name_of_file_create": "Введите имя файла: ",
+        "name_of_file_create": "Введите имя файла [поумолчанию: %defaultPath%]: ",
         "name_of_directory_create": "Введите путь файла: ",
         "history_saved": "История сохранена в %filepath%!",
         "select_lang": "Выберите язык %ru% или %en%: "

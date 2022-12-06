@@ -154,15 +154,15 @@ class Application
             $exporter = 'historyConsoleExporter';
 
             if ($output === 'export') {
-                $nameOfFile = readline($this->messages['info']['name_of_file_create']);
-
+                $defaultFullPathName = 'export_' . date("m.d.y");
+                $nameOfFile = readline($this->getText('info','name_of_file_create', ['defaultPath'=>$defaultFullPathName]));
                 $pathToFile = readline($this->messages['info']['name_of_directory_create']);
-
                 $fullPathName = "{$pathToFile}{$nameOfFile}";
+
                 $ext = pathinfo($fullPathName, PATHINFO_EXTENSION);
 
                 if ($fullPathName === '' || $pathToFile === '' || $nameOfFile === '') {
-                    $fullPathName = 'export_' . date("m.d.y");
+                    $fullPathName = $defaultFullPathName;
                 }
 
                 if($ext === '') {
@@ -219,11 +219,11 @@ class Application
         } while (!$isDataValid);
 
         if (get_class($this->$exporter) == 'App\Exporters\HistoryTxtExporter') {
+            var_dump($fullPathName);
             info($this->getText('info','history_saved', ['filepath' => $fullPathName]));
         }
 
         return $this->$exporter->export($showDateHistory);
-
     }
 
     protected function loadLocale($lang)
