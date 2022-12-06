@@ -21,7 +21,7 @@
         "history_back": "You are returned to main menu",
         "name_of_file_create": "Enter name of created file: ",
         "name_of_directory_create": "Enter path of save exported history: ",
-        "history_saved": "History saved!",
+        "history_saved": "History saved in %filepath%!",
         "select_lang": "Select language %ru% or %en%: "
     },
     "errors": {

@@ -151,11 +151,26 @@ class Application
         do {
             $output = choice($this->getText('questions', 'export_question', ['export' => EXPORT_HISTORY, 'screen' => SCREEN]), [EXPORT_HISTORY, SCREEN]);
 
+            $exporter = 'historyConsoleExporter';
+
             if ($output === 'export') {
                 $nameOfFile = readline($this->messages['info']['name_of_file_create']);
+
                 $pathToFile = readline($this->messages['info']['name_of_directory_create']);
 
-                $fullPathName = "{$pathToFile}{$nameOfFile}.txt";
+                $fullPathName = "{$pathToFile}{$nameOfFile}";
+                $ext = pathinfo($fullPathName, PATHINFO_EXTENSION);
+
+                if ($fullPathName === '' || $pathToFile === '' || $nameOfFile === '') {
+                    $fullPathName = 'export_' . date("m.d.y");
+                }
+
+                if($ext === '') {
+                    $fullPathName .= '.txt';
+                } elseif($ext !== '' && $ext !== 'txt') {
+                    return info('Wrong extension!');
+                }
+
                 $this->historyTxtExporter->setFilePath($fullPathName);
 
                 if (file_exists($fullPathName)) {
@@ -170,6 +185,8 @@ class Application
                             return '';
                     }
                 }
+
+                $exporter = 'historyTxtExporter';
             }
 
             $showDateHistory = ask($this->getText('info', 'info_history', ['full' => FULL]));
@@ -201,13 +218,12 @@ class Application
             }
         } while (!$isDataValid);
 
-        if ($output === 'export') {
-            $this->historyTxtExporter->export($showDateHistory);
-
-            return info($this->messages['info']['history_saved']);
+        if (get_class($this->$exporter) == 'App\Exporters\HistoryTxtExporter') {
+            info($this->getText('info','history_saved', ['filepath' => $fullPathName]));
         }
 
-        return $this->historyConsoleExporter->export($showDateHistory);
+        return $this->$exporter->export($showDateHistory);
+
     }
 
     protected function loadLocale($lang)

@@ -21,7 +21,7 @@
         "history_back": "Вы вернулись в главное меню",
         "name_of_file_create": "Введите имя файла: ",
         "name_of_directory_create": "Введите путь файла: ",
-        "history_saved": "История сохранена!",
+        "history_saved": "История сохранена в %filepath%!",
         "select_lang": "Выберите язык %ru% или %en%: "
     },
     "errors": {
