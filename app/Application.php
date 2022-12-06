@@ -135,7 +135,7 @@ class Application
 
     protected function finishApp()
     {
-        $command = choice($this->getText('questions', 'quit', ['yes'=>AGREE, 'no'=>DEGREE]), [AGREE, DEGREE], $this->getText('errors', 'choice_error', ['info' => INFO]));
+        $command = choice($this->getText('questions', 'quit', ['yes' => AGREE, 'no' => DEGREE]), [AGREE, DEGREE], $this->getText('errors', 'choice_error', ['info' => INFO]));
 
         if ($command == AGREE) {
             exit();
@@ -172,7 +172,7 @@ class Application
                 }
             }
 
-            $showDateHistory = ask($this->getText('info', 'info_history', ['full'=>FULL]));
+            $showDateHistory = ask($this->getText('info', 'info_history', ['full' => FULL]));
             $isDataValid = (is_date($showDateHistory) || in_array($showDateHistory, HISTORY_COMMANDS));
 
             if (!$isDataValid) {
@@ -219,12 +219,6 @@ class Application
 
     protected function getText($typeOfText, $text, $replacements)
     {
-//        $a = 'Hello username and my %cat% cat';
-//
-//        $pattern = ["username" => 'Denis',
-//                    "cat" => 'Murka'
-//                    ];
-
         foreach ($replacements as $key => $value) {
             $this->messages[$typeOfText][$text] = str_replace("%{$key}%", $value, $this->messages[$typeOfText][$text]);
         }
