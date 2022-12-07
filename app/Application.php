@@ -54,7 +54,7 @@ class Application
             write_symbol_line(25, '=');
 
             $this->historyRepository->create([
-                'date' => $this->now(),
+                'date' => now(),
                 'first_operand' => $argument1,
                 'second_operand' => $argument2,
                 'sign' => $command,
@@ -151,23 +151,24 @@ class Application
         do {
             $output = choice($this->getText('questions', 'export_question', ['export' => EXPORT_HISTORY, 'screen' => SCREEN]), [EXPORT_HISTORY, SCREEN]);
 
-            $exporter = 'historyConsoleExporter';
+            $exporter = $this->historyConsoleExporter;
 
             if ($output === 'export') {
-                $defaultFullPathName = 'export_' .  $this->now();
-                $nameOfFile = readline($this->getText('info','name_of_file_create', ['defaultPath'=>$defaultFullPathName]));
+                $defaultFileName = 'export_' .  now();
+                $nameOfFile = readline($this->getText('info','name_of_file_create', ['defaultPath' => $defaultFileName]));
+
+                if (empty($nameOfFile)) {
+                    $nameOfFile = $defaultFileName;
+                }
+
                 $pathToFile = readline($this->messages['info']['name_of_directory_create']);
                 $fullPathName = "{$pathToFile}{$nameOfFile}";
 
                 $ext = pathinfo($fullPathName, PATHINFO_EXTENSION);
 
-                if ($fullPathName === '' || $pathToFile === '' || $nameOfFile === '') {
-                    $fullPathName = $defaultFullPathName;
-                }
-
-                if($ext === '') {
+                if(empty($ext)) {
                     $fullPathName .= '.txt';
-                } elseif($ext !== '' && $ext !== 'txt') {
+                } elseif($ext !== 'txt') {
                     return info('Wrong extension!');
                 }
 
@@ -186,7 +187,7 @@ class Application
                     }
                 }
 
-                $exporter = 'historyTxtExporter';
+                $exporter = $this->historyTxtExporter;
             }
 
             $showDateHistory = ask($this->getText('info', 'info_history', ['full' => FULL]));
@@ -218,11 +219,11 @@ class Application
             }
         } while (!$isDataValid);
 
-        if (get_class($this->$exporter) == 'App\Exporters\HistoryTxtExporter') {
+        if (get_class($exporter) === HistoryTxtExporter::class) {
             info($this->getText('info','history_saved', ['filepath' => $fullPathName]));
         }
 
-        return $this->$exporter->export($showDateHistory);
+        return $exporter->export($showDateHistory);
     }
 
     protected function loadLocale($lang)
@@ -253,11 +254,6 @@ class Application
         popen('cls', 'w');
 
         return $this->messages = $this->loadLocale($lang);
-    }
-
-    protected function now($date = 'd-m-Y')
-    {
-        return date($date);
     }
 }
 

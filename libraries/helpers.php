@@ -44,3 +44,8 @@ function ini_encode(array $data)
 
     return $iniData;
 }
+
+function now($date = 'd-m-Y')
+{
+    return date($date);
+}
