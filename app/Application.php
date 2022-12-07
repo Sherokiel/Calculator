@@ -54,7 +54,7 @@ class Application
             write_symbol_line(25, '=');
 
             $this->historyRepository->create([
-                'date' => date('d-m-Y'),
+                'date' => $this->now(),
                 'first_operand' => $argument1,
                 'second_operand' => $argument2,
                 'sign' => $command,
@@ -154,7 +154,7 @@ class Application
             $exporter = 'historyConsoleExporter';
 
             if ($output === 'export') {
-                $defaultFullPathName = 'export_' . date("m.d.y");
+                $defaultFullPathName = 'export_' .  $this->now();
                 $nameOfFile = readline($this->getText('info','name_of_file_create', ['defaultPath'=>$defaultFullPathName]));
                 $pathToFile = readline($this->messages['info']['name_of_directory_create']);
                 $fullPathName = "{$pathToFile}{$nameOfFile}";
@@ -254,4 +254,10 @@ class Application
 
         return $this->messages = $this->loadLocale($lang);
     }
+
+    protected function now($date = 'd-m-Y')
+    {
+        return date($date);
+    }
 }
+
