@@ -19,9 +19,9 @@
         "no_history_day": "You have no history in that day.",
         "history_help": "Available Commands in history viewer",
         "history_back": "You are returned to main menu",
-        "name_of_file_create": "Enter name of created file: ",
+        "name_of_file_create": "Enter name of created file [default: %defaultPath%]: ",
         "name_of_directory_create": "Enter path of save exported history: ",
-        "history_saved": "History saved!",
+        "history_saved": "History saved in %filepath%!",
         "select_lang": "Select language %ru% or %en%: "
     },
     "errors": {
@@ -30,6 +30,7 @@
         "if_separate_zero": "Cant separate on zero.",
         "history_wrong_input": "Please input a valid date in format DD-MM-YYYY (e.g. 25-12-2022).",
         "undefined_command": "Undefined command %command%",
-        "choice_error": "Wrong command. enter %info% for show available commands"
+        "choice_error": "Wrong command. enter %info% for show available commands",
+        "wrng_ext": "Wrong extension!"
     }
 }

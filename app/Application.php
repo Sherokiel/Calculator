@@ -54,7 +54,7 @@ class Application
             write_symbol_line(25, '=');
 
             $this->historyRepository->create([
-                'date' => date('d-m-Y'),
+                'date' => now(),
                 'first_operand' => $argument1,
                 'second_operand' => $argument2,
                 'sign' => $command,
@@ -151,11 +151,27 @@ class Application
         do {
             $output = choice($this->getText('questions', 'export_question', ['export' => EXPORT_HISTORY, 'screen' => SCREEN]), [EXPORT_HISTORY, SCREEN]);
 
-            if ($output === 'export') {
-                $nameOfFile = readline($this->messages['info']['name_of_file_create']);
-                $pathToFile = readline($this->messages['info']['name_of_directory_create']);
+            $exporter = $this->historyConsoleExporter;
 
-                $fullPathName = "{$pathToFile}{$nameOfFile}.txt";
+            if ($output === 'export') {
+                $defaultFileName = 'export_' . now();
+                $nameOfFile = readline($this->getText('info', 'name_of_file_create', ['defaultPath' => $defaultFileName]));
+
+                if (empty($nameOfFile)) {
+                    $nameOfFile = $defaultFileName;
+                }
+
+                $pathToFile = readline($this->messages['info']['name_of_directory_create']);
+                $fullPathName = "{$pathToFile}{$nameOfFile}";
+
+                $ext = pathinfo($fullPathName, PATHINFO_EXTENSION);
+
+                if (empty($ext)) {
+                    $fullPathName .= '.txt';
+                } elseif ($ext !== 'txt') {
+                    return info($this->messages['errors']['wrng_ext']);
+                }
+
                 $this->historyTxtExporter->setFilePath($fullPathName);
 
                 if (file_exists($fullPathName)) {
@@ -170,6 +186,8 @@ class Application
                             return '';
                     }
                 }
+
+                $exporter = $this->historyTxtExporter;
             }
 
             $showDateHistory = ask($this->getText('info', 'info_history', ['full' => FULL]));
@@ -201,13 +219,11 @@ class Application
             }
         } while (!$isDataValid);
 
-        if ($output === 'export') {
-            $this->historyTxtExporter->export($showDateHistory);
-
-            return info($this->messages['info']['history_saved']);
+        if (get_class($exporter) === HistoryTxtExporter::class) {
+            info($this->getText('info','history_saved', ['filepath' => $fullPathName]));
         }
 
-        return $this->historyConsoleExporter->export($showDateHistory);
+        return $exporter->export($showDateHistory);
     }
 
     protected function loadLocale($lang)
@@ -219,11 +235,13 @@ class Application
 
     protected function getText($typeOfText, $text, $replacements)
     {
+        $message = $this->messages[$typeOfText][$text];
+
         foreach ($replacements as $key => $value) {
-            $this->messages[$typeOfText][$text] = str_replace("%{$key}%", $value, $this->messages[$typeOfText][$text]);
+            $message = str_replace("%{$key}%", $value, $message);
         }
 
-        return $this->messages[$typeOfText][$text];
+        return $message;
     }
 
     protected function choiceLocale()
@@ -238,3 +256,4 @@ class Application
         return $this->messages = $this->loadLocale($lang);
     }
 }
+
