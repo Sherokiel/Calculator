@@ -154,8 +154,8 @@ class Application
             $exporter = $this->historyConsoleExporter;
 
             if ($output === 'export') {
-                $defaultFileName = 'export_' .  now();
-                $nameOfFile = readline($this->getText('info','name_of_file_create', ['defaultPath' => $defaultFileName]));
+                $defaultFileName = 'export_' . now();
+                $nameOfFile = readline($this->getText('info', 'name_of_file_create', ['defaultPath' => $defaultFileName]));
 
                 if (empty($nameOfFile)) {
                     $nameOfFile = $defaultFileName;
@@ -166,10 +166,10 @@ class Application
 
                 $ext = pathinfo($fullPathName, PATHINFO_EXTENSION);
 
-                if(empty($ext)) {
+                if (empty($ext)) {
                     $fullPathName .= '.txt';
-                } elseif($ext !== 'txt') {
-                    return info('Wrong extension!');
+                } elseif ($ext !== 'txt') {
+                    return info($this->messages['errors']['wrng_ext']);
                 }
 
                 $this->historyTxtExporter->setFilePath($fullPathName);

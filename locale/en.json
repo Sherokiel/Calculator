@@ -30,6 +30,7 @@
         "if_separate_zero": "Cant separate on zero.",
         "history_wrong_input": "Please input a valid date in format DD-MM-YYYY (e.g. 25-12-2022).",
         "undefined_command": "Undefined command %command%",
-        "choice_error": "Wrong command. enter %info% for show available commands"
+        "choice_error": "Wrong command. enter %info% for show available commands",
+        "wrng_ext": "Wrong extension!"
     }
 }
