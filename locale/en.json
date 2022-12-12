@@ -5,7 +5,11 @@
         "export_question": "You want show history on screen or export in file (Enter %export% or %screen%): "
     },
     "info": {
-        "welcome_user": "Welcome %user%!",
+        "enter_user": "Enter username: ",
+        "enter_pass": "Enter password: ",
+        "create_pass": "Create password: ",
+        "confirm_pass": "Confirm password: ",
+        "logged_in": "You are logged in.",
         "welcome1": "Welcome to the calculator app!",
         "welcome2": "Print %info% to learn more about the app.",
         "enter_command": "Enter command: ",
@@ -31,6 +35,8 @@
         "history_wrong_input": "Please input a valid date in format DD-MM-YYYY (e.g. 25-12-2022).",
         "undefined_command": "Undefined command %command%",
         "choice_error": "Wrong command. enter %info% for show available commands",
-        "wrng_ext": "Wrong extension!"
+        "wrng_ext": "Wrong extension!",
+        "not_found_user": "User %username% not registered or wrong password",
+        "not_match": "Passwords not match"
     }
 }
