@@ -34,14 +34,15 @@ class Application
     {
         $isRunning = true;
 
-        $userName = $this->authorize();
+        $user = $this->authorize();
 
         info_box(
-            $this->getText('info', 'welcome_user', ['user' => $userName]),
+            $this->getText('info', 'welcome_user', ['user' => $user]),
             $this->messages['info']['welcome1'],
             '',
             $this->getText('info', 'welcome2', ['info' => INFO]),
-            '');
+            ''
+        );
 
         while ($isRunning) {
             $command = choice($this->messages['info']['enter_command'], AVAILABLE_COMMANDS, $this->getText('errors', 'choice_error', ['info' => INFO]));
@@ -289,7 +290,6 @@ class Application
                     ]);
 
                     info($this->messages['info']['reg_in']);
-
                 } while ($password !== $passwordConfirm);
             } else {
                 $password = readline($this->messages['info']['enter_pass']);
