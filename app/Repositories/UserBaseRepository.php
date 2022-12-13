@@ -14,5 +14,13 @@ class UserRepository extends JsonBaseRepository
         return ['username', 'password'];
     }
 
-
+    public function getFirst($condition)
+    {
+        foreach ($this->all() as $value) {
+            if ($this->isSuitableRecord($condition, $value)) {
+                return $value;
+            }
+        }
+        return null;
+    }
 }
