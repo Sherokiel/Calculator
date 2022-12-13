@@ -229,7 +229,7 @@ class Application
             }
         } while (!$isDataValid);
 
-        if (get_class($exporter) === HistoryTxtExporter::class) {
+        if ($exporter instanceof HistoryTxtExporter) {
             info($this->getText('info','history_saved', ['filepath' => $fullPathName]));
         }
 
