@@ -297,13 +297,11 @@ class Application
 
             if ($user['password'] !== $password) {
                 info($this->getText('errors', 'not_found_user', ['username' => $userName]));
-
             }
-
         } while ($user['password'] !== $password);
 
         info($this->messages['info']['logged_in']);
 
-        return $userName;
+        return $user['username'];
     }
 }

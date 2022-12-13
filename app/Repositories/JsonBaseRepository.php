@@ -46,13 +46,18 @@ abstract class JsonBaseRepository extends FileBaseRepository
 
     public function isExist($condition = [])
     {
+        return !empty($this->first($condition));
+    }
+
+    public function first($condition = [])
+    {
         foreach ($this->all() as $value) {
             if ($this->isSuitableRecord($condition, $value)) {
-                return true;
+                return $value;
             }
         }
 
-        return false;
+        return null;
     }
 
     public function get($condition)
@@ -67,14 +72,5 @@ abstract class JsonBaseRepository extends FileBaseRepository
         return array_intersect_assoc($condition, $value) === $condition;
     }
 
-    public function first($condition)
-    {
-        foreach ($this->all() as $value) {
-            if ($this->isSuitableRecord($condition, $value)) {
-                return $value;
-            }
-        }
-        return null;
-    }
     abstract protected function getEntityFields(): array;
 }
