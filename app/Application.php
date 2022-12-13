@@ -4,6 +4,7 @@ namespace App;
 
 use App\Repositories\HistoryRepository;
 use App\Repositories\SettingsRepository;
+use App\Repositories\UserRepository;
 use App\Exporters\HistoryConsoleExporter;
 use App\Exporters\HistoryTxtExporter;
 
@@ -14,13 +15,15 @@ class Application
     protected $settingsRepository;
     protected $historyConsoleExporter;
     protected $historyTxtExporter;
+    protected $userRepository;
 
     public function __construct()
     {
         $this->settingsRepository = new SettingsRepository();
-
         $lang = $this->settingsRepository->getSetting('localization', 'locale');
         $this->messages = $this->loadLocale($lang);
+
+        $this->userRepository = new UserRepository();
 
         $this->historyRepository = new HistoryRepository();
         $this->historyConsoleExporter = new HistoryConsoleExporter();
@@ -31,7 +34,15 @@ class Application
     {
         $isRunning = true;
 
-        info_box('', $this->messages['info']['welcome1'], '', $this->getText('info', 'welcome2', ['info' => INFO]), '');
+        $user = $this->authorize();
+
+        info_box(
+            $this->getText('info', 'welcome_user', ['user' => $user]),
+            $this->messages['info']['welcome1'],
+            '',
+            $this->getText('info', 'welcome2', ['info' => INFO]),
+            ''
+        );
 
         while ($isRunning) {
             $command = choice($this->messages['info']['enter_command'], AVAILABLE_COMMANDS, $this->getText('errors', 'choice_error', ['info' => INFO]));
@@ -219,7 +230,7 @@ class Application
             }
         } while (!$isDataValid);
 
-        if (get_class($exporter) === HistoryTxtExporter::class) {
+        if ($exporter instanceof HistoryTxtExporter) {
             info($this->getText('info','history_saved', ['filepath' => $fullPathName]));
         }
 
@@ -255,5 +266,42 @@ class Application
 
         return $this->messages = $this->loadLocale($lang);
     }
-}
 
+    protected function authorize()
+    {
+        do {
+            $userName = readline($this->messages['info']['enter_user']);
+            $user = $this->userRepository->first(['username' => $userName]);
+
+            if (empty($user)) {
+                do {
+                    $password = readline($this->messages['info']['create_pass']);
+                    $passwordConfirm = readline($this->messages['info']['confirm_pass']);
+
+                    if ($password !== $passwordConfirm) {
+                        info($this->messages['errors']['not_match']);
+
+                        continue;
+                    }
+
+                    $user = $this->userRepository->create([
+                        'username' => $userName,
+                        'password' => $password
+                    ]);
+
+                    info($this->messages['info']['reg_in']);
+                } while ($password !== $passwordConfirm);
+            } else {
+                $password = readline($this->messages['info']['enter_pass']);
+            }
+
+            if ($user['password'] !== $password) {
+                info($this->getText('errors', 'not_found_user', ['username' => $userName]));
+            }
+        } while ($user['password'] !== $password);
+
+        info($this->messages['info']['logged_in']);
+
+        return $user['username'];
+    }
+}
