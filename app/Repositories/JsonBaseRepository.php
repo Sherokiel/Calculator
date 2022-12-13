@@ -30,7 +30,9 @@ abstract class JsonBaseRepository extends FileBaseRepository
         $contents = $this->all();
         $contents[] = $item;
 
-        return file_put_contents($this->filePath, json_encode($contents));
+        file_put_contents($this->filePath, json_encode($contents));
+
+        return $item;
     }
 
     public function allGroupedBy($field)
@@ -65,5 +67,14 @@ abstract class JsonBaseRepository extends FileBaseRepository
         return array_intersect_assoc($condition, $value) === $condition;
     }
 
+    public function first($condition)
+    {
+        foreach ($this->all() as $value) {
+            if ($this->isSuitableRecord($condition, $value)) {
+                return $value;
+            }
+        }
+        return null;
+    }
     abstract protected function getEntityFields(): array;
 }

@@ -36,11 +36,12 @@ class Application
 
         $userName = $this->authorize();
 
-        info_box($this->getText('info', 'welcome_user', ['user' => $userName]),
-                                        $this->messages['info']['welcome1'],
-                                        '',
-                                        $this->getText('info', 'welcome2', ['info' => INFO]),
-                                        '');
+        info_box(
+            $this->getText('info', 'welcome_user', ['user' => $userName]),
+            $this->messages['info']['welcome1'],
+            '',
+            $this->getText('info', 'welcome2', ['info' => INFO]),
+            '');
 
         while ($isRunning) {
             $command = choice($this->messages['info']['enter_command'], AVAILABLE_COMMANDS, $this->getText('errors', 'choice_error', ['info' => INFO]));
@@ -269,49 +270,40 @@ class Application
     {
         do {
             $userName = readline($this->messages['info']['enter_user']);
+            $user = $this->userRepository->first(['username' => $userName]);
 
-//            $isUserExists = $this->userRepository->isExist(['username' => $userName]);
-            $isUserExists = $this->userRepository->getFirst(['username' => $userName]);
+            if (empty($user)) {
+                do {
+                    $password = readline($this->messages['info']['create_pass']);
+                    $passwordConfirm = readline($this->messages['info']['confirm_pass']);
 
-var_dump($isUserExists);
-            if (!$isUserExists) {
-                var_dump('111');
-                $password = readline($this->messages['info']['create_pass']);
-                $passwordConfirm = readline($this->messages['info']['confirm_pass']);
+                    if ($password !== $passwordConfirm) {
+                        info($this->messages['errors']['not_match']);
 
-                if ($password !== $passwordConfirm) {
-                    info($this->messages['errors']['not_match']);
+                        continue;
+                    }
 
-                    continue;
-                }
+                    $user = $this->userRepository->create([
+                        'username' => $userName,
+                        'password' => $password
+                    ]);
 
-                $this->userRepository->create([
-                    'username' => $userName,
-                    'password' => $password
-                ]);
                     info($this->messages['info']['reg_in']);
 
-                    continue;
+                } while ($password !== $passwordConfirm);
             } else {
                 $password = readline($this->messages['info']['enter_pass']);
             }
 
-            $isUserExists = array_diff_assoc($isUserExists, ['username' => $userName, 'password' => $password]);
-
-            if(empty(array_diff_assoc($isUserExists, ['username' => $userName, 'password' => $password]))) {
-                $isUserExists = true;
-            } else {
-                $isUserExists = false;
-            }
-
-            if (!$isUserExists) {
+            if ($user['password'] !== $password) {
                 info($this->getText('errors', 'not_found_user', ['username' => $userName]));
+
             }
-        } while (!$isUserExists);
+
+        } while ($user['password'] !== $password);
 
         info($this->messages['info']['logged_in']);
 
         return $userName;
     }
 }
-
