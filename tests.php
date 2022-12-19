@@ -2,7 +2,6 @@
 
 require 'libraries' . DIRECTORY_SEPARATOR . 'helpers.php';
 
-
 require prepare_file_path('app/Repositories/FileBaseRepository.php');
 require prepare_file_path('app/Repositories/JsonBaseRepository.php');
 require prepare_file_path('app/Repositories/UserBaseRepository.php');
@@ -23,13 +22,6 @@ testCreateCheckDB([
 
 readline();
 
-function testCreate ($dataTest)
-{
-    $exmpClass = beforeTestsProcessing();
-
-    return $exmpClass->create($dataTest);
-}
-
 function beforeTestsProcessing()
 {
     $exmpClass = new UserRepository();
@@ -42,23 +34,19 @@ function beforeTestsProcessing()
 
 function assertEquals($firstValue, $secondValue)
 {
-    if ($firstValue === [$secondValue]) {
-        echo 'Success' . "\n";
-    } else {
-        echo 'Fail' . "\n";
-    }
+    echo ($firstValue === $secondValue) ? 'Success' . PHP_EOL : 'Fail' . PHP_EOL;
 }
 
 function testCreateCheckResult($dataTest)
 {
-    $data[] = testCreate($dataTest);
+    $data = beforeTestsProcessing()->create($dataTest);
 
-    assertEquals($data, $dataTest);
+    assertEquals([$data], $dataTest);
 }
 
 function testCreateCheckDB($dataTest)
 {
-    testCreate($dataTest);
+    beforeTestsProcessing()->create($dataTest);
 
     $data = json_decode(file_get_contents('test_data_storage/users.json'), true);
 
