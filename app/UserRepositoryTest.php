@@ -17,6 +17,7 @@ class UserRepositoryTest
         $this->testCreateCheckResult();
         $this->testCreateCheckDB();
     }
+
     protected function beforeTestsProcessing()
     {
         file_put_contents(prepare_file_path($this->dirName . '/users.json'), '');
