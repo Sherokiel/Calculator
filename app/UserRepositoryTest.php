@@ -3,7 +3,7 @@
 namespace App;
 
 use App\Repositories\UserRepository;
-class TestsClass
+class UserRepositoryTest
 {
     public function __construct()
     {
@@ -12,11 +12,11 @@ class TestsClass
 
     protected function beforeTestsProcessing()
     {
-        $exmpClass = new UserRepository();
+        $this->userRepository = new UserRepository();
 
         file_put_contents(prepare_file_path($this->dirName . '/users.json'), '');
 
-        return $exmpClass;
+        return $this->userRepository;
     }
 
     protected function assertEquals($firstValue, $secondValue)
