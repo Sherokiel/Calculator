@@ -3,17 +3,17 @@
 namespace App;
 
 use App\Repositories\UserRepository;
+
 class UserRepositoryTest
 {
     public function __construct()
     {
         $this->dirName = getenv('JSON_STORAGE_PATH');
+        $this->userRepository = new UserRepository();
     }
 
     protected function beforeTestsProcessing()
     {
-        $this->userRepository = new UserRepository();
-
         file_put_contents(prepare_file_path($this->dirName . '/users.json'), '');
 
         return $this->userRepository;
@@ -31,7 +31,7 @@ class UserRepositoryTest
             'password' => 'password1'
         ];
 
-        $data = $this->beforeTestsProcessing()->create($dataTest);
+        $data = $this->userRepository->create($dataTest);
 
         $this->assertEquals($data, $dataTest);
     }
@@ -43,9 +43,14 @@ class UserRepositoryTest
             'password' => 'password1'
         ];
 
-        $this->beforeTestsProcessing()->create($dataTest);
-        $data = json_decode(file_get_contents('test_data_storage/users.json'), true);
+        $this->userRepository->create($dataTest);
+        $data = $this->getJSONFixture('test_data_storage/users.json');
 
         $this->assertEquals($data, [$dataTest]);
+    }
+
+    public function getJSONFixture($path)
+    {
+        return json_decode(file_get_contents($path), true);
     }
 }
