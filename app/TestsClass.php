@@ -21,22 +21,29 @@ class TestsClass
 
     protected function assertEquals($firstValue, $secondValue)
     {
-        var_dump($firstValue);
-        var_dump($secondValue);
         echo ($firstValue === $secondValue) ? 'Success' . PHP_EOL : 'Fail' . PHP_EOL;
     }
 
-    public function testCreateCheckResult($dataTest)
+    public function testCreateCheckResult()
     {
+        $dataTest = [
+            'username' => 'username1',
+            'password' => 'password1'
+        ];
+
         $data = $this->beforeTestsProcessing()->create($dataTest);
 
         $this->assertEquals($data, $dataTest);
     }
 
-    public function testCreateCheckDB($dataTest)
+    public function testCreateCheckDB()
     {
-        $this->beforeTestsProcessing()->create($dataTest);
+        $dataTest = [
+            'username' => 'username1',
+            'password' => 'password1'
+        ];
 
+        $this->beforeTestsProcessing()->create($dataTest);
         $data = json_decode(file_get_contents('test_data_storage/users.json'), true);
 
         $this->assertEquals($data, [$dataTest]);

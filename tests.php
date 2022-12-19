@@ -13,13 +13,8 @@ putenv('JSON_STORAGE_PATH=test_data_storage');
 
 $tests = new TestsClass();
 
-$data = [
-    'username' => 'username1',
-    'password' => 'password1'
-];
+$tests->testCreateCheckResult();
 
-$tests->testCreateCheckResult($data);
-
-$tests->testCreateCheckDB($data);
+$tests->testCreateCheckDB();
 
 readline();
