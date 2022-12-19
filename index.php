@@ -16,6 +16,8 @@ require prepare_file_path('app/Repositories/SettingsRepository.php');
 require prepare_file_path('libraries/console_helpers.php');
 require prepare_file_path('constants.php');
 
+putenv('JSON_STORAGE_PATH=data_storage');
+
 try {
     $calculator = new Application();
     $calculator->run();
