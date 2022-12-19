@@ -6,7 +6,7 @@ class IniBaseRepository extends FileBaseRepository
 {
     public function __construct($fileName)
     {
-        return parent::__construct($fileName . '.ini', 'settings');
+        return parent::__construct("{$fileName}.ini", 'settings');
     }
 
     public function all()

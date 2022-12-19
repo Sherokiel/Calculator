@@ -8,9 +8,9 @@ abstract class JsonBaseRepository extends FileBaseRepository
 {
     public function __construct($fileName)
     {
-        $dirName = getenv('dirName');
+        $dirName = getenv('JSON_STORAGE_PATH');
 
-        return parent::__construct($fileName . '.json', $dirName);
+        return parent::__construct("{$fileName}.json", $dirName);
     }
 
     public function all()
