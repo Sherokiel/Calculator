@@ -16,6 +16,8 @@ class UserRepositoryTest
     {
         $this->testCreateCheckResult();
         $this->testCreateCheckDB();
+        $this->testEntityFields();
+        $this->testExtraFields();
     }
 
     protected function beforeTestsProcessing()
@@ -55,6 +57,30 @@ class UserRepositoryTest
         $data = $this->getJSONFixture('test_data_storage/users.json');
 
         $this->assertEquals($data, [$dataTest]);
+    }
+
+    public function testEntityFields()
+    {
+        $dataTest = [
+            'username' => 'username1',
+        ];
+
+        $data = $this->getJSONFixture('test_data_storage/users.json');
+
+        $this->assertEquals($data, $dataTest);
+    }
+
+    public function testExtraFields()
+    {
+        $dataTest = [
+            'username' => 'username1',
+            'password' => 'password1',
+            'date'=>'date'
+        ];
+
+        $data = $this->getJSONFixture('test_data_storage/users.json');
+
+        $this->assertEquals($data, $dataTest);
     }
 
     public function getJSONFixture($path)
