@@ -16,8 +16,6 @@ class UserRepositoryTest
     {
         $this->testCreateCheckResult();
         $this->testCreateCheckDB();
-
-        readline();
     }
     protected function beforeTestsProcessing()
     {
