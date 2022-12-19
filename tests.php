@@ -7,14 +7,8 @@ require prepare_file_path('app/Repositories/JsonBaseRepository.php');
 require prepare_file_path('app/Repositories/UserBaseRepository.php');
 require prepare_file_path('app/UserRepositoryTest.php');
 
-use App\UserRepositoryTest;
+use Tests\UserRepositoryTest;
 
 putenv('JSON_STORAGE_PATH=test_data_storage');
 
-$tests = new UserRepositoryTest();
-
-$tests->testCreateCheckResult();
-
-$tests->testCreateCheckDB();
-
-readline();
+(new UserRepositoryTest())->run();

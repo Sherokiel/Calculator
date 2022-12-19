@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Tests;
 
 use App\Repositories\UserRepository;
 
@@ -12,11 +12,16 @@ class UserRepositoryTest
         $this->userRepository = new UserRepository();
     }
 
+    public function run()
+    {
+        $this->testCreateCheckResult();
+        $this->testCreateCheckDB();
+
+        readline();
+    }
     protected function beforeTestsProcessing()
     {
         file_put_contents(prepare_file_path($this->dirName . '/users.json'), '');
-
-        return $this->userRepository;
     }
 
     protected function assertEquals($firstValue, $secondValue)
@@ -26,6 +31,8 @@ class UserRepositoryTest
 
     public function testCreateCheckResult()
     {
+        $this->beforeTestsProcessing();
+
         $dataTest = [
             'username' => 'username1',
             'password' => 'password1'
@@ -38,6 +45,8 @@ class UserRepositoryTest
 
     public function testCreateCheckDB()
     {
+        $this->beforeTestsProcessing();
+
         $dataTest = [
             'username' => 'username1',
             'password' => 'password1'
