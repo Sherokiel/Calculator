@@ -3,7 +3,7 @@
 namespace Tests;
 
 use App\Repositories\UserRepository;
-
+use Exception;
 class UserRepositoryTest
 {
     public function __construct()
@@ -14,10 +14,11 @@ class UserRepositoryTest
 
     public function run()
     {
-        $this->testCreateCheckResult();
-        $this->testCreateCheckDB();
-        $this->testEntityFields();
-        $this->testExtraFields();
+        foreach (get_class_methods(new UserRepositoryTest()) as $method) {
+            if(str_starts_with($method, 'test')) {
+                $this->$method();
+            }
+        }
     }
 
     protected function beforeTestsProcessing()
@@ -27,7 +28,11 @@ class UserRepositoryTest
 
     protected function assertEquals($firstValue, $secondValue)
     {
-        echo ($firstValue === $secondValue) ? 'Success' . PHP_EOL : 'Fail' . PHP_EOL;
+        $assertEquals = $firstValue === $secondValue;
+
+        echo ($assertEquals) ? 'Success' . PHP_EOL : 'Fail' . PHP_EOL;
+
+        return ($assertEquals);
     }
 
     public function testCreateCheckResult()
@@ -54,33 +59,57 @@ class UserRepositoryTest
         ];
 
         $this->userRepository->create($dataTest);
+
         $data = $this->getJSONFixture('test_data_storage/users.json');
 
         $this->assertEquals($data, [$dataTest]);
     }
 
-    public function testEntityFields()
+    public function testCreateNotAllFields()
     {
         $dataTest = [
             'username' => 'username1',
         ];
 
-        $data = $this->getJSONFixture('test_data_storage/users.json');
+        try {
+            $this->userRepository->create($dataTest);
+        } catch (Exception $error) {
+            return $this->assertEquals($error->getMessage(), 'One of required fields does not filled.');
+        }
+        echo 'fail';
 
-        $this->assertEquals($data, $dataTest);
+        return false;
     }
 
-    public function testExtraFields()
+    public function testCreateExtraFields()
     {
+        $this->beforeTestsProcessing();
+
         $dataTest = [
             'username' => 'username1',
             'password' => 'password1',
-            'date'=>'date'
+            'date' => 'date'
         ];
 
+        $data = $this->userRepository->create($dataTest);
+
+        $this->assertEquals($data, ['username' => 'username1', 'password' => 'password1']);
+    }
+
+    public function testCreateExtraFieldsBD()
+    {
+        $this->beforeTestsProcessing();
+
+        $dataTest = [
+            'username' => 'username1',
+            'password' => 'password1',
+            'date' => 'date'
+        ];
+
+        $this->userRepository->create($dataTest);
         $data = $this->getJSONFixture('test_data_storage/users.json');
 
-        $this->assertEquals($data, $dataTest);
+        $this->assertEquals($data, [['username' => 'username1', 'password' => 'password1']]);
     }
 
     public function getJSONFixture($path)

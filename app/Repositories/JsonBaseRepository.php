@@ -30,11 +30,11 @@ abstract class JsonBaseRepository extends FileBaseRepository
         }
 
         $contents = $this->all();
-        $contents[] = $item;
-
+        //$contents[] = $item;
+        $contents[] = $fieldsToInsert;
         file_put_contents($this->filePath, json_encode($contents));
 
-        return $item;
+        return $fieldsToInsert;
     }
 
     public function allGroupedBy($field)
