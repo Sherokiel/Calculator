@@ -14,8 +14,8 @@ class UserRepositoryTest
 
     public function run()
     {
-        foreach (get_class_methods(new UserRepositoryTest()) as $method) {
-            if(str_starts_with($method, 'test')) {
+        foreach (get_class_methods($this) as $method) {
+            if (str_starts_with($method, 'test')) {
                 $this->$method();
             }
         }
@@ -28,11 +28,11 @@ class UserRepositoryTest
 
     protected function assertEquals($firstValue, $secondValue)
     {
-        $assertEquals = $firstValue === $secondValue;
+        $result = $firstValue === $secondValue;
 
-        echo ($assertEquals) ? 'Success' . PHP_EOL : 'Fail' . PHP_EOL;
+        echo ($result) ? 'Success' . PHP_EOL : 'Fail' . PHP_EOL;
 
-        return ($assertEquals);
+        return $result;
     }
 
     public function testCreateCheckResult()
@@ -76,6 +76,7 @@ class UserRepositoryTest
         } catch (Exception $error) {
             return $this->assertEquals($error->getMessage(), 'One of required fields does not filled.');
         }
+
         echo 'fail';
 
         return false;
