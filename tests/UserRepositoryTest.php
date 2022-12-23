@@ -27,6 +27,7 @@ class UserRepositoryTest
                 $methodsDone++;
             }
         }
+
         echo "Completed tests count: {$methodsDone}";
     }
 
@@ -47,18 +48,18 @@ class UserRepositoryTest
     public function testCreateCheckResult()
     {
         $dataTest = $this->getJSONFixture('valid_create_data.json');
-        $data = $this->userRepository->create($dataTest);
+        $result = $this->userRepository->create($dataTest);
 
-        $this->assertEquals($data, $dataTest);
+        $this->assertEquals($result, $dataTest);
     }
 
     public function testCreateCheckDB()
     {
         $dataTest = $this->getJSONFixture('valid_create_data.json');
         $this->userRepository->create($dataTest);
-        $data = $this->getDataSet('users.json');
+        $result = $this->getDataSet('users.json');
 
-        $this->assertEquals($data, [$dataTest]);
+        $this->assertEquals($result, [$dataTest]);
     }
 
     public function testCreateNotAllFields()
@@ -79,18 +80,18 @@ class UserRepositoryTest
     public function testCreateExtraFields()
     {
         $dataTest = $this->getJSONFixture('extra_fields_create_data.json');
-        $data = $this->userRepository->create($dataTest);
+        $result = $this->userRepository->create($dataTest);
 
-        $this->assertEquals($data, ['username' => 'username1', 'password' => 'password1']);
+        $this->assertEquals($result, ['username' => 'username1', 'password' => 'password1']);
     }
 
     public function testCreateExtraFieldsBD()
     {
         $dataTest = $this->getJSONFixture('extra_fields_create_data.json');
         $this->userRepository->create($dataTest);
-        $data = $this->getDataSet('users.json');
+        $result = $this->getDataSet('users.json');
 
-        $this->assertEquals($data, [['username' => 'username1', 'password' => 'password1']]);
+        $this->assertEquals($result, [['username' => 'username1', 'password' => 'password1']]);
     }
 
     public function getDataSet($data)
@@ -103,8 +104,8 @@ class UserRepositoryTest
         return json_decode(file_get_contents("tests/fixtures/UserRepositoryTest/{$data}"), true);
     }
 
-    public function putJSONFixture($data, $path)
+    protected function putJSONFixture($data, $fixtureName)
     {
-        return file_put_contents($path, json_encode($data, JSON_PRETTY_PRINT));
+        return file_put_contents($fixtureName, json_encode($data, JSON_PRETTY_PRINT));
     }
 }
