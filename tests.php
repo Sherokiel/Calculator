@@ -12,6 +12,10 @@ use Tests\UserRepositoryTest;
 
 putenv('JSON_STORAGE_PATH=test_data_storage');
 
-(new UserRepositoryTest())->run();
+try {
+    (new UserRepositoryTest())->run();
+} catch (Exception $error) {
+    echo $error;
+}
 
 readline();

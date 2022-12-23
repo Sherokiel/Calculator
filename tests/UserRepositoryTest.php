@@ -3,7 +3,7 @@
 namespace Tests;
 
 use App\Repositories\UserRepository;
-use supports\AssertionException;
+use Tests\support\AssertionException;
 use Exception;
 
 class UserRepositoryTest
@@ -28,7 +28,7 @@ class UserRepositoryTest
 
                 try {
                     $this->$method();
-                } catch (Exception $error) {
+                } catch (AssertionException $error) {
                     echo $error->getMessage();
 
                     continue;

@@ -15,11 +15,4 @@ class UserRepository extends JsonBaseRepository
     {
         return ['username', 'password'];
     }
-
-    public function create($item)
-    {
-        return parent::create($item);
-
-       //throw new Exception('Какой то текст' . PHP_EOL);
-    }
 }
