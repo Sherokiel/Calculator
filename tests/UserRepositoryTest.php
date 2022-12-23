@@ -19,7 +19,6 @@ class UserRepositoryTest
 
         foreach (get_class_methods($this) as $method) {
             if (str_starts_with($method, 'test')) {
-
                 $this->beforeTestsProcessing();
 
                 echo "{$method}: ". PHP_EOL;
@@ -82,7 +81,7 @@ class UserRepositoryTest
         $dataTest = $this->getJSONFixture('extra_fields_create_data.json');
         $result = $this->userRepository->create($dataTest);
 
-        $this->assertEquals($result, ['username' => 'username1', 'password' => 'password1']);
+        $this->assertEquals($result, $this->getJSONFixture('valid_create_data.json'));
     }
 
     public function testCreateExtraFieldsBD()
@@ -91,15 +90,15 @@ class UserRepositoryTest
         $this->userRepository->create($dataTest);
         $result = $this->getDataSet('users.json');
 
-        $this->assertEquals($result, [['username' => 'username1', 'password' => 'password1']]);
+        $this->assertEquals($result, [$this->getJSONFixture('valid_create_data.json')]);
     }
 
-    public function getDataSet($data)
+    protected function getDataSet($data)
     {
         return json_decode(file_get_contents("test_data_storage/{$data}"), true);
     }
 
-    public function getJSONFixture($data)
+    protected function getJSONFixture($data)
     {
         return json_decode(file_get_contents("tests/fixtures/UserRepositoryTest/{$data}"), true);
     }
