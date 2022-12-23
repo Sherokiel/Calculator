@@ -3,8 +3,8 @@
 namespace Tests;
 
 use App\Repositories\UserRepository;
+use supports\AssertionException;
 use Exception;
-use AssertionException;
 
 class UserRepositoryTest
 {
