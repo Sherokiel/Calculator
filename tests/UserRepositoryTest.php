@@ -76,7 +76,7 @@ class UserRepositoryTest
         $this->userRepository->create($dataTest);
         $result = $this->getDataSet('users.json');
 
-        $this->assertEquals([$result], [$dataTest]);
+        $this->assertEquals($result, [$dataTest]);
     }
 
     public function testCreateNotAllFields()
