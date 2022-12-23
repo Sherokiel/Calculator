@@ -19,8 +19,7 @@ require prepare_file_path('constants.php');
 putenv('JSON_STORAGE_PATH=data_storage');
 
 try {
-    $calculator = new Application();
-    $calculator->run();
+    (new Application())->run();
 } catch (Error $error) {
     echo $error;
 
