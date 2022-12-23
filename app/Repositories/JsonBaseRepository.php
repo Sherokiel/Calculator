@@ -29,12 +29,14 @@ abstract class JsonBaseRepository extends FileBaseRepository
             throw new Exception('One of required fields does not filled.');
         }
 
+        $item = $fieldsToInsert;
+
         $contents = $this->all();
-        $contents[] = $fieldsToInsert;
+        $contents[] = $item;
 
         file_put_contents($this->filePath, json_encode($contents));
 
-        return $fieldsToInsert;
+        return $item;
     }
 
     public function allGroupedBy($field)

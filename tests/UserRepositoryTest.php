@@ -4,6 +4,7 @@ namespace Tests;
 
 use App\Repositories\UserRepository;
 use Exception;
+
 class UserRepositoryTest
 {
     public function __construct()
@@ -14,11 +15,15 @@ class UserRepositoryTest
 
     public function run()
     {
+        $methodsDone = 0;
         foreach (get_class_methods($this) as $method) {
             if (str_starts_with($method, 'test')) {
+                echo "{$method}: ". PHP_EOL;
                 $this->$method();
+                $methodsDone++;
             }
         }
+        echo 'Tests complete: ' . $methodsDone;
     }
 
     protected function beforeTestsProcessing()
@@ -30,7 +35,7 @@ class UserRepositoryTest
     {
         $result = $firstValue === $secondValue;
 
-        echo ($result) ? 'Success' . PHP_EOL : 'Fail' . PHP_EOL;
+        echo ($result) ? 'Success.' . PHP_EOL : 'Fail.' . PHP_EOL;
 
         return $result;
     }
@@ -39,11 +44,7 @@ class UserRepositoryTest
     {
         $this->beforeTestsProcessing();
 
-        $dataTest = [
-            'username' => 'username1',
-            'password' => 'password1'
-        ];
-
+        $dataTest = $this->getJSONFixture('tests/fixtures/UserRepositoryTest/createTest.json');
         $data = $this->userRepository->create($dataTest);
 
         $this->assertEquals($data, $dataTest);
@@ -53,13 +54,8 @@ class UserRepositoryTest
     {
         $this->beforeTestsProcessing();
 
-        $dataTest = [
-            'username' => 'username1',
-            'password' => 'password1'
-        ];
-
+        $dataTest = $this->getJSONFixture('tests/fixtures/UserRepositoryTest/createTest.json');
         $this->userRepository->create($dataTest);
-
         $data = $this->getJSONFixture('test_data_storage/users.json');
 
         $this->assertEquals($data, [$dataTest]);
@@ -67,9 +63,7 @@ class UserRepositoryTest
 
     public function testCreateNotAllFields()
     {
-        $dataTest = [
-            'username' => 'username1',
-        ];
+        $dataTest = $this->getJSONFixture('tests/fixtures/UserRepositoryTest/notAllFields.json');
 
         try {
             $this->userRepository->create($dataTest);
@@ -86,12 +80,7 @@ class UserRepositoryTest
     {
         $this->beforeTestsProcessing();
 
-        $dataTest = [
-            'username' => 'username1',
-            'password' => 'password1',
-            'date' => 'date'
-        ];
-
+        $dataTest = $this->getJSONFixture('tests/fixtures/UserRepositoryTest/extraFields.json');
         $data = $this->userRepository->create($dataTest);
 
         $this->assertEquals($data, ['username' => 'username1', 'password' => 'password1']);
@@ -101,12 +90,7 @@ class UserRepositoryTest
     {
         $this->beforeTestsProcessing();
 
-        $dataTest = [
-            'username' => 'username1',
-            'password' => 'password1',
-            'date' => 'date'
-        ];
-
+        $dataTest = $this->getJSONFixture('tests/fixtures/UserRepositoryTest/extraFields.json');
         $this->userRepository->create($dataTest);
         $data = $this->getJSONFixture('test_data_storage/users.json');
 
