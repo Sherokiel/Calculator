@@ -4,6 +4,7 @@ namespace Tests;
 
 use App\Repositories\UserRepository;
 use Exception;
+use AssertionException;
 
 class UserRepositoryTest
 {
@@ -54,7 +55,7 @@ class UserRepositoryTest
         $result = $firstValue === $secondValue;
 
         if (!$result) {
-            throw new Exception('Assertion error:' . PHP_EOL . 'Expected: ' . PHP_EOL . json_encode($secondValue, JSON_PRETTY_PRINT) . PHP_EOL . ' Actual: ' . PHP_EOL . json_encode($firstValue, JSON_PRETTY_PRINT) . PHP_EOL);
+            throw new AssertionException($firstValue, $secondValue);
         }
 
         return $result;
@@ -75,7 +76,7 @@ class UserRepositoryTest
         $this->userRepository->create($dataTest);
         $result = $this->getDataSet('users.json');
 
-        $this->assertEquals($result, [$dataTest]);
+        $this->assertEquals([$result], [$dataTest]);
     }
 
     public function testCreateNotAllFields()
