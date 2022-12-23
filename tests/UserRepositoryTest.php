@@ -15,13 +15,13 @@ class UserRepositoryTest
 
     public function run()
     {
-        $methodsDone = 0;
-        $methodsSuccessfully = 0;
+        $testsCount = 0;
+        $completedCount = 0;
 
         foreach (get_class_methods($this) as $method) {
             if (str_starts_with($method, 'test')) {
                 $this->beforeTestsProcessing();
-                $methodsDone++;
+                $testsCount++;
 
                 echo "{$method}: ". PHP_EOL;
 
@@ -32,15 +32,16 @@ class UserRepositoryTest
 
                     continue;
                 }
-                $methodsSuccessfully++;
 
-                echo PHP_EOL;
+                $completedCount++;
+
+                echo 'Success.' . PHP_EOL . PHP_EOL;
             }
         }
 
-        $methodsFail = $methodsDone - $methodsSuccessfully;
+        $methodsFail = $testsCount - $completedCount;
 
-        echo 'Total tests run: ' . $methodsDone . PHP_EOL . 'Completed: ' . $methodsSuccessfully . PHP_EOL . 'Failed: ' . $methodsFail . PHP_EOL;
+        echo 'Total tests run: ' . $testsCount . PHP_EOL . 'Completed: ' . $completedCount . PHP_EOL . 'Failed: ' . $methodsFail . PHP_EOL;
     }
 
     protected function beforeTestsProcessing()
@@ -55,8 +56,6 @@ class UserRepositoryTest
         if (!$result) {
             throw new Exception('Assertion error:' . PHP_EOL . 'Expected: ' . PHP_EOL . json_encode($secondValue, JSON_PRETTY_PRINT) . PHP_EOL . ' Actual: ' . PHP_EOL . json_encode($firstValue, JSON_PRETTY_PRINT) . PHP_EOL);
         }
-
-        echo 'Success.' . PHP_EOL;
 
         return $result;
     }
