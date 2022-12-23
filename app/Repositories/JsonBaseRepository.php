@@ -23,18 +23,18 @@ abstract class JsonBaseRepository extends FileBaseRepository
     public function create($item)
     {
         $entityFields = $this->getEntityFields();
-        $fieldsToInsert = array_intersect_key($item, array_flip($entityFields));
+        $item = array_intersect_key($item, array_flip($entityFields));
 
-        if (count($fieldsToInsert) !== count($entityFields)) {
+        if (count($item) !== count($entityFields)) {
             throw new Exception('One of required fields does not filled.');
         }
 
         $contents = $this->all();
-        $contents[] = $fieldsToInsert;
+        $contents[] = $item;
 
-        file_put_contents($this->filePath, json_encode($contents));
+        file_put_contents($this->filePath, json_encode($contents, JSON_PRETTY_PRINT));
 
-        return $fieldsToInsert;
+        return $item;
     }
 
     public function allGroupedBy($field)
