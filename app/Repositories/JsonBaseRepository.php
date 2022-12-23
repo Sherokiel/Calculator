@@ -32,7 +32,7 @@ abstract class JsonBaseRepository extends FileBaseRepository
         $contents = $this->all();
         $contents[] = $item;
 
-        file_put_contents($this->filePath, json_encode($contents));
+        file_put_contents($this->filePath, json_encode($contents, JSON_PRETTY_PRINT));
 
         return $item;
     }

@@ -7,6 +7,7 @@ use Exception;
 
 class UserRepositoryTest
 {
+    protected $fixturePath = 'tests/fixtures/UserRepositoryTest/';
     public function __construct()
     {
         $this->dirName = getenv('JSON_STORAGE_PATH');
@@ -16,6 +17,7 @@ class UserRepositoryTest
     public function run()
     {
         $methodsDone = 0;
+
         foreach (get_class_methods($this) as $method) {
             if (str_starts_with($method, 'test')) {
                 echo "{$method}: ". PHP_EOL;
@@ -23,7 +25,7 @@ class UserRepositoryTest
                 $methodsDone++;
             }
         }
-        echo 'Tests complete: ' . $methodsDone;
+        echo "Completed tests count: {$methodsDone}";
     }
 
     protected function beforeTestsProcessing()
@@ -44,7 +46,7 @@ class UserRepositoryTest
     {
         $this->beforeTestsProcessing();
 
-        $dataTest = $this->getJSONFixture('tests/fixtures/UserRepositoryTest/createTest.json');
+        $dataTest = $this->getJSONFixture("{$this->fixturePath}valid_create_data.json");
         $data = $this->userRepository->create($dataTest);
 
         $this->assertEquals($data, $dataTest);
@@ -54,7 +56,7 @@ class UserRepositoryTest
     {
         $this->beforeTestsProcessing();
 
-        $dataTest = $this->getJSONFixture('tests/fixtures/UserRepositoryTest/createTest.json');
+        $dataTest = $this->getJSONFixture("{$this->fixturePath}valid_create_data.json");
         $this->userRepository->create($dataTest);
         $data = $this->getJSONFixture('test_data_storage/users.json');
 
@@ -63,7 +65,7 @@ class UserRepositoryTest
 
     public function testCreateNotAllFields()
     {
-        $dataTest = $this->getJSONFixture('tests/fixtures/UserRepositoryTest/notAllFields.json');
+        $dataTest = $this->getJSONFixture("{$this->fixturePath}not_all_fields_create_data.json");
 
         try {
             $this->userRepository->create($dataTest);
@@ -80,7 +82,7 @@ class UserRepositoryTest
     {
         $this->beforeTestsProcessing();
 
-        $dataTest = $this->getJSONFixture('tests/fixtures/UserRepositoryTest/extraFields.json');
+        $dataTest = $this->getJSONFixture("{$this->fixturePath}extra_fields_create_data.json");
         $data = $this->userRepository->create($dataTest);
 
         $this->assertEquals($data, ['username' => 'username1', 'password' => 'password1']);
@@ -90,7 +92,7 @@ class UserRepositoryTest
     {
         $this->beforeTestsProcessing();
 
-        $dataTest = $this->getJSONFixture('tests/fixtures/UserRepositoryTest/extraFields.json');
+        $dataTest = $this->getJSONFixture("{$this->fixturePath}extra_fields_create_data.json");
         $this->userRepository->create($dataTest);
         $data = $this->getJSONFixture('test_data_storage/users.json');
 
@@ -100,5 +102,10 @@ class UserRepositoryTest
     public function getJSONFixture($path)
     {
         return json_decode(file_get_contents($path), true);
+    }
+
+    public function putJSONFixture($data, $path)
+    {
+        return file_put_contents($path,json_encode($data, JSON_PRETTY_PRINT));
     }
 }
