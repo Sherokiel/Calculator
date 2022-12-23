@@ -16,18 +16,31 @@ class UserRepositoryTest
     public function run()
     {
         $methodsDone = 0;
+        $methodsSuccessfully = 0;
 
         foreach (get_class_methods($this) as $method) {
             if (str_starts_with($method, 'test')) {
                 $this->beforeTestsProcessing();
+                $methodsDone++;
 
                 echo "{$method}: ". PHP_EOL;
-                $this->$method();
-                $methodsDone++;
+
+                try {
+                    $this->$method();
+                } catch (Exception $error) {
+                    echo $error->getMessage();
+
+                    continue;
+                }
+                $methodsSuccessfully++;
+
+                echo PHP_EOL;
             }
         }
 
-        echo "Completed tests count: {$methodsDone}";
+        $methodsFail = $methodsDone - $methodsSuccessfully;
+
+        echo 'Total tests run: ' . $methodsDone . PHP_EOL . 'Completed: ' . $methodsSuccessfully . PHP_EOL . 'Failed: ' . $methodsFail . PHP_EOL;
     }
 
     protected function beforeTestsProcessing()
@@ -39,7 +52,11 @@ class UserRepositoryTest
     {
         $result = $firstValue === $secondValue;
 
-        echo ($result) ? 'Success.' . PHP_EOL : 'Fail.' . PHP_EOL;
+        if (!$result) {
+            throw new Exception('Assertion error:' . PHP_EOL . 'Expected: ' . PHP_EOL . json_encode($secondValue, JSON_PRETTY_PRINT) . PHP_EOL . ' Actual: ' . PHP_EOL . json_encode($firstValue, JSON_PRETTY_PRINT) . PHP_EOL);
+        }
+
+        echo 'Success.' . PHP_EOL;
 
         return $result;
     }
@@ -55,10 +72,11 @@ class UserRepositoryTest
     public function testCreateCheckDB()
     {
         $dataTest = $this->getJSONFixture('valid_create_data.json');
+
         $this->userRepository->create($dataTest);
         $result = $this->getDataSet('users.json');
 
-        $this->assertEquals($result, [$dataTest]);
+        $this->assertEquals([$result], [$dataTest]);
     }
 
     public function testCreateNotAllFields()
