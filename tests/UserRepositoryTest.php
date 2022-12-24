@@ -70,11 +70,6 @@ class UserRepositoryTest
         return $result;
     }
 
-    public function testGithubRunner()
-    {
-        $this->assertEquals(true, false);
-    }
-
     public function testCreateCheckResult()
     {
         $dataTest = $this->getJSONFixture('valid_create_data.json');
