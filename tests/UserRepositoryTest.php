@@ -120,7 +120,7 @@ class UserRepositoryTest
         try {
             $this->userRepository->allGroupedBy('invalidField');
         } catch (InvalidFieldException $error) {
-            return $this->assertEquals($error->getMessage(), "Field invalidField is not valid.");
+            return $this->assertEquals($error->getMessage(), 'Field invalidField is not valid.');
         }
 
         echo 'fail';
