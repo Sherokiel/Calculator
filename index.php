@@ -10,9 +10,11 @@ require prepare_file_path('app/Exporters/HistoryTxtExporter.php');
 require prepare_file_path('app/Repositories/FileBaseRepository.php');
 require prepare_file_path('app/Repositories/IniBaseRepository.php');
 require prepare_file_path('app/Repositories/JsonBaseRepository.php');
-require prepare_file_path('app/Repositories/UserBaseRepository.php');
+require prepare_file_path('app/Repositories/UserRepository.php');
 require prepare_file_path('app/Repositories/HistoryRepository.php');
 require prepare_file_path('app/Repositories/SettingsRepository.php');
+require prepare_file_path('app/Exceptions/InvalidFieldException.php');
+require prepare_file_path('app/Exceptions/CreateWithoutRequiredFieldsException.php');
 require prepare_file_path('libraries/console_helpers.php');
 require prepare_file_path('constants.php');
 
@@ -20,7 +22,7 @@ putenv('JSON_STORAGE_PATH=data_storage');
 
 try {
     (new Application())->run();
-} catch (Error $error) {
+} catch (Exception $error) {
     echo $error;
 
     readline();
