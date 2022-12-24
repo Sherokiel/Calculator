@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Supports\CreateException;
-use App\Supports\GroupedByException;
+use App\Exception\CreateWithoutRequiredFieldsException;
+use App\Exception\InvalidFieldException;
 
 abstract class JsonBaseRepository extends FileBaseRepository
 {
@@ -27,7 +27,7 @@ abstract class JsonBaseRepository extends FileBaseRepository
         $item = array_intersect_key($item, array_flip($entityFields));
 
         if (count($item) !== count($entityFields)) {
-            throw new CreateException;
+            throw new CreateWithoutRequiredFieldsException;
         }
 
         $contents = $this->all();
@@ -41,7 +41,7 @@ abstract class JsonBaseRepository extends FileBaseRepository
     public function allGroupedBy($field)
     {
         if (!in_array($field, $this->getEntityFields())) {
-            throw new GroupedByException($field);
+            throw new InvalidFieldException($field);
         }
 
         return array_group($this->all(), $field);

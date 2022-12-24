@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\support;;
+namespace Tests\Support;;
 
 use Exception;
 

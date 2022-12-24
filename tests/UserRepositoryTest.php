@@ -3,10 +3,9 @@
 namespace Tests;
 
 use App\Repositories\UserRepository;
-use App\Supports\CreateException;
-use App\Supports\GroupedByException;
-use Tests\support\AssertionException;
-use Exception;
+use App\Exception\CreateWithoutRequiredFieldsException;
+use App\Exception\InvalidFieldException;
+use Tests\Support\AssertionException;
 
 class UserRepositoryTest
 {
@@ -20,14 +19,16 @@ class UserRepositoryTest
     {
         $testsCount = 0;
         $completedCount = 0;
+        $keyword = 'test';
+        $length = strlen($keyword);
 
         foreach (get_class_methods($this) as $method) {
-            if (str_starts_with($method, 'test')) {
+            if (str_starts_with($method, $keyword)) {
                 $this->beforeTestsProcessing();
                 $testsCount++;
 
 
-                echo substr($method, 4) . ': ' . PHP_EOL;
+                echo substr($method, $length) . ': ' . PHP_EOL;
 
                 try {
                     $this->$method();
@@ -77,9 +78,9 @@ class UserRepositoryTest
         $dataTest = $this->getJSONFixture('valid_create_data.json');
 
         $this->userRepository->create($dataTest);
-        $result = $this->getDataSet('users.json');
+        $usersState = $this->getDataSet('users.json');
 
-        $this->assertEquals([$result], [$dataTest]);
+        $this->assertEquals($usersState, [$dataTest]);
     }
 
     public function testCreateNotAllFields()
@@ -88,7 +89,7 @@ class UserRepositoryTest
 
         try {
             $this->userRepository->create($dataTest);
-        } catch (CreateException $error) {
+        } catch (CreateWithoutRequiredFieldsException $error) {
             return $this->assertEquals($error->getMessage(), 'One of required fields does not filled.');
         }
 
@@ -116,12 +117,10 @@ class UserRepositoryTest
 
     public function testGroupByInvalidFieldCheckThrowException()
     {
-        $dataTest = 'invalidField';
-
         try {
-            $this->userRepository->allGroupedBy($dataTest);
-        } catch (GroupedByException $error) {
-            return $this->assertEquals($error->getMessage(), "Field {$dataTest} is not valid.");
+            $this->userRepository->allGroupedBy('invalidField');
+        } catch (InvalidFieldException $error) {
+            return $this->assertEquals($error->getMessage(), "Field invalidField is not valid.");
         }
 
         echo 'fail';
