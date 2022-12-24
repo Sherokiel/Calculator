@@ -9,13 +9,16 @@ on:
 permissions:
   contents: read
 
+env:
+  APP_ENV: tests_runner
+
 jobs:
   build-with-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.3'
+          php-version: '8.1'
       - uses: actions/checkout@v3
       - name: Run tests
         run: php tests.php
