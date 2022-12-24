@@ -50,7 +50,7 @@ class UserRepositoryTest
         echo 'Total tests run: ' . $testsCount . PHP_EOL . 'Completed: ' . $completedCount . PHP_EOL . 'Failed: ' . $methodsFail . PHP_EOL;
 
         if ($methodsFail > 0 && getenv('APP_ENV') === 'tests_runner') {
-            exit(0);
+            exit(1);
         }
     }
 
