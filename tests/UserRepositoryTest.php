@@ -3,8 +3,8 @@
 namespace Tests;
 
 use App\Repositories\UserRepository;
-use App\Exception\CreateWithoutRequiredFieldsException;
-use App\Exception\InvalidFieldException;
+use App\Exceptions\CreateWithoutRequiredFieldsException;
+use App\Exceptions\InvalidFieldException;
 use Tests\Support\AssertionException;
 
 class UserRepositoryTest
