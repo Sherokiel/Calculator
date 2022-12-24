@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Exception;
 use App\Repositories\UserRepository;
 use App\Exceptions\CreateWithoutRequiredFieldsException;
 use App\Exceptions\InvalidFieldException;
@@ -47,6 +48,10 @@ class UserRepositoryTest
         $methodsFail = $testsCount - $completedCount;
 
         echo 'Total tests run: ' . $testsCount . PHP_EOL . 'Completed: ' . $completedCount . PHP_EOL . 'Failed: ' . $methodsFail . PHP_EOL;
+
+        if ($methodsFail > 0 && getenv('APP_ENV') === 'tests_runner') {
+            throw new Exception('Tests failed.');
+        }
     }
 
     protected function beforeTestsProcessing()
@@ -63,6 +68,11 @@ class UserRepositoryTest
         }
 
         return $result;
+    }
+
+    public function testGithubRunner()
+    {
+        $this->assertEquals(true, false);
     }
 
     public function testCreateCheckResult()
