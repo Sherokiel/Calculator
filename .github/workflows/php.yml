@@ -1,0 +1,21 @@
+name: PHP Composer
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+permissions:
+  contents: read
+
+jobs:
+  build-with-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.3'
+      - uses: actions/checkout@v3
+      - name: Run tests
+        run: php tests.php
