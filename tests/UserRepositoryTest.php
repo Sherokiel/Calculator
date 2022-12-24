@@ -3,6 +3,8 @@
 namespace Tests;
 
 use App\Repositories\UserRepository;
+use App\Supports\CreateException;
+use App\Supports\GroupedByException;
 use Tests\support\AssertionException;
 use Exception;
 
@@ -24,7 +26,8 @@ class UserRepositoryTest
                 $this->beforeTestsProcessing();
                 $testsCount++;
 
-                echo "{$method}: ". PHP_EOL;
+
+                echo substr($method, 4) . ': ' . PHP_EOL;
 
                 try {
                     $this->$method();
@@ -85,7 +88,7 @@ class UserRepositoryTest
 
         try {
             $this->userRepository->create($dataTest);
-        } catch (Exception $error) {
+        } catch (CreateException $error) {
             return $this->assertEquals($error->getMessage(), 'One of required fields does not filled.');
         }
 
@@ -109,6 +112,21 @@ class UserRepositoryTest
         $result = $this->getDataSet('users.json');
 
         $this->assertEquals($result, [$this->getJSONFixture('valid_create_data.json')]);
+    }
+
+    public function testGroupByInvalidFieldCheckThrowException()
+    {
+        $dataTest = 'invalidField';
+
+        try {
+            $this->userRepository->allGroupedBy($dataTest);
+        } catch (GroupedByException $error) {
+            return $this->assertEquals($error->getMessage(), "Field {$dataTest} is not valid.");
+        }
+
+        echo 'fail';
+
+        return false;
     }
 
     protected function getDataSet($data)
