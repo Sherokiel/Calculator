@@ -5,7 +5,7 @@ namespace Tests;
 use App\Repositories\UserRepository;
 use App\Exceptions\CreateWithoutRequiredFieldsException;
 use App\Exceptions\InvalidFieldException;
-use mysql_xdevapi\Exception;
+use Exception;
 use Tests\Support\AssertionException;
 
 class UserRepositoryTest
@@ -101,45 +101,18 @@ class UserRepositoryTest
         $this->assertEquals($result, [$this->getJSONFixture('valid_create_data.json')]);
     }
 
-//    public function testCreateNotAllFields()
-//    {
-//        $dataTest = $this->getJSONFixture('not_all_fields_create_data.json');
-//
-//        return $this->assertExceptionThrowed(CreateWithoutRequiredFieldsException::class, 'create', $dataTest, 'One of required fields does not filled.');
-//
-////        try {
-////            $this->userRepository->create($this->getJSONFixture('not_all_fields_create_data.json'));
-////        } catch (CreateWithoutRequiredFieldsException $error) {
-////            return $this->assertEquals($error->getMessage(), 'One of required fields does not filled.');
-////        }
-////
-////        echo 'fail';
-////
-////        return false;
-//    }
+    public function testCreateNotAllFields()
+    {
+        return $this->assertExceptionThrowed(InvalidFieldException::class, function() {
+            return $this->userRepository->create($this->getJSONFixture('not_all_fields_create_data.json'));
+        }, 'One of required fields does not filled.');
+    }
 
     public function testGroupByInvalidFieldCheckThrowException()
     {
-
-        //$this->assertExceptionThrowed(InvalidFieldException::class, $this->userRepository->allGroupedBy(), 'Field invalidField is not valid.');
-
-
         return $this->assertExceptionThrowed(InvalidFieldException::class, function() {
             return $this->userRepository->allGroupedBy('invalidField');
         }, 'Field invalidField is not valid.');
-
-
-
-
-//        try {
-//            $this->userRepository->allGroupedBy('invalidField');
-//        } catch (InvalidFieldException $error) {
-//            return $this->assertEquals($error->getMessage(), 'Field invalidField is not valid.');
-//        }
-//
-//        echo 'fail';
-//
-//        return false;
     }
 
     protected function getDataSet($data)
