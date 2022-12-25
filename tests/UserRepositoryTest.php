@@ -39,6 +39,7 @@ class UserRepositoryTest
                     continue;
                 }
 
+
                 $completedCount++;
 
                 echo 'Success.' . PHP_EOL . PHP_EOL;
