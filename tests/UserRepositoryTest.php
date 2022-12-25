@@ -5,6 +5,7 @@ namespace Tests;
 use App\Repositories\UserRepository;
 use App\Exceptions\CreateWithoutRequiredFieldsException;
 use App\Exceptions\InvalidFieldException;
+use mysql_xdevapi\Exception;
 use Tests\Support\AssertionException;
 
 class UserRepositoryTest
@@ -83,21 +84,6 @@ class UserRepositoryTest
         $this->assertEquals($usersState, [$dataTest]);
     }
 
-    public function testCreateNotAllFields()
-    {
-        $dataTest = $this->getJSONFixture('not_all_fields_create_data.json');
-
-        try {
-            $this->userRepository->create($dataTest);
-        } catch (CreateWithoutRequiredFieldsException $error) {
-            return $this->assertEquals($error->getMessage(), 'One of required fields does not filled.');
-        }
-
-        echo 'fail';
-
-        return false;
-    }
-
     public function testCreateExtraFields()
     {
         $dataTest = $this->getJSONFixture('extra_fields_create_data.json');
@@ -115,17 +101,45 @@ class UserRepositoryTest
         $this->assertEquals($result, [$this->getJSONFixture('valid_create_data.json')]);
     }
 
+//    public function testCreateNotAllFields()
+//    {
+//        $dataTest = $this->getJSONFixture('not_all_fields_create_data.json');
+//
+//        return $this->assertExceptionThrowed(CreateWithoutRequiredFieldsException::class, 'create', $dataTest, 'One of required fields does not filled.');
+//
+////        try {
+////            $this->userRepository->create($this->getJSONFixture('not_all_fields_create_data.json'));
+////        } catch (CreateWithoutRequiredFieldsException $error) {
+////            return $this->assertEquals($error->getMessage(), 'One of required fields does not filled.');
+////        }
+////
+////        echo 'fail';
+////
+////        return false;
+//    }
+
     public function testGroupByInvalidFieldCheckThrowException()
     {
-        try {
-            $this->userRepository->allGroupedBy('invalidField');
-        } catch (InvalidFieldException $error) {
-            return $this->assertEquals($error->getMessage(), 'Field invalidField is not valid.');
-        }
 
-        echo 'fail';
+        //$this->assertExceptionThrowed(InvalidFieldException::class, $this->userRepository->allGroupedBy(), 'Field invalidField is not valid.');
 
-        return false;
+
+        return $this->assertExceptionThrowed(InvalidFieldException::class, function() {
+            return $this->userRepository->allGroupedBy('invalidField');
+        }, 'Field invalidField is not valid.');
+
+
+
+
+//        try {
+//            $this->userRepository->allGroupedBy('invalidField');
+//        } catch (InvalidFieldException $error) {
+//            return $this->assertEquals($error->getMessage(), 'Field invalidField is not valid.');
+//        }
+//
+//        echo 'fail';
+//
+//        return false;
     }
 
     protected function getDataSet($data)
@@ -141,5 +155,20 @@ class UserRepositoryTest
     protected function putJSONFixture($data, $fixtureName)
     {
         return file_put_contents($fixtureName, json_encode($data, JSON_PRETTY_PRINT));
+    }
+
+    protected function assertExceptionThrowed($class, $callback, $message)
+    {
+        try {
+            $callback();
+        } catch (Exception $error) {
+            if ($error instanceof $class){
+                return $this->assertEquals($error->getMessage(), $message);
+            }
+        }
+
+        echo 'fail';
+
+        return false;
     }
 }
