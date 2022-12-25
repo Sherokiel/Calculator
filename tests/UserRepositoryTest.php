@@ -103,7 +103,7 @@ class UserRepositoryTest
 
     public function testCreateNotAllFields()
     {
-        return $this->assertExceptionThrowed(InvalidFieldException::class, function() {
+        return $this->assertExceptionThrowed(CreateWithoutRequiredFieldsException::class, function() {
             return $this->userRepository->create($this->getJSONFixture('not_all_fields_create_data.json'));
         }, 'One of required fields does not filled.');
     }
