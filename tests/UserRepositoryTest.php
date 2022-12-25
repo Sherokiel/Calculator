@@ -5,8 +5,9 @@ namespace Tests;
 use App\Repositories\UserRepository;
 use App\Exceptions\CreateWithoutRequiredFieldsException;
 use App\Exceptions\InvalidFieldException;
-use Exception;
+use App\Exceptions\AssertionExceptionExpectException;
 use Tests\Support\AssertionException;
+use Exception;
 
 class UserRepositoryTest
 {
@@ -107,16 +108,18 @@ class UserRepositoryTest
 
     public function testCreateNotAllFields()
     {
-        return $this->assertExceptionThrowed(CreateWithoutRequiredFieldsException::class, function() {
-            return $this->userRepository->create($this->getJSONFixture('not_all_fields_create_data.json'));
-        }, 'One of required fields does not filled.');
+        $this->assertExceptionThrowed(CreateWithoutRequiredFieldsException::class, 'One of required fields does not filled.', function() {
+            $data = $this->getJSONFixture('not_all_fields_create_data.json');
+
+            return $this->userRepository->create($data);
+        });
     }
 
     public function testGroupByInvalidFieldCheckThrowException()
     {
-        return $this->assertExceptionThrowed(InvalidFieldException::class, function() {
+        $this->assertExceptionThrowed(InvalidFieldException::class, 'Field invalidField is not valid.', function() {
             return $this->userRepository->allGroupedBy('invalidField');
-        }, 'Field invalidField is not valid.');
+        });
     }
 
     protected function getDataSet($data)
@@ -134,18 +137,16 @@ class UserRepositoryTest
         return file_put_contents($fixtureName, json_encode($data, JSON_PRETTY_PRINT));
     }
 
-    protected function assertExceptionThrowed($class, $callback, $message)
+    protected function assertExceptionThrowed($expectedExceptionClass, $expectedMessage, $callback)
     {
         try {
             $callback();
         } catch (Exception $error) {
-            if ($error instanceof $class){
-                return $this->assertEquals($error->getMessage(), $message);
+            if ($error instanceof $expectedExceptionClass){
+                $this->assertEquals($error->getMessage(), $expectedMessage);
             }
         }
 
-        echo 'fail';
-
-        return false;
+        throw new AssertionExceptionExpectException($expectedExceptionClass);
     }
 }
