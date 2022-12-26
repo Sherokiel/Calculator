@@ -11,7 +11,6 @@ require prepare_file_path('tests/supports/AssertionException.php');
 require prepare_file_path('tests/supports/AssertionExceptionExpectException.php');
 require prepare_file_path('tests/UserRepositoryTest.php');
 
-
 use Tests\UserRepositoryTest;
 
 putenv('JSON_STORAGE_PATH=test_data_storage');
