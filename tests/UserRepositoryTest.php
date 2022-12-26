@@ -142,11 +142,12 @@ class UserRepositoryTest
         try {
             $callback();
         } catch (Exception $error) {
+            var_dump($error instanceof $expectedExceptionClass);
             if ($error instanceof $expectedExceptionClass){
                 $this->assertEquals($error->getMessage(), $expectedMessage);
+            } else {
+                throw new AssertionExceptionExpectException($expectedExceptionClass);
             }
         }
-
-        throw new AssertionExceptionExpectException($expectedExceptionClass);
     }
 }
