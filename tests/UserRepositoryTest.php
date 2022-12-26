@@ -111,14 +111,14 @@ class UserRepositoryTest
         $this->assertExceptionThrowed(CreateWithoutRequiredFieldsException::class, 'One of required fields does not filled.', function() {
             $data = $this->getJSONFixture('not_all_fields_create_data.json');
 
-            return $this->userRepository->create($data);
+            $this->userRepository->create($data);
         });
     }
 
     public function testGroupByInvalidFieldCheckThrowException()
     {
         $this->assertExceptionThrowed(InvalidFieldException::class, 'Field invalidField is not valid.', function() {
-            return $this->userRepository->allGroupedBy('invalidField');
+            $this->userRepository->allGroupedBy('invalidField');
         });
     }
 
