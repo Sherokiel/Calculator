@@ -2,11 +2,12 @@
 
 namespace Tests;
 
-use Exception;
-use App\Repositories\UserRepository;
 use App\Exceptions\CreateWithoutRequiredFieldsException;
 use App\Exceptions\InvalidFieldException;
+use App\Repositories\UserRepository;
+use Exception;
 use Tests\Support\AssertionException;
+use Tests\Support\AssertionExceptionExpectException;
 
 class UserRepositoryTest
 {
@@ -88,21 +89,6 @@ class UserRepositoryTest
         $this->assertEquals($usersState, [$dataTest]);
     }
 
-    public function testCreateNotAllFields()
-    {
-        $dataTest = $this->getJSONFixture('not_all_fields_create_data.json');
-
-        try {
-            $this->userRepository->create($dataTest);
-        } catch (CreateWithoutRequiredFieldsException $error) {
-            return $this->assertEquals($error->getMessage(), 'One of required fields does not filled.');
-        }
-
-        echo 'fail';
-
-        return false;
-    }
-
     public function testCreateExtraFields()
     {
         $dataTest = $this->getJSONFixture('extra_fields_create_data.json');
@@ -120,17 +106,20 @@ class UserRepositoryTest
         $this->assertEquals($result, [$this->getJSONFixture('valid_create_data.json')]);
     }
 
+    public function testCreateNotAllFields()
+    {
+        $this->assertExceptionThrowed(CreateWithoutRequiredFieldsException::class, 'One of required fields does not filled.', function () {
+            $data = $this->getJSONFixture('not_all_fields_create_data.json');
+
+            $this->userRepository->create($data);
+        });
+    }
+
     public function testGroupByInvalidFieldCheckThrowException()
     {
-        try {
+        $this->assertExceptionThrowed(InvalidFieldException::class, 'Field invalidField is not valid.', function () {
             $this->userRepository->allGroupedBy('invalidField');
-        } catch (InvalidFieldException $error) {
-            return $this->assertEquals($error->getMessage(), 'Field invalidField is not valid.');
-        }
-
-        echo 'fail';
-
-        return false;
+        });
     }
 
     protected function getDataSet($data)
@@ -146,5 +135,18 @@ class UserRepositoryTest
     protected function putJSONFixture($data, $fixtureName)
     {
         return file_put_contents($fixtureName, json_encode($data, JSON_PRETTY_PRINT));
+    }
+
+    protected function assertExceptionThrowed($expectedExceptionClass, $expectedMessage, $callback)
+    {
+        try {
+            $callback();
+        } catch (Exception $error) {
+            if ($error instanceof $expectedExceptionClass){
+                $this->assertEquals($error->getMessage(), $expectedMessage);
+            } else {
+                throw new AssertionExceptionExpectException($expectedExceptionClass);
+            }
+        }
     }
 }
