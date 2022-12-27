@@ -57,7 +57,8 @@ abstract class JsonBaseRepository extends FileBaseRepository
         if (!in_array($field, $this->getEntityFields())) {
             throw new InvalidFieldException($field);
         }
-        return array_group($this->allByUsers(), $field);
+
+        return array_group($this->all(), $field);
     }
 
     public function isExist($condition = [])

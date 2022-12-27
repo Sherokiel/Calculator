@@ -13,4 +13,5 @@ class HistoryRepository extends JsonBaseRepository
     {
         return ['user', 'date', 'first_operand', 'second_operand', 'sign', 'result'];
     }
+
 }

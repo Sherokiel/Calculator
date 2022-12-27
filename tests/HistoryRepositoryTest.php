@@ -4,17 +4,17 @@ namespace Tests;
 
 use App\Exceptions\CreateWithoutRequiredFieldsException;
 use App\Exceptions\InvalidFieldException;
-use App\Repositories\UserRepository;
+use App\Repositories\HistoryRepository;
 use Exception;
 use Tests\Support\AssertionException;
 use Tests\Support\AssertionExceptionExpectException;
 
-class UserRepositoryTest
+class HistoryRepositoryTest
 {
     public function __construct()
     {
         $this->dirName = getenv('JSON_STORAGE_PATH');
-        $this->userRepository = new UserRepository();
+        $this->historyRepository = new HistoryRepository();
     }
 
     public function run()
@@ -30,7 +30,7 @@ class UserRepositoryTest
                 $testsCount++;
 
 
-                echo 'User' . substr($method, $length) . ': ' . PHP_EOL;
+                echo 'History' . substr($method, $length) . ': ' . PHP_EOL;
 
                 try {
                     $this->$method();
@@ -57,7 +57,22 @@ class UserRepositoryTest
 
     protected function beforeTestsProcessing()
     {
-        file_put_contents(prepare_file_path($this->dirName . '/users.json'), '');
+        file_put_contents(prepare_file_path($this->dirName . '/history.json'), '');
+    }
+
+    protected function getDataSet($data)
+    {
+        return json_decode(file_get_contents("test_data_storage/{$data}"), true);
+    }
+
+    protected function getJSONFixture($data)
+    {
+        return json_decode(file_get_contents("tests/fixtures/HistoryRepositoryTest/{$data}"), true);
+    }
+
+    protected function putJSONFixture($data, $fixtureName)
+    {
+        return file_put_contents($fixtureName, json_encode($data, JSON_PRETTY_PRINT));
     }
 
     protected function assertEquals($firstValue, $secondValue)
@@ -69,21 +84,6 @@ class UserRepositoryTest
         }
 
         return $result;
-    }
-
-    protected function getDataSet($data)
-    {
-        return json_decode(file_get_contents("test_data_storage/{$data}"), true);
-    }
-
-    protected function getJSONFixture($data)
-    {
-        return json_decode(file_get_contents("tests/fixtures/UserRepositoryTest/{$data}"), true);
-    }
-
-    protected function putJSONFixture($data, $fixtureName)
-    {
-        return file_put_contents($fixtureName, json_encode($data, JSON_PRETTY_PRINT));
     }
 
     protected function assertExceptionThrowed($expectedExceptionClass, $expectedMessage, $callback)
@@ -102,7 +102,7 @@ class UserRepositoryTest
     public function testCreateCheckResult()
     {
         $dataTest = $this->getJSONFixture('valid_create_data.json');
-        $result = $this->userRepository->create($dataTest);
+        $result = $this->historyRepository->create($dataTest);
 
         $this->assertEquals($result, $dataTest);
     }
@@ -111,8 +111,8 @@ class UserRepositoryTest
     {
         $dataTest = $this->getJSONFixture('valid_create_data.json');
 
-        $this->userRepository->create($dataTest);
-        $usersState = $this->getDataSet('users.json');
+        $this->historyRepository->create($dataTest);
+        $usersState = $this->getDataSet('history.json');
 
         $this->assertEquals($usersState, [$dataTest]);
     }
@@ -120,7 +120,7 @@ class UserRepositoryTest
     public function testCreateExtraFields()
     {
         $dataTest = $this->getJSONFixture('extra_fields_create_data.json');
-        $result = $this->userRepository->create($dataTest);
+        $result = $this->historyRepository->create($dataTest);
 
         $this->assertEquals($result, $this->getJSONFixture('valid_create_data.json'));
     }
@@ -128,8 +128,8 @@ class UserRepositoryTest
     public function testCreateExtraFieldsBD()
     {
         $dataTest = $this->getJSONFixture('extra_fields_create_data.json');
-        $this->userRepository->create($dataTest);
-        $result = $this->getDataSet('users.json');
+        $this->historyRepository->create($dataTest);
+        $result = $this->getDataSet('history.json');
 
         $this->assertEquals($result, [$this->getJSONFixture('valid_create_data.json')]);
     }
@@ -139,14 +139,24 @@ class UserRepositoryTest
         $this->assertExceptionThrowed(CreateWithoutRequiredFieldsException::class, 'One of required fields does not filled.', function () {
             $data = $this->getJSONFixture('not_all_fields_create_data.json');
 
-            $this->userRepository->create($data);
+            $this->historyRepository->create($data);
         });
     }
 
     public function testGroupByInvalidFieldCheckThrowException()
     {
         $this->assertExceptionThrowed(InvalidFieldException::class, 'Field invalidField is not valid.', function () {
-            $this->userRepository->allGroupedBy('invalidField');
+            $this->historyRepository->allGroupedBy('invalidField');
         });
+    }
+
+
+    public function testGroupedBy()
+    {
+        $dataTest =  $this->getJSONFixture('valid_unGroupedBy_data.json');
+        $this->historyRepository->create($dataTest);
+        $result = $this->historyRepository->allGroupedBy('date');
+
+        $this->assertEquals($result, $this->getJSONFixture('valid_GroupedBy_data.json'));
     }
 }

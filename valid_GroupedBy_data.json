@@ -1,0 +1,12 @@
+{
+    "11-12-2022": [
+        {
+            "user": "username1",
+            "date": "11-12-2022",
+            "first_operand": "first_operand",
+            "second_operand": "second_operand",
+            "sign": "sign",
+            "result": "result"
+        }
+    ]
+}
