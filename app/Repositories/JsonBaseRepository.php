@@ -21,6 +21,20 @@ abstract class JsonBaseRepository extends FileBaseRepository
         return ($content === '') ? [] : json_decode($content, true);
     }
 
+    public function allByUsers()
+    {
+        $user = getenv('USER');
+        $content = $this->all();
+
+        foreach ($content as $value) {
+            if (in_array($user, $value)) {
+                $contents[] = $value;
+            }
+        }
+
+        return $contents;
+    }
+
     public function create($item)
     {
         $entityFields = $this->getEntityFields();
@@ -43,8 +57,8 @@ abstract class JsonBaseRepository extends FileBaseRepository
         if (!in_array($field, $this->getEntityFields())) {
             throw new InvalidFieldException($field);
         }
-
-        return array_group($this->all(), $field);
+        return array_group($this->allByUsers(), $field);
+  //      return array_group($this->all(), $field);
     }
 
     public function isExist($condition = [])

@@ -43,6 +43,7 @@ class Application
             $this->getText('info', 'welcome2', ['info' => INFO]),
             ''
         );
+        putenv("USER=$user");
 
         while ($isRunning) {
             $command = choice($this->messages['info']['enter_command'], AVAILABLE_COMMANDS, $this->getText('errors', 'choice_error', ['info' => INFO]));
@@ -65,6 +66,7 @@ class Application
             write_symbol_line(25, '=');
 
             $this->historyRepository->create([
+                'user' => $user,
                 'date' => now(),
                 'first_operand' => $argument1,
                 'second_operand' => $argument2,
