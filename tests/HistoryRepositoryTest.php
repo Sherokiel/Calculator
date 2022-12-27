@@ -58,10 +58,8 @@ class HistoryRepositoryTest
     protected function beforeTestsProcessing()
     {
         $data = $this->getDataSet('perfect_value.json');
-        var_dump($data);
-        readline();
-        $this->putJSONFixture(prepare_file_path($this->dirName . '/history.json'), json_encode($data, JSON_PRETTY_PRINT));
-        //file_put_contents(prepare_file_path($this->dirName . '/history.json'), json_encode($data, JSON_PRETTY_PRINT));
+
+        $this->putJSONFixture($this->dirName . '/history.json', $data);
     }
 
     protected function getDataSet($data)
