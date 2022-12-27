@@ -21,6 +21,20 @@ abstract class JsonBaseRepository extends FileBaseRepository
         return ($content === '') ? [] : json_decode($content, true);
     }
 
+    public function allByUsers()
+    {
+        $user = getenv('USER');
+        $content = $this->all();
+
+        foreach ($content as $value) {
+            if (in_array($user, $value)) {
+                $contents[] = $value;
+            }
+        }
+
+        return $contents;
+    }
+
     public function create($item)
     {
         $entityFields = $this->getEntityFields();
