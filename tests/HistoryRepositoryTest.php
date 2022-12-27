@@ -57,7 +57,11 @@ class HistoryRepositoryTest
 
     protected function beforeTestsProcessing()
     {
-        file_put_contents(prepare_file_path($this->dirName . '/history.json'), '');
+        $data = $this->getDataSet('perfect_value.json');
+        var_dump($data);
+        readline();
+        $this->putJSONFixture(prepare_file_path($this->dirName . '/history.json'), json_encode($data, JSON_PRETTY_PRINT));
+        //file_put_contents(prepare_file_path($this->dirName . '/history.json'), json_encode($data, JSON_PRETTY_PRINT));
     }
 
     protected function getDataSet($data)
@@ -70,7 +74,7 @@ class HistoryRepositoryTest
         return json_decode(file_get_contents("tests/fixtures/HistoryRepositoryTest/{$data}"), true);
     }
 
-    protected function putJSONFixture($data, $fixtureName)
+    protected function putJSONFixture($fixtureName, $data)
     {
         return file_put_contents($fixtureName, json_encode($data, JSON_PRETTY_PRINT));
     }
@@ -153,8 +157,9 @@ class HistoryRepositoryTest
 
     public function testGroupedBy()
     {
-        $dataTest =  $this->getJSONFixture('valid_unGroupedBy_data.json');
-        $this->historyRepository->create($dataTest);
+        $dataTest[] =  $this->getJSONFixture('valid_unGroupedBy_data.json');
+        //file_put_contents($this->dirName . '/history.json', json_encode($dataTest, JSON_PRETTY_PRINT));
+
         $result = $this->historyRepository->allGroupedBy('date');
 
         $this->assertEquals($result, $this->getJSONFixture('valid_GroupedBy_data.json'));
