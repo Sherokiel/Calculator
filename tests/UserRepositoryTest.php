@@ -6,7 +6,7 @@ use App\Exceptions\CreateWithoutRequiredFieldsException;
 use App\Exceptions\InvalidFieldException;
 use App\Repositories\UserRepository;
 
-class UserRepositoryTest extends Tests
+class UserRepositoryTest extends BaseTest
 {
     public function __construct()
     {
@@ -17,10 +17,10 @@ class UserRepositoryTest extends Tests
 
     public function testCreateCheckResult()
     {
-        $dataTest = $this->getJSONFixture('valid_create_data.json');
-        $result = $this->userRepository->create($dataTest);
+        $data = $this->getJSONFixture('valid_create_data.json');
+        $result = $this->userRepository->create($data);
 
-        $this->assertEquals($dataTest, $result);
+        $this->assertEquals($data, $result);
     }
 
     public function testCreateCheckDB()
@@ -28,7 +28,7 @@ class UserRepositoryTest extends Tests
         $dataTest = $this->getJSONFixture('valid_create_data.json');
 
         $this->userRepository->create($dataTest);
-        $usersState = $this->getDataSet('users.json');
+        $usersState = $this->getDataSet('test_data_storage/users.json');
 
         $this->assertEquals([$dataTest], $usersState);
     }
@@ -47,7 +47,7 @@ class UserRepositoryTest extends Tests
         $this->userRepository->create($dataTest);
 
 
-        $result = $this->getDataSet('users.json');
+        $result = $this->getDataSet('test_data_storage/users.json');
         $this->assertEquals([$this->getJSONFixture('valid_create_data.json')], $result);
     }
 

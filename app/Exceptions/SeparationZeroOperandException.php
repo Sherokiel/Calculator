@@ -4,10 +4,10 @@ namespace App\Exceptions;
 
 use App\Exceptions\OperandException;
 
-class LetterOperandException extends OperandException
+class SeparationZeroOperandException extends OperandException
 {
     public function __construct()
     {
-        parent::__construct('Cant write letter.');
+        parent::__construct('Cant separate on zero.');
     }
 }

@@ -1,6 +1,6 @@
 [
   {
-    "user": "username1",
+    "user_name": "username1",
     "date": "15-11-2022",
     "first_operand": "1",
     "second_operand": "1",
@@ -8,7 +8,7 @@
     "result": 2
   },
   {
-    "user": "username1",
+    "user_name": "username1",
     "date": "15-11-2022",
     "first_operand": 10,
     "second_operand": 123,
@@ -16,7 +16,7 @@
     "result": 1230
   },
   {
-    "user": "username1",
+    "user_name": "username1",
     "date": "25-11-2022",
     "first_operand": 1,
     "second_operand": 2,
@@ -24,7 +24,7 @@
     "result": 3
   },
   {
-    "user": "username1",
+    "user_name": "username1",
     "date": "25-11-2022",
     "first_operand": 9,
     "second_operand": 2,
@@ -32,7 +32,7 @@
     "result": 81
   },
   {
-    "user": "username1",
+    "user_name": "username1",
     "date": "25-11-2022",
     "first_operand": 100,
     "second_operand": 40,

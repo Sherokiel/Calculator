@@ -6,7 +6,7 @@ use Tests\Support\AssertionException;
 use Tests\Support\AssertionExceptionExpectException;
 use Exception;
 
-class Tests
+class BaseTest
 {
     public function __construct($repositoryName, $fileName)
     {
@@ -14,6 +14,7 @@ class Tests
         $this->fileName = $fileName;
         $this->repositoryName = $repositoryName;
     }
+
     public function run()
     {
         $testsCount = 0;
@@ -23,18 +24,14 @@ class Tests
 
         foreach (get_class_methods($this) as $method) {
             if (str_starts_with($method, $keyword)) {
-                if (file_exists("{$this->dirName}/{$this->fileName}_perfect_value.json")) {
-
-                    $this->beforeTestsProcessing();
-                }
-
+                $this->beforeTestsProcessing();
                 $testsCount++;
 
 
                 echo $this->fileName . substr($method, $length) . ': ' . PHP_EOL;
 
                 try {
-                    $this->$method();
+                    $this->{$method}();
                 } catch (AssertionException $error) {
                     echo $error->getMessage();
 
@@ -58,14 +55,18 @@ class Tests
 
     protected function beforeTestsProcessing()
     {
-        $data = $this->getDataSet("{$this->fileName}_perfect_value.json");
+        if (file_exists("tests/Dumb/{$this->fileName}_perfect_value.json")) {
 
-        $this->putJSONFixture($this->dirName . "/{$this->fileName}.json", $data);
+            $data = $this->getDataSet("tests/Dumb/{$this->fileName}_perfect_value.json");
+
+            $this->putJSONFixture($this->dirName . "/{$this->fileName}.json", $data);
+        }
     }
 
     protected function getDataSet($data)
     {
-        return json_decode(file_get_contents("test_data_storage/{$data}"), true);
+       // return json_decode(file_get_contents("tests/Dumb/{$data}"), true);
+        return json_decode(file_get_contents($data), true);
     }
 
     protected function getJSONFixture($data)

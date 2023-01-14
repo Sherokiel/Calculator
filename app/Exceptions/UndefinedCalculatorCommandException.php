@@ -3,7 +3,8 @@
 namespace App\Exceptions;
 
 use Exception;
-class CalculateUndefinedCommandsException extends Exception
+
+class UndefinedCalculatorCommandException extends Exception
 {
     public function __construct()
     {

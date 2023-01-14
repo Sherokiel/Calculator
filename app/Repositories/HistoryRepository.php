@@ -11,7 +11,6 @@ class HistoryRepository extends JsonBaseRepository
 
     protected function getEntityFields(): array
     {
-        return ['user', 'date', 'first_operand', 'second_operand', 'sign', 'result'];
+        return ['user_name', 'date', 'first_operand', 'second_operand', 'sign', 'result'];
     }
-
 }

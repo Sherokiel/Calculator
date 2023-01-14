@@ -6,7 +6,7 @@ use App\Exceptions\CreateWithoutRequiredFieldsException;
 use App\Exceptions\InvalidFieldException;
 use App\Repositories\HistoryRepository;
 
-class HistoryRepositoryTest extends Tests
+class HistoryRepositoryTest extends BaseTest
 {
     public function __construct()
     {
@@ -28,15 +28,13 @@ class HistoryRepositoryTest extends Tests
         $dataTest = $this->getJSONFixture('valid_create_data.json');
         $this->historyRepository->create($dataTest);
 
-        $historyState = $this->getDataSet('history.json');
+        $historyState = $this->getDataSet('test_data_storage/history.json');
         $dataTest = $this->getJSONFixture('create_success_history_state.json');
 
         $this->assertEquals($dataTest, $historyState);
     }
-/**
- * @CreateExtraFields проверка, удалит ли метод create дополнительное поле.
- */
-    public function testCreateExtraFields()
+
+    public function testCreateExtraFieldsCut()
     {
         $dataTest = $this->getJSONFixture('extra_fields_create_data.json');
         $result = $this->historyRepository->create($dataTest);
@@ -48,13 +46,11 @@ class HistoryRepositoryTest extends Tests
     {
         $dataTest = $this->getJSONFixture('extra_fields_create_data.json');
         $this->historyRepository->create($dataTest);
-        $result = $this->getDataSet('history.json');
+        $result = $this->getDataSet('test_data_storage/history.json');
 
         $this->assertEquals($this->getJSONFixture('create_success_history_state.json'), $result);
     }
- /**
-  * @CreateNotAllFields проверка, выдаст ли нужную ошибку если будут не все указаные поля.
-  */
+
     public function testCreateNotAllFields()
     {
         $this->assertExceptionThrowed(CreateWithoutRequiredFieldsException::class, 'One of required fields does not filled.', function () {
@@ -70,7 +66,6 @@ class HistoryRepositoryTest extends Tests
             $this->historyRepository->allGroupedBy('invalidField');
         });
     }
-
 
     public function testGroupedBy()
     {

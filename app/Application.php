@@ -2,17 +2,14 @@
 
 namespace App;
 
-use App\Exceptions\LetterOperandException;
-use App\Exceptions\OperandExceptions;
+use App\Exceptions\OperandException;
 use App\Repositories\HistoryRepository;
 use App\Repositories\SettingsRepository;
 use App\Repositories\UserRepository;
 use App\Exporters\HistoryConsoleExporter;
 use App\Exporters\HistoryTxtExporter;
-use App\Services\CalculationService;
-use App\Services\ReadOperandService;
-use Exception;
-use App\Exceptions\SeparateZeroOperandException;
+use App\Services\CalculatorService;
+
 
 class Application
 {
@@ -29,11 +26,11 @@ class Application
         $lang = $this->settingsRepository->getSetting('localization', 'locale');
         $this->messages = $this->loadLocale($lang);
 
-        $this->calculateService = new CalculationService();
-        $this->readOperandService = new ReadOperandService();
+        $this->calculatorService = new CalculatorService();
 
         $this->userRepository = new UserRepository();
         $this->historyRepository = new HistoryRepository();
+
         $this->historyConsoleExporter = new HistoryConsoleExporter();
         $this->historyTxtExporter = new HistoryTxtExporter();
     }
@@ -68,13 +65,13 @@ class Application
                 ? $this->readOperand($this->messages['info']['enter_second'], $command, true)
                 : $this->readOperand($this->messages['info']['enter_exponent'], $command);
 
-            $result = $this->calculateService->calculate($argument1, $command, $argument2);
+            $result = $this->calculatorService->calculate($argument1, $command, $argument2);
 
             info($this->messages['info']['result'] . $result);
             write_symbol_line(25, '=');
 
             $this->historyRepository->create([
-                'user' => $user,
+                'user_name' => $user,
                 'date' => now(),
                 'first_operand' => $argument1,
                 'second_operand' => $argument2,
@@ -86,15 +83,15 @@ class Application
 
     protected function readOperand($message, $command, $isSecondOperand = false)
     {
-            $argument = readline($message);
+        $argument = readline($message);
 
-            try {
-                $this->readOperandService->readOperandService($argument, $command, $isSecondOperand);
-            } catch (OperandExceptions $error) {
-                echo $error->getMessage();
+        try {
+            $this->calculatorService->formatOperand($argument, $command, $isSecondOperand);
+        } catch (OperandException $error) {
+            info($error->getMessage());
 
-                $this->readOperand($message, $command, $isSecondOperand = false);
-            }
+            $this->readOperand($message, $command, $isSecondOperand = false);
+        }
 
         return $argument;
     }
