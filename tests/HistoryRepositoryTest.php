@@ -5,100 +5,14 @@ namespace Tests;
 use App\Exceptions\CreateWithoutRequiredFieldsException;
 use App\Exceptions\InvalidFieldException;
 use App\Repositories\HistoryRepository;
-use Exception;
-use Tests\Support\AssertionException;
-use Tests\Support\AssertionExceptionExpectException;
 
-class HistoryRepositoryTest
+class HistoryRepositoryTest extends Tests
 {
     public function __construct()
     {
-        $this->dirName = getenv('JSON_STORAGE_PATH');
+        parent::__construct('HistoryRepositoryTest', 'history');
+
         $this->historyRepository = new HistoryRepository();
-    }
-
-    public function run()
-    {
-        $testsCount = 0;
-        $completedCount = 0;
-        $keyword = 'test';
-        $length = strlen($keyword);
-
-        foreach (get_class_methods($this) as $method) {
-            if (str_starts_with($method, $keyword)) {
-                $this->beforeTestsProcessing();
-                $testsCount++;
-
-
-                echo 'History' . substr($method, $length) . ': ' . PHP_EOL;
-
-                try {
-                    $this->$method();
-                } catch (AssertionException $error) {
-                    echo $error->getMessage();
-
-                    continue;
-                }
-
-                $completedCount++;
-
-                echo 'Success.' . PHP_EOL . PHP_EOL;
-            }
-        }
-
-        $methodsFail = $testsCount - $completedCount;
-
-        echo 'Total tests run: ' . $testsCount . PHP_EOL . 'Completed: ' . $completedCount . PHP_EOL . 'Failed: ' . $methodsFail . PHP_EOL . PHP_EOL;
-
-        if ($methodsFail > 0 && getenv('APP_ENV') === 'tests_runner') {
-            exit(1);
-        }
-    }
-
-    protected function beforeTestsProcessing()
-    {
-        $data = $this->getDataSet('perfect_value.json');
-
-        $this->putJSONFixture($this->dirName . '/history.json', $data);
-    }
-
-    protected function getDataSet($data)
-    {
-        return json_decode(file_get_contents("test_data_storage/{$data}"), true);
-    }
-
-    protected function getJSONFixture($data)
-    {
-        return json_decode(file_get_contents("tests/fixtures/HistoryRepositoryTest/{$data}"), true);
-    }
-
-    protected function putJSONFixture($fixtureName, $data)
-    {
-        return file_put_contents($fixtureName, json_encode($data, JSON_PRETTY_PRINT));
-    }
-
-    protected function assertEquals($firstValue, $secondValue)
-    {
-        $result = $firstValue === $secondValue;
-
-        if (!$result) {
-            throw new AssertionException($firstValue, $secondValue);
-        }
-
-        return $result;
-    }
-
-    protected function assertExceptionThrowed($expectedExceptionClass, $expectedMessage, $callback)
-    {
-        try {
-            $callback();
-        } catch (Exception $error) {
-            if ($error instanceof $expectedExceptionClass){
-                $this->assertEquals($error->getMessage(), $expectedMessage);
-            } else {
-                throw new AssertionExceptionExpectException($expectedExceptionClass);
-            }
-        }
     }
 
     public function testCreateCheckResult()
@@ -106,25 +20,28 @@ class HistoryRepositoryTest
         $dataTest = $this->getJSONFixture('valid_create_data.json');
         $result = $this->historyRepository->create($dataTest);
 
-        $this->assertEquals($result, $dataTest);
+        $this->assertEquals($dataTest, $result);
     }
 
     public function testCreateCheckDB()
     {
         $dataTest = $this->getJSONFixture('valid_create_data.json');
-
         $this->historyRepository->create($dataTest);
-        $usersState = $this->getDataSet('history.json');
 
-        $this->assertEquals($usersState, [$dataTest]);
+        $historyState = $this->getDataSet('history.json');
+        $dataTest = $this->getJSONFixture('create_success_history_state.json');
+
+        $this->assertEquals($dataTest, $historyState);
     }
-
+/**
+ * @CreateExtraFields проверка, удалит ли метод create дополнительное поле.
+ */
     public function testCreateExtraFields()
     {
         $dataTest = $this->getJSONFixture('extra_fields_create_data.json');
         $result = $this->historyRepository->create($dataTest);
 
-        $this->assertEquals($result, $this->getJSONFixture('valid_create_data.json'));
+        $this->assertEquals($this->getJSONFixture('valid_create_data.json'), $result);
     }
 
     public function testCreateExtraFieldsBD()
@@ -133,9 +50,11 @@ class HistoryRepositoryTest
         $this->historyRepository->create($dataTest);
         $result = $this->getDataSet('history.json');
 
-        $this->assertEquals($result, [$this->getJSONFixture('valid_create_data.json')]);
+        $this->assertEquals($this->getJSONFixture('create_success_history_state.json'), $result);
     }
-
+ /**
+  * @CreateNotAllFields проверка, выдаст ли нужную ошибку если будут не все указаные поля.
+  */
     public function testCreateNotAllFields()
     {
         $this->assertExceptionThrowed(CreateWithoutRequiredFieldsException::class, 'One of required fields does not filled.', function () {
@@ -155,11 +74,8 @@ class HistoryRepositoryTest
 
     public function testGroupedBy()
     {
-        $dataTest[] =  $this->getJSONFixture('valid_unGroupedBy_data.json');
-        //file_put_contents($this->dirName . '/history.json', json_encode($dataTest, JSON_PRETTY_PRINT));
-
         $result = $this->historyRepository->allGroupedBy('date');
 
-        $this->assertEquals($result, $this->getJSONFixture('valid_GroupedBy_data.json'));
+        $this->assertEquals($this->getJSONFixture('valid_GroupedBy_data.json'), $result);
     }
 }

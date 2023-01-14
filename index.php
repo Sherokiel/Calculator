@@ -4,6 +4,8 @@ use App\Application;
 
 require 'libraries' . DIRECTORY_SEPARATOR . 'helpers.php';
 require prepare_file_path('app/Application.php');
+require prepare_file_path('app/Services/CalculationService.php');
+require prepare_file_path('app/Services/ReadOperandService.php');
 require prepare_file_path('app/Exporters/BaseHistoryExporter.php');
 require prepare_file_path('app/Exporters/HistoryConsoleExporter.php');
 require prepare_file_path('app/Exporters/HistoryTxtExporter.php');
@@ -15,6 +17,11 @@ require prepare_file_path('app/Repositories/HistoryRepository.php');
 require prepare_file_path('app/Repositories/SettingsRepository.php');
 require prepare_file_path('app/Exceptions/InvalidFieldException.php');
 require prepare_file_path('app/Exceptions/CreateWithoutRequiredFieldsException.php');
+require prepare_file_path('app/Exceptions/CalculateUndefinedCommandsException.php');
+require prepare_file_path('App\Exceptions\OperandExceptions.php');
+require prepare_file_path('app/Exceptions/LetterOperandException.php');
+require prepare_file_path('app/Exceptions/IfSpaceOperandException.php');
+require prepare_file_path('app/Exceptions/SeparateZeroOperandException.php');
 require prepare_file_path('libraries/console_helpers.php');
 require prepare_file_path('constants.php');
 

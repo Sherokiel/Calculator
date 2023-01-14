@@ -2,11 +2,17 @@
 
 namespace App;
 
+use App\Exceptions\LetterOperandException;
+use App\Exceptions\OperandExceptions;
 use App\Repositories\HistoryRepository;
 use App\Repositories\SettingsRepository;
 use App\Repositories\UserRepository;
 use App\Exporters\HistoryConsoleExporter;
 use App\Exporters\HistoryTxtExporter;
+use App\Services\CalculationService;
+use App\Services\ReadOperandService;
+use Exception;
+use App\Exceptions\SeparateZeroOperandException;
 
 class Application
 {
@@ -23,8 +29,10 @@ class Application
         $lang = $this->settingsRepository->getSetting('localization', 'locale');
         $this->messages = $this->loadLocale($lang);
 
-        $this->userRepository = new UserRepository();
+        $this->calculateService = new CalculationService();
+        $this->readOperandService = new ReadOperandService();
 
+        $this->userRepository = new UserRepository();
         $this->historyRepository = new HistoryRepository();
         $this->historyConsoleExporter = new HistoryConsoleExporter();
         $this->historyTxtExporter = new HistoryTxtExporter();
@@ -60,7 +68,7 @@ class Application
                 ? $this->readOperand($this->messages['info']['enter_second'], $command, true)
                 : $this->readOperand($this->messages['info']['enter_exponent'], $command);
 
-            $result = $this->calculate($argument1, $command, $argument2);
+            $result = $this->calculateService->calculate($argument1, $command, $argument2);
 
             info($this->messages['info']['result'] . $result);
             write_symbol_line(25, '=');
@@ -76,56 +84,17 @@ class Application
         }
     }
 
-    protected function calculate($argument1, $command, $argument2)
-    {
-        switch ($command) {
-            case '+':
-                return $argument1 + $argument2;
-            case '-':
-                return $argument1 - $argument2;
-            case '*':
-                return $argument1 * $argument2;
-            case '/':
-                return $argument1 / $argument2;
-            case '^':
-                return pow($argument1, $argument2);
-            case 'sr':
-                return pow($argument1, (1 / $argument2));
-            default:
-                return info($this->getText('errors', 'undefined_command', ['command' => $command]));
-        }
-    }
-
     protected function readOperand($message, $command, $isSecondOperand = false)
     {
-        do {
             $argument = readline($message);
-            $int1 = str_to_number($argument);
-            $isDataValid = ($argument == $int1);
 
-            if (!$isDataValid) {
-                info($this->messages['errors']['if_letter']);
+            try {
+                $this->readOperandService->readOperandService($argument, $command, $isSecondOperand);
+            } catch (OperandExceptions $error) {
+                echo $error->getMessage();
 
-                continue;
+                $this->readOperand($message, $command, $isSecondOperand = false);
             }
-
-            $isDataValid = strlen($argument) > 0;
-            if (!$isDataValid) {
-                info($this->messages['errors']['if_space']);
-
-                continue;
-            }
-
-            settype($argument, 'integer');
-
-            if ($isSecondOperand) {
-                $isDataValid = ($command !== '/' || $argument !== 0);
-
-                if (!$isDataValid) {
-                    info($this->messages['errors']['if_separate_zero']);
-                }
-            }
-        } while (!$isDataValid);
 
         return $argument;
     }
