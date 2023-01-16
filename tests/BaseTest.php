@@ -8,11 +8,11 @@ use Exception;
 
 class BaseTest
 {
-    public function __construct($repositoryName, $fileName)
+    public function __construct($fileName)
     {
         $this->dirName = getenv('JSON_STORAGE_PATH');
         $this->fileName = $fileName;
-        $this->repositoryName = $repositoryName;
+        $this->repositoryName = substr(strrchr(get_class($this), '\\'), 1);
     }
 
     public function run()

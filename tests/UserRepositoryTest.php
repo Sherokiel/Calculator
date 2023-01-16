@@ -10,7 +10,7 @@ class UserRepositoryTest extends BaseTest
 {
     public function __construct()
     {
-        parent::__construct('UserRepositoryTest', 'users', '');
+        parent::__construct('users');
 
         $this->userRepository = new UserRepository();
     }

@@ -44,12 +44,11 @@ class CalculatorService
         settype($argument, 'integer');
 
         if ($isSecondOperand) {
-            $isDataValid = ($command !== '/' || $argument !== 0);
-
-            if (!$isDataValid) {
+            if (($argument === 0) && ($command === '/')) {
                 throw new SeparationZeroOperandException();
             }
         }
+
         return $argument;
     }
 }
