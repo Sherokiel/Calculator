@@ -10,7 +10,7 @@ class HistoryRepositoryTest extends BaseTest
 {
     public function __construct()
     {
-        parent::__construct(['history', 'user']);
+        parent::__construct();
 
         $this->historyRepository = new HistoryRepository();
     }

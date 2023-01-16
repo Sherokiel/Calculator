@@ -24,8 +24,10 @@ use Tests\CalculatorServiceTest;
 putenv('JSON_STORAGE_PATH=test_data_storage');
 
 try {
-    (new UserRepositoryTest())->run();
     (new HistoryRepositoryTest())->run();
+    readline();
+    (new UserRepositoryTest())->run();
+    readline();
     (new CalculatorServiceTest())->run();
 } catch (Exception $error) {
     echo $error;

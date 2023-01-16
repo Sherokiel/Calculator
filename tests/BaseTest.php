@@ -8,10 +8,9 @@ use Exception;
 
 class BaseTest
 {
-    public function __construct($fileName)
+    public function __construct()
     {
         $this->dirName = getenv('JSON_STORAGE_PATH');
-        $this->fileName = $fileName;
         $this->repositoryName = substr(strrchr(get_class($this), '\\'), 1);
     }
 
@@ -54,10 +53,25 @@ class BaseTest
 
     protected function beforeTestsProcessing()
     {
-        foreach ($this->fileName as $dump) {
-            if (file_exists("tests/fixtures/{$this->repositoryName}/dumps/{$dump}.json")) {
-                $data = $this->getDataSet("tests/fixtures/{$this->repositoryName}/dumps/{$dump}.json");
-                $this->putJSONFixture($this->dirName . "/{$dump}.json", $data);
+        if(is_dir("tests/fixtures/{$this->repositoryName}")) {
+            $this->fileName = scandir("tests/fixtures/{$this->repositoryName}/dumps/");
+
+            $key = array_search('.', $this->fileName);
+            if ($key !== false) {
+                unset($this->fileName[$key]);
+            }
+
+            $key = array_search('..', $this->fileName);
+            if ($key !== false) {
+                unset($this->fileName[$key]);
+            }
+            foreach ($this->fileName as $dump) {
+                if (file_exists("tests/fixtures/{$this->repositoryName}/dumps/{$dump}")) {
+
+                    $data = $this->getDataSet("tests/fixtures/{$this->repositoryName}/dumps/{$dump}");
+
+                    $this->putJSONFixture($this->dirName . "/{$dump}", $data);
+                }
             }
         }
     }
