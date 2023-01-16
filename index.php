@@ -4,7 +4,7 @@ use App\Application;
 
 require 'libraries' . DIRECTORY_SEPARATOR . 'helpers.php';
 require prepare_file_path('app/Application.php');
-require prepare_file_path('app/Services/CalculatorServiceTest.php');
+require prepare_file_path('app/Services/CalculatorService.php');
 require prepare_file_path('app/Exporters/BaseHistoryExporter.php');
 require prepare_file_path('app/Exporters/HistoryConsoleExporter.php');
 require prepare_file_path('app/Exporters/HistoryTxtExporter.php');

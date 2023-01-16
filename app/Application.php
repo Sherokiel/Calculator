@@ -10,7 +10,6 @@ use App\Exporters\HistoryConsoleExporter;
 use App\Exporters\HistoryTxtExporter;
 use App\Services\CalculatorService;
 
-
 class Application
 {
     protected $messages;
@@ -86,14 +85,12 @@ class Application
         $argument = readline($message);
 
         try {
-            $this->calculatorService->formatOperand($argument, $command, $isSecondOperand);
+            return $this->calculatorService->formatOperand($argument, $command, $isSecondOperand);
         } catch (OperandException $error) {
             info($error->getMessage());
 
-            $this->readOperand($message, $command, $isSecondOperand = false);
+            return $this->readOperand($message, $command, $isSecondOperand = false);
         }
-
-        return $argument;
     }
 
     protected function executeSystemCommand($command)

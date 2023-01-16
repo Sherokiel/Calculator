@@ -2,7 +2,7 @@
 
 require 'libraries' . DIRECTORY_SEPARATOR . 'helpers.php';
 
-require prepare_file_path('tests/TestRun.php');
+require prepare_file_path('tests/BaseTest.php');
 require prepare_file_path('app/Repositories/FileBaseRepository.php');
 require prepare_file_path('app/Repositories/JsonBaseRepository.php');
 require prepare_file_path('app/Repositories/UserRepository.php');

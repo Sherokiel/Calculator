@@ -50,5 +50,6 @@ class CalculatorService
                 throw new SeparationZeroOperandException();
             }
         }
+        return $argument;
     }
 }
