@@ -43,10 +43,8 @@ class CalculatorService
 
         settype($argument, 'integer');
 
-        if ($isSecondOperand) {
-            if (($argument === 0) && ($command === '/')) {
-                throw new SeparationZeroOperandException();
-            }
+        if ($isSecondOperand && ($argument === 0) && ($command === '/')) {
+            throw new SeparationZeroOperandException();
         }
 
         return $argument;
