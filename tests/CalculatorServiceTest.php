@@ -9,7 +9,7 @@ class CalculatorServiceTest extends BaseTest
 {
     public function __construct()
     {
-        parent::__construct(null, null);
+        parent::__construct([null]);
 
         $this->CalculationService = new CalculatorService();
     }

@@ -27,7 +27,7 @@ class BaseTest
                 $this->beforeTestsProcessing();
                 $testsCount++;
 
-                echo $this->fileName . substr($method, $length) . ': ' . PHP_EOL;
+                echo $this->repositoryName . substr($method, $length) . ': ' . PHP_EOL;
 
                 try {
                     $this->{$method}();
@@ -54,10 +54,11 @@ class BaseTest
 
     protected function beforeTestsProcessing()
     {
-        if (file_exists("tests/fixtures/{$this->repositoryName}/dumps/{$this->fileName}.json")) {
-            $data = $this->getDataSet("tests/fixtures/{$this->repositoryName}/dumps/{$this->fileName}.json");
-
-            $this->putJSONFixture($this->dirName . "/{$this->fileName}.json", $data);
+        foreach ($this->fileName as $dump) {
+            if (file_exists("tests/fixtures/{$this->repositoryName}/dumps/{$dump}.json")) {
+                $data = $this->getDataSet("tests/fixtures/{$this->repositoryName}/dumps/{$dump}.json");
+                $this->putJSONFixture($this->dirName . "/{$dump}.json", $data);
+            }
         }
     }
 
