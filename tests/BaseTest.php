@@ -11,7 +11,7 @@ class BaseTest
     public function __construct()
     {
         $this->dirName = getenv('JSON_STORAGE_PATH');
-        $this->repositoryName = substr(strrchr(get_class($this), '\\'), 1);
+        $this->testClassName = substr(strrchr(get_class($this), '\\'), 1);
     }
 
     public function run()
@@ -26,7 +26,7 @@ class BaseTest
                 $this->beforeTestsProcessing();
                 $testsCount++;
 
-                echo $this->repositoryName . substr($method, $length) . ': ' . PHP_EOL;
+                echo $this->testClassName . substr($method, $length) . ': ' . PHP_EOL;
 
                 try {
                     $this->{$method}();
@@ -53,24 +53,19 @@ class BaseTest
 
     protected function beforeTestsProcessing()
     {
-        if(is_dir("tests/fixtures/{$this->repositoryName}")) {
-            $this->fileName = scandir("tests/fixtures/{$this->repositoryName}/dumps/");
+        if(is_dir("tests/fixtures/{$this->testClassName}")) {
+            $dumps = scandir("tests/fixtures/{$this->testClassName}/dumps/");
 
-            $key = array_search('.', $this->fileName);
-            if ($key !== false) {
-                unset($this->fileName[$key]);
-            }
+            $dumps = array_filter($dumps, function ($key) {
+                    return $key != '.' &&  $key != '..';
+            } );
 
-            $key = array_search('..', $this->fileName);
-            if ($key !== false) {
-                unset($this->fileName[$key]);
-            }
-            foreach ($this->fileName as $dump) {
-                if (file_exists("tests/fixtures/{$this->repositoryName}/dumps/{$dump}")) {
+            foreach ($dumps as $dump) {
+                if (file_exists("tests/fixtures/{$this->testClassName}/dumps/{$dump}")) {
 
-                    $data = $this->getDataSet("tests/fixtures/{$this->repositoryName}/dumps/{$dump}");
+                    $data = $this->getDataSet("tests/fixtures/{$this->testClassName}/dumps/{$dump}");
 
-                    $this->putJSONFixture($this->dirName . "/{$dump}", $data);
+                    $this->putJSONFixture("{$this->dirName}/{$dump}", $data);
                 }
             }
         }
@@ -83,7 +78,7 @@ class BaseTest
 
     protected function getJSONFixture($data)
     {
-        return json_decode(file_get_contents("tests/fixtures/{$this->repositoryName}/{$data}"), true);
+        return json_decode(file_get_contents("tests/fixtures/{$this->testClassName}/{$data}"), true);
     }
 
     protected function putJSONFixture($fixtureName, $data)
@@ -115,5 +110,3 @@ class BaseTest
         }
     }
 }
-
-
