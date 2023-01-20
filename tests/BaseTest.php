@@ -57,7 +57,7 @@ class BaseTest
             $dumps = scandir("tests/fixtures/{$this->testClassName}/dumps/");
 
             $dumps = array_filter($dumps, function ($key) {
-                    return $key != '.' &&  $key != '..';
+                    return !in_array($key, ['.', '..']);
             } );
 
             foreach ($dumps as $dump) {

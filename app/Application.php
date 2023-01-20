@@ -9,6 +9,7 @@ use App\Repositories\UserRepository;
 use App\Exporters\HistoryConsoleExporter;
 use App\Exporters\HistoryTxtExporter;
 use App\Services\CalculatorService;
+use App\Services\HistoryService;
 
 class Application
 {
@@ -26,6 +27,7 @@ class Application
         $this->messages = $this->loadLocale($lang);
 
         $this->calculatorService = new CalculatorService();
+        $this->historyService = new HistoryService();
 
         $this->userRepository = new UserRepository();
         $this->historyRepository = new HistoryRepository();
@@ -124,82 +126,41 @@ class Application
             return info($this->messages['info']['no_history']);
         }
 
-        do {
-            $output = choice($this->getText('questions', 'export_question', ['export' => EXPORT_HISTORY, 'screen' => SCREEN]), [EXPORT_HISTORY, SCREEN]);
+        $output = choice($this->getText('questions', 'export_question', ['export' => EXPORT_HISTORY, 'screen' => SCREEN]), [EXPORT_HISTORY, SCREEN]);
+        $fullPathName = null;
 
-            $exporter = $this->historyConsoleExporter;
+        if ($output === 'export') {
+            $defaultFileName = 'export_' . now();
+            $nameOfFile = readline($this->getText('info', 'name_of_file_create', ['defaultPath' => $defaultFileName]));
+            $pathToFile = readline($this->messages['info']['name_of_directory_create']);
 
-            if ($output === 'export') {
-                $defaultFileName = 'export_' . now();
-                $nameOfFile = readline($this->getText('info', 'name_of_file_create', ['defaultPath' => $defaultFileName]));
+            $fullPathName = "{$pathToFile}{$nameOfFile}";
 
-                if (empty($nameOfFile)) {
-                    $nameOfFile = $defaultFileName;
+            $ext = pathinfo($fullPathName, PATHINFO_EXTENSION);
+
+            if (empty($ext)) {
+                $fullPathName .= '.txt';
+            } elseif ($ext !== 'txt') {
+                return info($this->messages['errors']['wrng_ext']);
+            }
+
+            if (file_exists($fullPathName)) {
+                $command = choice($this->getText('questions', 'text_file_exist', ['filepath' => $fullPathName, 'yes' => AGREE, 'no' => DEGREE]), [AGREE, DEGREE]);
+
+                switch ($command) {
+                    case (AGREE):
+                        file_put_contents($fullPathName, '');
+
+                        break;
+                    case (DEGREE):
+                        return '';
                 }
-
-                $pathToFile = readline($this->messages['info']['name_of_directory_create']);
-                $fullPathName = "{$pathToFile}{$nameOfFile}";
-
-                $ext = pathinfo($fullPathName, PATHINFO_EXTENSION);
-
-                if (empty($ext)) {
-                    $fullPathName .= '.txt';
-                } elseif ($ext !== 'txt') {
-                    return info($this->messages['errors']['wrng_ext']);
-                }
-
-                $this->historyTxtExporter->setFilePath($fullPathName);
-
-                if (file_exists($fullPathName)) {
-                    $command = choice($this->getText('questions', 'text_file_exist', ['filepath' => $fullPathName, 'yes' => AGREE, 'no' => DEGREE]), [AGREE, DEGREE]);
-
-                    switch ($command) {
-                        case (AGREE):
-                            file_put_contents($fullPathName, '');
-
-                            break;
-                        case (DEGREE):
-                            return '';
-                    }
-                }
-
-                $exporter = $this->historyTxtExporter;
             }
-
-            $showDateHistory = ask($this->getText('info', 'info_history', ['full' => FULL]));
-            $isDataValid = (is_date($showDateHistory) || in_array($showDateHistory, HISTORY_COMMANDS));
-
-            if (!$isDataValid) {
-                info($this->messages['errors']['history_wrong_input']);
-
-                continue;
-            }
-
-            if ($showDateHistory === 'help') {
-                show_info_block($this->messages['info']['history_help'], HISTORY_VIEWER_COMMANDS, 19, 71);
-                $isDataValid = false;
-
-                continue;
-            }
-
-            if ($showDateHistory === 'back') {
-                return info($this->messages['info']['history_back']);
-            }
-
-            if ($showDateHistory === FULL) {
-                $showDateHistory = null;
-            } elseif (!$this->historyRepository->isExist(['date' => $showDateHistory])) {
-                info($this->messages['info']['no_history_day']);
-
-                $isDataValid = false;
-            }
-        } while (!$isDataValid);
-
-        if ($exporter instanceof HistoryTxtExporter) {
-            info($this->getText('info','history_saved', ['filepath' => $fullPathName]));
         }
 
-        return $exporter->export($showDateHistory);
+        $showDateHistory = ask($this->getText('info', 'info_history', ['full' => FULL]));
+
+        return $this->historyService->showHistory($output, $showDateHistory, $fullPathName);
     }
 
     protected function loadLocale($lang)

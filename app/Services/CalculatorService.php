@@ -41,7 +41,7 @@ class CalculatorService
             throw new SpaceOperandException();
         }
 
-        settype($argument, 'integer');
+        settype($argument, 'float');
 
         if ($isSecondOperand && ($argument === 0) && ($command === '/')) {
             throw new SeparationZeroOperandException();
