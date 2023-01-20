@@ -49,6 +49,7 @@ class Application
             $this->getText('info', 'welcome2', ['info' => INFO]),
             ''
         );
+
         $this->historyService->setUser($user);
 
         while ($isRunning) {
