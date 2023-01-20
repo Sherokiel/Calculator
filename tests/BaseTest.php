@@ -53,16 +53,15 @@ class BaseTest
 
     protected function beforeTestsProcessing()
     {
-        if(is_dir("tests/fixtures/{$this->testClassName}")) {
+        if (is_dir("tests/fixtures/{$this->testClassName}")) {
             $dumps = scandir("tests/fixtures/{$this->testClassName}/dumps/");
 
             $dumps = array_filter($dumps, function ($key) {
                     return !in_array($key, ['.', '..']);
-            } );
+            });
 
             foreach ($dumps as $dump) {
                 if (file_exists("tests/fixtures/{$this->testClassName}/dumps/{$dump}")) {
-
                     $data = $this->getDataSet("tests/fixtures/{$this->testClassName}/dumps/{$dump}");
 
                     $this->putJSONFixture("{$this->dirName}/{$dump}", $data);

@@ -158,9 +158,39 @@ class Application
             }
         }
 
-        $showDateHistory = ask($this->getText('info', 'info_history', ['full' => FULL]));
+        do {
+            $showDateHistory = ask($this->getText('info', 'info_history', ['full' => FULL]));
 
-        return $this->historyService->showHistory($output, $showDateHistory, $fullPathName);
+            $isDataValid = (is_date($showDateHistory) || in_array($showDateHistory, HISTORY_COMMANDS));
+
+            if (!$isDataValid) {
+                info($this->messages['errors']['history_wrong_input']);
+
+                continue;
+            }
+
+            if ($showDateHistory === 'help') {
+                show_info_block($this->messages['info']['history_help'], HISTORY_VIEWER_COMMANDS, 19, 71);
+                $isDataValid = false;
+
+                continue;
+            }
+
+            if ($showDateHistory === 'back') {
+                return info($this->messages['info']['history_back']);
+            }
+
+
+            if ($showDateHistory === FULL) {
+                $showDateHistory = null;
+            } elseif (!$this->historyRepository->isExist(['date' => $showDateHistory])) {
+                info($this->messages['info']['no_history_day']);
+
+                $isDataValid = false;
+            }
+        } while (!$isDataValid);
+
+        return $this->historyService->export($output, $showDateHistory, $fullPathName);
     }
 
     protected function loadLocale($lang)

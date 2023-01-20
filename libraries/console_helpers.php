@@ -10,7 +10,7 @@ function str_to_number($string)
         $string = '-' . $string;
     }
 
-    return filter_var($string, FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
+    return filter_var($string, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 }
 
 function choice($message, $availableValues, $errorText = null)
