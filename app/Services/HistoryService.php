@@ -29,6 +29,8 @@ class HistoryService
             return $this->historyTxtExporter->setFilePath($fullPathName)->export($showDateHistory);
         }
 
+
+
         return $exporter->export($showDateHistory);
     }
 
