@@ -11,7 +11,9 @@ class HistoryService
     protected $historyRepository;
     protected $historyConsoleExporter;
     protected $historyTxtExporter;
+
     protected $user;
+
     public function __construct()
     {
         $this->historyRepository = new HistoryRepository();
@@ -21,13 +23,10 @@ class HistoryService
 
     public function export($output, $showDateHistory, $fullPathName)
     {
-
         $exporter = $this->historyConsoleExporter;
 
         if ($output === 'export') {
-            $this->historyTxtExporter->setFilePath($fullPathName);
-
-            $exporter = $this->historyTxtExporter;
+            return $this->historyTxtExporter->setFilePath($fullPathName)->export($showDateHistory);
         }
 
         return $exporter->export($showDateHistory);

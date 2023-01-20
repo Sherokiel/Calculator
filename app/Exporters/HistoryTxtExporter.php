@@ -21,6 +21,6 @@ class HistoryTxtExporter extends BaseHistoryExporter
 
     public function setFilePath($filePath)
     {
-        $this->fullPathName = $filePath;
+        return $this->fullPathName = $filePath;
     }
 }
