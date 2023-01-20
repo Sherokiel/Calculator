@@ -190,6 +190,10 @@ class Application
             }
         } while (!$isDataValid);
 
+        if ($output === 'export') {
+            info($this->getText('info','history_saved', ['filepath' => $fullPathName]));
+        }
+
         return $this->historyService->export($output, $showDateHistory, $fullPathName);
     }
 

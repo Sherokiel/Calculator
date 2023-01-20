@@ -30,10 +30,6 @@ class HistoryService
             $exporter = $this->historyTxtExporter;
         }
 
-        if ($exporter instanceof HistoryTxtExporter) {
-            info('History Saved in ' . $fullPathName);
-        }
-
         return $exporter->export($showDateHistory);
     }
 }
