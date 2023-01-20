@@ -49,7 +49,7 @@ class Application
             $this->getText('info', 'welcome2', ['info' => INFO]),
             ''
         );
-        putenv("USER=$user");
+        $this->historyService->setUser($user);
 
         while ($isRunning) {
             $command = choice($this->messages['info']['enter_command'], AVAILABLE_COMMANDS, $this->getText('errors', 'choice_error', ['info' => INFO]));

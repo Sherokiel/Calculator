@@ -11,7 +11,7 @@ class HistoryService
     protected $historyRepository;
     protected $historyConsoleExporter;
     protected $historyTxtExporter;
-
+    protected $user;
     public function __construct()
     {
         $this->historyRepository = new HistoryRepository();
@@ -31,5 +31,10 @@ class HistoryService
         }
 
         return $exporter->export($showDateHistory);
+    }
+
+    public function setUser($user)
+    {
+        $this->user = $user;
     }
 }
