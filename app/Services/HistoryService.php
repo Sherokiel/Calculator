@@ -25,13 +25,18 @@ class HistoryService
     {
         $exporter = $this->historyConsoleExporter;
 
-        if ($output === 'export') {
-            return $this->historyTxtExporter->setFilePath($fullPathName)->export($showDateHistory);
+        $data = ['date' => $showDateHistory];
+
+        if(is_null($showDateHistory)) {
+            $data = [];
         }
 
+        if ($output === 'export') {
+            return $this->historyTxtExporter->setFilePath($fullPathName)->export($data);
+           // return $this->historyTxtExporter->setFilePath($fullPathName)->export($showDateHistory);
+        }
 
-
-        return $exporter->export($showDateHistory);
+        return $exporter->export($data);
     }
 
     public function setUser($user)
