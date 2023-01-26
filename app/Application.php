@@ -41,6 +41,7 @@ class Application
         $isRunning = true;
 
         $user = $this->authorize();
+        $this->historyService->setUser($user);
 
         info_box(
             $this->getText('info', 'welcome_user', ['user' => $user]),
@@ -103,6 +104,8 @@ class Application
                 return show_info_block($this->messages['info']['info_block'], INFO_BLOCK);
             case(HISTORY):
                 $this->showHistory();
+
+                break;
             case(CHOICE_LANGUAGE):
                 return $this->choiceLocale();
             case(QUIT):

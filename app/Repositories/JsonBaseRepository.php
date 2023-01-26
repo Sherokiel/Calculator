@@ -21,9 +21,8 @@ abstract class JsonBaseRepository extends FileBaseRepository
         return ($content === '') ? [] : json_decode($content, true);
     }
 
-    public function allByUsers()
+    public function allByUsers($user)
     {
-        $user = getenv('USER');
         $content = $this->all();
 
         foreach ($content as $value) {
@@ -50,6 +49,15 @@ abstract class JsonBaseRepository extends FileBaseRepository
         file_put_contents($this->filePath, json_encode($contents, JSON_PRETTY_PRINT));
 
         return $item;
+    }
+
+    public function allGroupedByUser($field, $user)
+    {
+        if (!in_array($field, $this->getEntityFields())) {
+            throw new InvalidFieldException($field);
+        }
+
+        return array_group($this->allByUsers($user), $field);
     }
 
     public function allGroupedBy($field)

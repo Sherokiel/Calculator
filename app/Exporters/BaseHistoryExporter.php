@@ -18,8 +18,20 @@ abstract class BaseHistoryExporter
         $data = $this->historyRepository->get($date);
         $date = implode($date);
 
-        if($date === []) {
+        if($date === '') {
             return $this->showHistoryItems($this->historyRepository->allGroupedBy('date'));
+        }
+
+        return $this->showHistoryItems([$date => $data]);
+    }
+
+    public function exportByUser($date, $user)
+    {
+        $data = $this->historyRepository->get($date);
+        $date = implode($date);
+
+        if($date === '') {
+            return $this->showHistoryItems($this->historyRepository->allGroupedByUser('date', $user));
         }
 
         return $this->showHistoryItems([$date => $data]);
