@@ -101,17 +101,21 @@ class Application
     {
         switch ($command) {
             case(INFO):
-                return show_info_block($this->messages['info']['info_block'], INFO_BLOCK);
+                show_info_block($this->messages['info']['info_block'], INFO_BLOCK);
+
+                break;
             case(HISTORY):
                 $this->showHistory();
 
                 break;
             case(CHOICE_LANGUAGE):
-                return $this->choiceLocale();
+                $this->choiceLocale();
+
+                break;
             case(QUIT):
                 $this->finishApp();
             default:
-                return info($this->getText('errors', 'undefined_command', ['command' => $command]));
+                info($this->getText('errors', 'undefined_command', ['command' => $command]));
         }
     }
 
