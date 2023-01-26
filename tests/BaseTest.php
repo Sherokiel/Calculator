@@ -57,7 +57,7 @@ class BaseTest
             $dumps = scandir("tests/fixtures/{$this->testClassName}/dumps/");
 
             $dumps = array_filter($dumps, function ($key) {
-                    return !in_array($key, ['.', '..']);
+                return !in_array($key, ['.', '..']);
             });
 
             foreach ($dumps as $dump) {
@@ -77,7 +77,7 @@ class BaseTest
 
     protected function getJSONFixture($data)
     {
-        return json_decode(file_get_contents("tests/fixtures/{$this->testClassName}/{$data}"), true);
+        return $this->getDataSet("tests/fixtures/{$this->testClassName}/{$data}");
     }
 
     protected function putJSONFixture($fixtureName, $data)

@@ -102,7 +102,7 @@ class Application
             case(INFO):
                 return show_info_block($this->messages['info']['info_block'], INFO_BLOCK);
             case(HISTORY):
-                return $this->showHistory();
+                $this->showHistory();
             case(CHOICE_LANGUAGE):
                 return $this->choiceLocale();
             case(QUIT):
@@ -121,10 +121,10 @@ class Application
         }
     }
 
-    protected function showHistory()
+    protected function showHistory():void
     {
         if (!$this->historyRepository->isExist()) {
-            return info($this->messages['info']['no_history']);
+            info($this->messages['info']['no_history']);
         }
 
         $output = choice($this->getText('questions', 'export_question', ['export' => EXPORT_HISTORY, 'screen' => SCREEN]), [EXPORT_HISTORY, SCREEN]);
@@ -142,7 +142,7 @@ class Application
             if (empty($ext)) {
                 $fullPathName .= '.txt';
             } elseif ($ext !== 'txt') {
-                return info($this->messages['errors']['wrng_ext']);
+                info($this->messages['errors']['wrng_ext']);
             }
 
             if (file_exists($fullPathName)) {
@@ -154,7 +154,7 @@ class Application
 
                         break;
                     case (DEGREE):
-                        return '';
+                        break;
                 }
             }
         }
@@ -178,7 +178,7 @@ class Application
             }
 
             if ($showDateHistory === 'back') {
-                return info($this->messages['info']['history_back']);
+                info($this->messages['info']['history_back']);
             }
 
 
@@ -191,11 +191,11 @@ class Application
             }
         } while (!$isDataValid);
 
+        $this->historyService->export($output, $showDateHistory, $fullPathName);
+
         if ($output === 'export') {
             info($this->getText('info','history_saved', ['filepath' => $fullPathName]));
         }
-
-        return $this->historyService->export($output, $showDateHistory, $fullPathName);
     }
 
     protected function loadLocale($lang)

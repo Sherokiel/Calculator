@@ -21,21 +21,17 @@ class HistoryService
         $this->historyTxtExporter = new HistoryTxtExporter();
     }
 
-    public function export($output, $showDateHistory, $fullPathName)
+    public function export($output, $date, $fullPathName)
     {
-        $exporter = $this->historyConsoleExporter;
-
-        $condition = ['date' => $showDateHistory];
-
-        if(is_null($showDateHistory)) {
-            $condition = [];
-        }
+        $condition = (is_null($date))
+            ? []
+            : ['date' => $date];
 
         if ($output === 'export') {
-            return $this->historyTxtExporter->setFilePath($fullPathName)->export($condition);
+            $this->historyTxtExporter->setFilePath($fullPathName)->export($condition);
         }
 
-        return $exporter->export($condition);
+        $this->historyConsoleExporter->export($condition);
     }
 
     public function setUser($user)
