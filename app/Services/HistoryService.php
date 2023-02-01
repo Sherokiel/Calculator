@@ -34,8 +34,6 @@ class HistoryService
             $this->historyTxtExporter->setFilePath($fullPathName)->export($condition);
         }
 
-
-
         $this->historyConsoleExporter->export($condition);
     }
 

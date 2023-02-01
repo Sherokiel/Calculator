@@ -41,7 +41,6 @@ class Application
         $isRunning = true;
 
         $user = $this->authorize();
-        $this->historyService->setUser($user);
 
         info_box(
             $this->getText('info', 'welcome_user', ['user' => $user]),
@@ -50,8 +49,6 @@ class Application
             $this->getText('info', 'welcome2', ['info' => INFO]),
             ''
         );
-
-        $this->historyService->setUser($user);
 
         while ($isRunning) {
             $command = choice($this->messages['info']['enter_command'], AVAILABLE_COMMANDS, $this->getText('errors', 'choice_error', ['info' => INFO]));
@@ -267,6 +264,8 @@ class Application
                 info($this->getText('errors', 'not_found_user', ['username' => $userName]));
             }
         } while ($user['password'] !== $password);
+
+        $this->historyService->setUser($user['username']);
 
         info($this->messages['info']['logged_in']);
 
