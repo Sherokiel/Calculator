@@ -71,15 +71,6 @@ class Application
             write_symbol_line(25, '=');
 
             $this->historyService->create($argument1, $argument2, $command, $result);
-
-//            $this->historyRepository->create([
-//                'user_name' => $user,
-//                'date' => now(),
-//                'first_operand' => $argument1,
-//                'second_operand' => $argument2,
-//                'sign' => $command,
-//                'result' => $result,
-//            ]);
         }
     }
 
