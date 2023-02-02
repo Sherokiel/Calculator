@@ -134,7 +134,7 @@ class Application
         $output = choice($this->getText('questions', 'export_question', ['export' => EXPORT_HISTORY, 'screen' => SCREEN]), [EXPORT_HISTORY, SCREEN]);
         $fullPathName = null;
 
-        if ($output === 'export') {
+        if ($output === EXPORT_HISTORY) {
             $defaultFileName = 'export_' . now();
             $nameOfFile = readline($this->getText('info', 'name_of_file_create', ['defaultPath' => $defaultFileName]));
             $pathToFile = readline($this->messages['info']['name_of_directory_create']);
@@ -197,7 +197,7 @@ class Application
 
         $this->historyService->export($output, $showDateHistory, $fullPathName);
 
-        if ($output === 'export') {
+        if ($output === EXPORT_HISTORY) {
             info($this->getText('info','history_saved', ['filepath' => $fullPathName]));
         }
     }
@@ -265,7 +265,7 @@ class Application
             }
         } while ($user['password'] !== $password);
 
-        $this->historyService->setUser($user['username']);
+        $this->historyService->setUser($user);
 
         info($this->messages['info']['logged_in']);
 

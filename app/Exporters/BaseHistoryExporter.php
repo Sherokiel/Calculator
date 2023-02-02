@@ -15,7 +15,9 @@ abstract class BaseHistoryExporter
 
     public function export($condition)
     {
-        return $this->showHistoryItems($this->historyRepository->getGroupedBy('date', $condition));
+        $data = $this->historyRepository->getGroupedBy('date', $condition);
+
+        return $this->showHistoryItems($data);
     }
 
     protected function generateHistoryLine($historyItem)

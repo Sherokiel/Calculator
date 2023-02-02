@@ -24,6 +24,7 @@ require prepare_file_path('app/Exceptions/SpaceOperandException.php');
 require prepare_file_path('app/Exceptions/SeparationZeroOperandException.php');
 require prepare_file_path('libraries/console_helpers.php');
 require prepare_file_path('constants.php');
+
 putenv('JSON_STORAGE_PATH=data_storage');
 
 try {

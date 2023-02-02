@@ -23,22 +23,21 @@ class HistoryService
 
     public function export($output, $date, $fullPathName)
     {
-
         $condition = (is_null($date))
             ? []
             : ['date' => $date];
 
-        $condition = $condition + ['user_name' => $this->user];
+        $condition['user_name'] = $this->user;
 
-        if ($output === 'export') {
+        if ($output === EXPORT_HISTORY) {
             $this->historyTxtExporter->setFilePath($fullPathName)->export($condition);
+        } else {
+            $this->historyConsoleExporter->export($condition);
         }
-
-        $this->historyConsoleExporter->export($condition);
     }
 
     public function setUser($user)
     {
-        $this->user = $user;
+        $this->user = $user['username'];
     }
 }
