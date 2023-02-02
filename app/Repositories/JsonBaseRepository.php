@@ -40,10 +40,6 @@ abstract class JsonBaseRepository extends FileBaseRepository
 
     public function allGroupedBy($field)
     {
-        if (!in_array($field, $this->getEntityFields())) {
-            throw new InvalidFieldException($field);
-        }
-
         return $this->getGroupedBy($field, []);
     }
 
