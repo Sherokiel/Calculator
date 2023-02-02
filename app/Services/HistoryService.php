@@ -11,7 +11,6 @@ class HistoryService
     protected $historyRepository;
     protected $historyConsoleExporter;
     protected $historyTxtExporter;
-
     protected $user;
 
     public function __construct()
@@ -21,6 +20,17 @@ class HistoryService
         $this->historyTxtExporter = new HistoryTxtExporter();
     }
 
+    public function create($argument1, $argument2, $command, $result)
+    {
+        $this->historyRepository->create([
+                'user_name' => $this->user,
+                'date' => now(),
+                'first_operand' => $argument1,
+                'second_operand' => $argument2,
+                'sign' => $command,
+                'result' => $result,
+            ]);
+    }
     public function export($output, $date, $fullPathName)
     {
         $condition = (is_null($date))
