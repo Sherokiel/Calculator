@@ -3,13 +3,14 @@
 function str_to_number($string)
 {
     $isNegative = str_starts_with($string, '-');
+
     $string = str_replace(['+', '-'], ' ', $string);
 
     if ($isNegative) {
         $string = '-' . $string;
     }
 
-    return (string) filter_var($string, FILTER_SANITIZE_NUMBER_INT);
+    return filter_var($string, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 }
 
 function choice($message, $availableValues, $errorText = null)

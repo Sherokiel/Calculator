@@ -13,23 +13,11 @@ abstract class BaseHistoryExporter
         $this->historyRepository = new HistoryRepository();
     }
 
-    public function export($date = null)
+    public function export($condition)
     {
-        return (is_null($date))
-            ? $this->exportAll()
-            : $this->exportByDate($date);
-    }
+        $data = $this->historyRepository->getGroupedBy('date', $condition);
 
-    protected function exportByDate($date)
-    {
-        $data = $this->historyRepository->get(['date' => $date]);
-
-        return $this->showHistoryItems([$date => $data]);
-    }
-
-    protected function exportAll()
-    {
-        return $this->showHistoryItems($this->historyRepository->allGroupedBy('date'));
+        return $this->showHistoryItems($data);
     }
 
     protected function generateHistoryLine($historyItem)

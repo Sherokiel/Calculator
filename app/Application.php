@@ -2,11 +2,14 @@
 
 namespace App;
 
+use App\Exceptions\OperandException;
 use App\Repositories\HistoryRepository;
 use App\Repositories\SettingsRepository;
 use App\Repositories\UserRepository;
 use App\Exporters\HistoryConsoleExporter;
 use App\Exporters\HistoryTxtExporter;
+use App\Services\CalculatorService;
+use App\Services\HistoryService;
 
 class Application
 {
@@ -23,9 +26,12 @@ class Application
         $lang = $this->settingsRepository->getSetting('localization', 'locale');
         $this->messages = $this->loadLocale($lang);
 
-        $this->userRepository = new UserRepository();
+        $this->calculatorService = new CalculatorService();
+        $this->historyService = new HistoryService();
 
+        $this->userRepository = new UserRepository();
         $this->historyRepository = new HistoryRepository();
+
         $this->historyConsoleExporter = new HistoryConsoleExporter();
         $this->historyTxtExporter = new HistoryTxtExporter();
     }
@@ -59,88 +65,47 @@ class Application
                 ? $this->readOperand($this->messages['info']['enter_second'], $command, true)
                 : $this->readOperand($this->messages['info']['enter_exponent'], $command);
 
-            $result = $this->calculate($argument1, $command, $argument2);
+            $result = $this->calculatorService->calculate($argument1, $command, $argument2);
 
             info($this->messages['info']['result'] . $result);
             write_symbol_line(25, '=');
 
-            $this->historyRepository->create([
-                'date' => now(),
-                'first_operand' => $argument1,
-                'second_operand' => $argument2,
-                'sign' => $command,
-                'result' => $result,
-            ]);
-        }
-    }
-
-    protected function calculate($argument1, $command, $argument2)
-    {
-        switch ($command) {
-            case '+':
-                return $argument1 + $argument2;
-            case '-':
-                return $argument1 - $argument2;
-            case '*':
-                return $argument1 * $argument2;
-            case '/':
-                return $argument1 / $argument2;
-            case '^':
-                return pow($argument1, $argument2);
-            case 'sr':
-                return pow($argument1, (1 / $argument2));
-            default:
-                return info($this->getText('errors', 'undefined_command', ['command' => $command]));
+            $this->historyService->create($argument1, $argument2, $command, $result);
         }
     }
 
     protected function readOperand($message, $command, $isSecondOperand = false)
     {
-        do {
-            $argument = readline($message);
-            $int1 = str_to_number($argument);
-            $isDataValid = ($argument == $int1);
+        $argument = readline($message);
 
-            if (!$isDataValid) {
-                info($this->messages['errors']['if_letter']);
+        try {
+            return $this->calculatorService->formatOperand($argument, $command, $isSecondOperand);
+        } catch (OperandException $error) {
+            info($error->getMessage());
 
-                continue;
-            }
-
-            $isDataValid = strlen($argument) > 0;
-            if (!$isDataValid) {
-                info($this->messages['errors']['if_space']);
-
-                continue;
-            }
-
-            settype($argument, 'integer');
-
-            if ($isSecondOperand) {
-                $isDataValid = ($command !== '/' || $argument !== 0);
-
-                if (!$isDataValid) {
-                    info($this->messages['errors']['if_separate_zero']);
-                }
-            }
-        } while (!$isDataValid);
-
-        return $argument;
+            return $this->readOperand($message, $command, $isSecondOperand = false);
+        }
     }
 
     protected function executeSystemCommand($command)
     {
         switch ($command) {
             case(INFO):
-                return show_info_block($this->messages['info']['info_block'], INFO_BLOCK);
+                show_info_block($this->messages['info']['info_block'], INFO_BLOCK);
+
+                break;
             case(HISTORY):
-                return $this->showHistory();
+                $this->showHistory();
+
+                break;
             case(CHOICE_LANGUAGE):
-                return $this->choiceLocale();
+                $this->choiceLocale();
+
+                break;
             case(QUIT):
                 $this->finishApp();
             default:
-                return info($this->getText('errors', 'undefined_command', ['command' => $command]));
+                info($this->getText('errors', 'undefined_command', ['command' => $command]));
         }
     }
 
@@ -153,55 +118,47 @@ class Application
         }
     }
 
-    protected function showHistory()
+    protected function showHistory():void
     {
         if (!$this->historyRepository->isExist()) {
-            return info($this->messages['info']['no_history']);
+            info($this->messages['info']['no_history']);
+        }
+
+        $output = choice($this->getText('questions', 'export_question', ['export' => EXPORT_HISTORY, 'screen' => SCREEN]), [EXPORT_HISTORY, SCREEN]);
+        $fullPathName = null;
+
+        if ($output === EXPORT_HISTORY) {
+            $defaultFileName = 'export_' . now();
+            $nameOfFile = readline($this->getText('info', 'name_of_file_create', ['defaultPath' => $defaultFileName]));
+            $pathToFile = readline($this->messages['info']['name_of_directory_create']);
+
+            $fullPathName = "{$pathToFile}{$nameOfFile}";
+
+            $ext = pathinfo($fullPathName, PATHINFO_EXTENSION);
+
+            if (empty($ext)) {
+                $fullPathName .= '.txt';
+            } elseif ($ext !== 'txt') {
+                info($this->messages['errors']['wrng_ext']);
+            }
+
+            if (file_exists($fullPathName)) {
+                $command = choice($this->getText('questions', 'text_file_exist', ['filepath' => $fullPathName, 'yes' => AGREE, 'no' => DEGREE]), [AGREE, DEGREE]);
+
+                switch ($command) {
+                    case (AGREE):
+                        file_put_contents($fullPathName, '');
+
+                        break;
+                    case (DEGREE):
+                        break;
+                }
+            }
         }
 
         do {
-            $output = choice($this->getText('questions', 'export_question', ['export' => EXPORT_HISTORY, 'screen' => SCREEN]), [EXPORT_HISTORY, SCREEN]);
-
-            $exporter = $this->historyConsoleExporter;
-
-            if ($output === 'export') {
-                $defaultFileName = 'export_' . now();
-                $nameOfFile = readline($this->getText('info', 'name_of_file_create', ['defaultPath' => $defaultFileName]));
-
-                if (empty($nameOfFile)) {
-                    $nameOfFile = $defaultFileName;
-                }
-
-                $pathToFile = readline($this->messages['info']['name_of_directory_create']);
-                $fullPathName = "{$pathToFile}{$nameOfFile}";
-
-                $ext = pathinfo($fullPathName, PATHINFO_EXTENSION);
-
-                if (empty($ext)) {
-                    $fullPathName .= '.txt';
-                } elseif ($ext !== 'txt') {
-                    return info($this->messages['errors']['wrng_ext']);
-                }
-
-                $this->historyTxtExporter->setFilePath($fullPathName);
-
-                if (file_exists($fullPathName)) {
-                    $command = choice($this->getText('questions', 'text_file_exist', ['filepath' => $fullPathName, 'yes' => AGREE, 'no' => DEGREE]), [AGREE, DEGREE]);
-
-                    switch ($command) {
-                        case (AGREE):
-                            file_put_contents($fullPathName, '');
-
-                            break;
-                        case (DEGREE):
-                            return '';
-                    }
-                }
-
-                $exporter = $this->historyTxtExporter;
-            }
-
             $showDateHistory = ask($this->getText('info', 'info_history', ['full' => FULL]));
+
             $isDataValid = (is_date($showDateHistory) || in_array($showDateHistory, HISTORY_COMMANDS));
 
             if (!$isDataValid) {
@@ -218,8 +175,9 @@ class Application
             }
 
             if ($showDateHistory === 'back') {
-                return info($this->messages['info']['history_back']);
+                info($this->messages['info']['history_back']);
             }
+
 
             if ($showDateHistory === FULL) {
                 $showDateHistory = null;
@@ -230,11 +188,11 @@ class Application
             }
         } while (!$isDataValid);
 
-        if ($exporter instanceof HistoryTxtExporter) {
+        $this->historyService->export($output, $showDateHistory, $fullPathName);
+
+        if ($output === EXPORT_HISTORY) {
             info($this->getText('info','history_saved', ['filepath' => $fullPathName]));
         }
-
-        return $exporter->export($showDateHistory);
     }
 
     protected function loadLocale($lang)
@@ -299,6 +257,8 @@ class Application
                 info($this->getText('errors', 'not_found_user', ['username' => $userName]));
             }
         } while ($user['password'] !== $password);
+
+        $this->historyService->setUser($user);
 
         info($this->messages['info']['logged_in']);
 
