@@ -22,7 +22,7 @@ class HistoryService
 
     public function create($argument1, $argument2, $command, $result)
     {
-        $this->historyRepository->create([
+        return $this->historyRepository->create([
             'user_name' => $this->user,
             'date' => now(),
             'first_operand' => $argument1,

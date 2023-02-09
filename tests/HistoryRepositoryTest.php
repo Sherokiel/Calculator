@@ -73,4 +73,5 @@ class HistoryRepositoryTest extends BaseTest
 
         $this->assertEquals($this->getJSONFixture('valid_GroupedBy_data.json'), $result);
     }
+
 }
