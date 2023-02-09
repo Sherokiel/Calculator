@@ -9,8 +9,6 @@ class HistoryServiceTest extends BaseTest
     public function __construct()
     {
         parent::__construct();
-
-        $this->historyService = new HistoryService();
     }
 
     public function testCreateWithoutUser()
