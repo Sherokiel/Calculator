@@ -12,7 +12,7 @@ class HistoryServiceTest extends BaseTest
     public function __construct()
     {
         parent::__construct();
-        readline('11');
+
         $this->historyService = new HistoryService();
     }
 

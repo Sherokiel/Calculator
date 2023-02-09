@@ -1,10 +1,8 @@
-[
-  {
-    "user_name": "TestUser",
-    "date": "09-02-2023",
-    "first_operand": "5",
-    "second_operand": "6",
-    "sign": "*",
-    "result": 30
-  }
-]
+{
+  "user_name": "testUser",
+  "date": "09-02-2023",
+  "first_operand": "5",
+  "second_operand": "6",
+  "sign": "*",
+  "result": "30"
+}
