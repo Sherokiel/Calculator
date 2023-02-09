@@ -12,9 +12,11 @@ class HistoryService
     protected $historyConsoleExporter;
     protected $historyTxtExporter;
     protected $user;
+    protected $env;
 
     public function __construct()
     {
+        $this->env = getenv('APP_ENV');
         $this->historyRepository = new HistoryRepository();
         $this->historyConsoleExporter = new HistoryConsoleExporter();
         $this->historyTxtExporter = new HistoryTxtExporter();
@@ -24,7 +26,7 @@ class HistoryService
     {
         return $this->historyRepository->create([
             'user_name' => $this->user,
-            'date' => now(),
+            'date' => $this->now(),
             'first_operand' => $argument1,
             'second_operand' => $argument2,
             'sign' => $command,
@@ -49,5 +51,12 @@ class HistoryService
     public function setUser($user)
     {
         $this->user = $user['username'];
+    }
+
+    protected function now()
+    {
+        return ($this->env === 'testing' )
+            ? '09-02-2023'
+            : now();
     }
 }

@@ -28,6 +28,7 @@ use Tests\CalculatorServiceTest;
 use Tests\HistoryServiceTest;
 
 putenv('JSON_STORAGE_PATH=test_data_storage');
+putenv('APP_ENV=testing');
 
 try {
     (new HistoryRepositoryTest())->run();
