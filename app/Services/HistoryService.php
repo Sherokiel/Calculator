@@ -12,8 +12,8 @@ class HistoryService
     protected $historyConsoleExporter;
     protected $historyTxtExporter;
     protected $user;
-
     protected $env;
+
     public function __construct()
     {
         $this->env = getenv('APP_ENV');
@@ -53,10 +53,10 @@ class HistoryService
         $this->user = $user['username'];
     }
 
-    public function now()
+    protected function now()
     {
         return ($this->env === 'testing' )
-            ? '09.02.2023'
+            ? '09-02-2023'
             : now();
     }
 }
