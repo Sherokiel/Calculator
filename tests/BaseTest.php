@@ -53,7 +53,7 @@ class BaseTest
 
     protected function beforeTestsProcessing()
     {
-        if (is_dir("tests/fixtures/{$this->testClassName}")) {
+        if (is_dir("tests/fixtures/{$this->testClassName}/dumps")) {
             $dumps = scandir("tests/fixtures/{$this->testClassName}/dumps/");
 
             $dumps = array_filter($dumps, function ($key) {
