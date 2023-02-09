@@ -18,7 +18,7 @@ class HistoryServiceTest extends BaseTest
 
     public function testCreateUserFieldExist()
     {
-        $this->historyService->setUser('TestUser');
+        $this->historyService->setUser(['username' => 'testUser']);
 
         $result = $this->historyService->create('5', '6', '*', '30',);
 
