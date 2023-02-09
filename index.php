@@ -26,6 +26,7 @@ require prepare_file_path('libraries/console_helpers.php');
 require prepare_file_path('constants.php');
 
 putenv('JSON_STORAGE_PATH=data_storage');
+putenv('APP_ENV=locale');
 
 try {
     (new Application())->run();

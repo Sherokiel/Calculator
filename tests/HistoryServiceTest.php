@@ -13,6 +13,13 @@ class HistoryServiceTest extends BaseTest
         $this->historyService = new HistoryService();
     }
 
+    public function testCreateWithoutUser()
+    {
+        $result = $this->historyService->create('5', '6', '*', '30');
+
+        $this->assertEquals($this->getJSONFixture('create_user_field_exist.json'), $result);
+    }
+
     public function testCreateUserFieldExist()
     {
         $this->historyService->setUser(['username' => 'testUser']);
@@ -21,4 +28,6 @@ class HistoryServiceTest extends BaseTest
 
         $this->assertEquals($this->getJSONFixture('create_user_field_exist.json'), $result);
     }
+
+
 }
