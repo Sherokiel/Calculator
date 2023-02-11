@@ -91,8 +91,7 @@ class Application
     {
         switch ($command) {
             case(INFO):
-                show_info_block($this->messages['info']['info_block'], INFO_BLOCK);
-
+                show_info_block($this->messages['info']['info_block'], $this->info_block_locale(INFO_BLOCK));
                 break;
             case(HISTORY):
                 $this->showHistory();
@@ -220,7 +219,11 @@ class Application
         $lang = choice($message , LANGUAGE , $errorMessage);
         $this->settingsRepository->setSetting($lang, 'localization', 'locale');
 
-        popen('cls', 'w');
+        $command = (PHP_OS === 'WINNT')
+            ? 'cls'
+            : 'clean';
+
+        popen($command, 'w');
 
         return $this->messages = $this->loadLocale($lang);
     }
@@ -254,7 +257,7 @@ class Application
             }
 
             if ($user['password'] !== $password) {
-                info($this->getText('errors', 'not_found_user', ['username' => $userName]));
+                info($this->messages['errors']['wrong_pass']);
             }
         } while ($user['password'] !== $password);
 
@@ -263,5 +266,12 @@ class Application
         info($this->messages['info']['logged_in']);
 
         return $user['username'];
+    }
+
+    public function info_block_locale($block)
+    {
+        $block = array_combine(array_keys($block), array_values($this->messages["info_box"]));
+
+        return $block;
     }
 }
