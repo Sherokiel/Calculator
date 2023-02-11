@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-use App\Services\HistoryService;
 use Tests\Support\AssertionException;
 use Tests\Support\AssertionExceptionExpectException;
 use Exception;
