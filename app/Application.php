@@ -11,7 +11,6 @@ use App\Exporters\HistoryTxtExporter;
 use App\Services\CalculatorService;
 use App\Services\HistoryService;
 
-
 class Application
 {
     protected $messages;
@@ -92,7 +91,7 @@ class Application
     {
         switch ($command) {
             case(INFO):
-                show_info_block($this->messages['info']['info_block'], $this->info_block_locale());
+                show_info_block($this->messages['info']['info_block'], $this->getCommandList());
 
                 break;
             case(HISTORY):
@@ -266,18 +265,18 @@ class Application
         return $user['username'];
     }
 
-    public function info_block_locale()
+    protected function getCommandList()
     {
         return [
-            '+' => $this->messages['info_box']['+'],
-            '-' => $this->messages['info_box']['-'],
-            '*' => $this->messages['info_box']['*'],
-            '/' => $this->messages['info_box']['/'],
-            '^' => $this->messages['info_box']['^'],
-            'sq' => $this->messages['info_box']['sq'],
-            QUIT => $this->messages['info_box']['QUIT'],
-            HISTORY => $this->messages['info_box']['HISTORY'],
-            CHOICE_LANGUAGE => $this->messages['info_box']['CHOICE_LANGUAGE']
+            '+' => $this->messages['commands_descriptions']['addition'],
+            '-' => $this->messages['commands_descriptions']['subtraction'],
+            '*' => $this->messages['commands_descriptions']['multiplication'],
+            '/' => $this->messages['commands_descriptions']['division'],
+            '^' => $this->messages['commands_descriptions']['exponentiation'],
+            'sq' => $this->messages['commands_descriptions']['sq'],
+            QUIT => $this->messages['commands_descriptions']['quit'],
+            HISTORY => $this->messages['commands_descriptions']['history'],
+            CHOICE_LANGUAGE => $this->messages['commands_descriptions']['choice_language']
         ];
     }
 }
