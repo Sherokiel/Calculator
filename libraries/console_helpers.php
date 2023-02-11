@@ -97,8 +97,9 @@ function is_date($date, $format = 'j-m-Y')
 function clear_screen()
 {
     $command = (PHP_OS === 'WINNT')
+
         ? 'cls'
-        : 'clean';
+        : 'clear';
 
     popen($command, 'w');
 }
