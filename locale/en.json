@@ -38,7 +38,18 @@
         "undefined_command": "Undefined command %command%",
         "choice_error": "Wrong command. enter %info% for show available commands",
         "wrng_ext": "Wrong extension!",
-        "not_found_user": "User %username% not registered or wrong password",
+        "wrong_pass": "Wrong password",
         "not_match": "Passwords not match"
-    }
+    },
+    "commands_descriptions": {
+        "addition": "Addition operation",
+        "subtraction": "Subtraction operation",
+        "multiplication": "Multiplication operation",
+        "division" : "Division operation",
+        "exponentiation" : "Construction number in square",
+        "sq" : "Find root of number",
+        "quit" : "Exit program",
+        "history" : "Open show history mode",
+        "choice_language" : "To change language"
+   }
 }

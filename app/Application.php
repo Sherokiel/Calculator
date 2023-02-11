@@ -91,7 +91,7 @@ class Application
     {
         switch ($command) {
             case(INFO):
-                show_info_block($this->messages['info']['info_block'], INFO_BLOCK);
+                show_info_block($this->messages['info']['info_block'], $this->getCommandList());
 
                 break;
             case(HISTORY):
@@ -220,7 +220,7 @@ class Application
         $lang = choice($message , LANGUAGE , $errorMessage);
         $this->settingsRepository->setSetting($lang, 'localization', 'locale');
 
-        popen('cls', 'w');
+        clear_screen();
 
         return $this->messages = $this->loadLocale($lang);
     }
@@ -254,7 +254,7 @@ class Application
             }
 
             if ($user['password'] !== $password) {
-                info($this->getText('errors', 'not_found_user', ['username' => $userName]));
+                info($this->messages['errors']['wrong_pass']);
             }
         } while ($user['password'] !== $password);
 
@@ -263,5 +263,20 @@ class Application
         info($this->messages['info']['logged_in']);
 
         return $user['username'];
+    }
+
+    protected function getCommandList()
+    {
+        return [
+            '+' => $this->messages['commands_descriptions']['addition'],
+            '-' => $this->messages['commands_descriptions']['subtraction'],
+            '*' => $this->messages['commands_descriptions']['multiplication'],
+            '/' => $this->messages['commands_descriptions']['division'],
+            '^' => $this->messages['commands_descriptions']['exponentiation'],
+            'sq' => $this->messages['commands_descriptions']['sq'],
+            QUIT => $this->messages['commands_descriptions']['quit'],
+            HISTORY => $this->messages['commands_descriptions']['history'],
+            CHOICE_LANGUAGE => $this->messages['commands_descriptions']['choice_language']
+        ];
     }
 }

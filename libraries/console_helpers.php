@@ -76,7 +76,7 @@ function show_info_block($title, $info, $widthOfBox = 19, $lineWidthRatio = 48)
     foreach ($info as $key => $value) {
         $separatorLength = $lineWidthRatio - mb_strlen($value);
 
-        info (str_pad($key, $separatorLength, '_') . $value, 1);
+        info (mb_str_pad($key, $separatorLength, '_', STR_PAD_RIGHT) . $value, 1);
     }
 
     return write_symbol_line($length, '*', 1);
@@ -92,4 +92,13 @@ function ask($message)
 function is_date($date, $format = 'j-m-Y')
 {
     return date_create_from_format($format, $date);
+}
+
+function clear_screen()
+{
+    $command = (PHP_OS === 'WINNT')
+        ? 'cls'
+        : 'clean';
+
+    popen($command, 'w');
 }
