@@ -132,6 +132,10 @@ class Application
             $nameOfFile = readline($this->getText('info', 'name_of_file_create', ['defaultPath' => $defaultFileName]));
             $pathToFile = readline($this->messages['info']['name_of_directory_create']);
 
+            if ($nameOfFile === '') {
+                $nameOfFile = $defaultFileName;
+            }
+
             $fullPathName = "{$pathToFile}{$nameOfFile}";
 
             $ext = pathinfo($fullPathName, PATHINFO_EXTENSION);
