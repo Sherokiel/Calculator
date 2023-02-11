@@ -92,6 +92,7 @@ class Application
         switch ($command) {
             case(INFO):
                 show_info_block($this->messages['info']['info_block'], $this->info_block_locale(INFO_BLOCK));
+
                 break;
             case(HISTORY):
                 $this->showHistory();
