@@ -93,3 +93,12 @@ function is_date($date, $format = 'j-m-Y')
 {
     return date_create_from_format($format, $date);
 }
+
+function clear_screen()
+{
+    $command = (PHP_OS === 'WINNT')
+        ? 'cls'
+        : 'clean';
+
+    popen($command, 'w');
+}

@@ -16,17 +16,6 @@ const BASIC_COMMANDS = ['+', '-', '*', '/'];
 const AVAILABLE_COMMANDS = [...BASIC_COMMANDS, '^', 'sr', ...SYSTEM_COMMANDS, CHOICE_LANGUAGE];
 const FULL = 'full';
 const HISTORY_COMMANDS = [EXPORT_HISTORY, FULL, 'help', 'back'];
-const INFO_BLOCK = [
-    '+' => 'Addition operation',
-    '-' => 'Subtraction operation',
-    '*' => 'Multiplication operation',
-    '/' => 'Division operation',
-    '^' => 'Construction number in square',
-    'sq' => 'Find root of number',
-    QUIT => 'Exit program',
-    HISTORY => 'Open show history mode',
-    CHOICE_LANGUAGE => 'To change language'
-];
 
 const HISTORY_VIEWER_COMMANDS = [
      FULL => 'Show full history of all time',

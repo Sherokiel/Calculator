@@ -11,6 +11,7 @@ use App\Exporters\HistoryTxtExporter;
 use App\Services\CalculatorService;
 use App\Services\HistoryService;
 
+
 class Application
 {
     protected $messages;
@@ -91,7 +92,7 @@ class Application
     {
         switch ($command) {
             case(INFO):
-                show_info_block($this->messages['info']['info_block'], $this->info_block_locale(INFO_BLOCK));
+                show_info_block($this->messages['info']['info_block'], $this->info_block_locale());
 
                 break;
             case(HISTORY):
@@ -220,11 +221,7 @@ class Application
         $lang = choice($message , LANGUAGE , $errorMessage);
         $this->settingsRepository->setSetting($lang, 'localization', 'locale');
 
-        $command = (PHP_OS === 'WINNT')
-            ? 'cls'
-            : 'clean';
-
-        popen($command, 'w');
+        clear_screen();
 
         return $this->messages = $this->loadLocale($lang);
     }
@@ -269,10 +266,18 @@ class Application
         return $user['username'];
     }
 
-    public function info_block_locale($block)
+    public function info_block_locale()
     {
-        $block = array_combine(array_keys($block), array_values($this->messages["info_box"]));
-
-        return $block;
+        return [
+            '+' => $this->messages['info_box']['+'],
+            '-' => $this->messages['info_box']['-'],
+            '*' => $this->messages['info_box']['*'],
+            '/' => $this->messages['info_box']['/'],
+            '^' => $this->messages['info_box']['^'],
+            'sq' => $this->messages['info_box']['sq'],
+            QUIT => $this->messages['info_box']['QUIT'],
+            HISTORY => $this->messages['info_box']['HISTORY'],
+            CHOICE_LANGUAGE => $this->messages['info_box']['CHOICE_LANGUAGE']
+        ];
     }
 }
