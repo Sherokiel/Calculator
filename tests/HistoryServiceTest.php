@@ -11,6 +11,14 @@ class HistoryServiceTest extends BaseTest
         parent::__construct();
     }
 
+    protected function beforeTestsProcessing()
+    {
+        parent::beforeTestsProcessing();
+
+        $this->historyService = new HistoryService();
+
+    }
+
     public function testCreateWithoutUser()
     {
         $result = $this->historyService->create('5', '6', '*', '30');

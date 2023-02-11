@@ -54,8 +54,6 @@ class BaseTest
 
     protected function beforeTestsProcessing()
     {
-        $this->historyService = new HistoryService();
-
         if (is_dir("tests/fixtures/{$this->testClassName}/dumps")) {
             $dumps = scandir("tests/fixtures/{$this->testClassName}/dumps/");
 
