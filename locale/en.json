@@ -41,15 +41,15 @@
         "wrong_pass": "Wrong password",
         "not_match": "Passwords not match"
     },
-    "info_box": {
-        "+": "Addition operation",
-        "-": "Subtraction operation",
-        "*": "Multiplication operation",
-        "/" : "Division operation",
-        "^" : "Construction number in square",
+    "commands_descriptions": {
+        "addition": "Addition operation",
+        "subtraction": "Subtraction operation",
+        "multiplication": "Multiplication operation",
+        "division" : "Division operation",
+        "exponentiation" : "Construction number in square",
         "sq" : "Find root of number",
-        "QUIT" : "Exit program",
-        "HISTORY" : "Open show history mode",
-        "CHOICE_LANGUAGE" : "To change language"
+        "quit" : "Exit program",
+        "history" : "Open show history mode",
+        "choice_language" : "To change language"
    }
 }
