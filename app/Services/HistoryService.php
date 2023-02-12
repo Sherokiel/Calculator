@@ -35,15 +35,13 @@ class HistoryService
     }
     public function export($output, $date, $fullPathName)
     {
-        $condition['user_name'] = $this->user;
-
-        if ($this->user === 'Admin') {
-            $condition = [];
-        }
-
         $condition = (is_null($date))
             ? []
             : ['date' => $date];
+
+        if ($this->user['role'] !== 'admin') {
+            $condition['user_name'] = $this->user['username'];
+        }
 
         if ($output === EXPORT_HISTORY) {
             $this->historyTxtExporter->setFilePath($fullPathName)->export($condition);
@@ -54,7 +52,7 @@ class HistoryService
 
     public function setUser($user)
     {
-        $this->user = $user['username'];
+        $this->user = $user;
     }
 
     protected function now()
