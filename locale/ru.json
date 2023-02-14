@@ -51,5 +51,8 @@
         "quit" : "Выход",
         "history" : "Режим истории",
         "choice_language" : "Выбор языка"
+    },
+    "exceptions": {
+        "CreateWithoutRequiredFieldsException": "Одно поле не заполнено."
     }
 }

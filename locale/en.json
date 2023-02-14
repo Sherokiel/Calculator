@@ -51,5 +51,8 @@
         "quit" : "Exit program",
         "history" : "Open show history mode",
         "choice_language" : "To change language"
-   }
+   },
+    "exceptions": {
+        "CreateWithoutRequiredFieldsException": "One of required fields does not filled."
+    }
 }

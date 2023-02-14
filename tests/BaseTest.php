@@ -102,7 +102,7 @@ class BaseTest
             $callback();
         } catch (Exception $error) {
             if ($error instanceof $expectedExceptionClass){
-                $this->assertEquals($error->getMessage(), $expectedMessage);
+                $this->assertEquals($expectedMessage, $error->getMessage());
             } else {
                 throw new AssertionExceptionExpectException($expectedExceptionClass);
             }

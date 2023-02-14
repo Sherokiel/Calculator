@@ -15,6 +15,7 @@ require prepare_file_path('app/Repositories/JsonBaseRepository.php');
 require prepare_file_path('app/Repositories/UserRepository.php');
 require prepare_file_path('app/Repositories/HistoryRepository.php');
 require prepare_file_path('app/Repositories/SettingsRepository.php');
+require prepare_file_path('app/Traits/ExceptionLocale.php');
 require prepare_file_path('app/Exceptions/InvalidFieldException.php');
 require prepare_file_path('app/Exceptions/CreateWithoutRequiredFieldsException.php');
 require prepare_file_path('app/Exceptions/UndefinedCalculatorCommandException.php');

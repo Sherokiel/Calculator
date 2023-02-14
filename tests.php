@@ -12,6 +12,7 @@ require prepare_file_path('app/Repositories/UserRepository.php');
 require prepare_file_path('app/Repositories/HistoryRepository.php');
 require prepare_file_path('app/Services/CalculatorService.php');
 require prepare_file_path('app/Services/HistoryService.php');
+require prepare_file_path('app/Traits/ExceptionLocale.php');
 require prepare_file_path('app/Exceptions/UndefinedCalculatorCommandException.php');
 require prepare_file_path('app/Exceptions/InvalidFieldException.php');
 require prepare_file_path('app/Exceptions/CreateWithoutRequiredFieldsException.php');
