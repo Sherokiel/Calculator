@@ -9,6 +9,8 @@ require prepare_file_path('app/Exporters/HistoryTxtExporter.php');
 require prepare_file_path('app/Repositories/FileBaseRepository.php');
 require prepare_file_path('app/Repositories/JsonBaseRepository.php');
 require prepare_file_path('app/Repositories/UserRepository.php');
+require prepare_file_path('app/Repositories/IniBaseRepository.php');
+require prepare_file_path('app/Repositories/SettingsRepository.php');
 require prepare_file_path('app/Repositories/HistoryRepository.php');
 require prepare_file_path('app/Services/CalculatorService.php');
 require prepare_file_path('app/Services/HistoryService.php');
