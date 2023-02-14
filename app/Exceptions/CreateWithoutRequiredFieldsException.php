@@ -8,7 +8,6 @@ use Traits\locale;
 class CreateWithoutRequiredFieldsException extends Exception
 {
     use locale;
-    protected $message;
 
     public function __construct()
     {
