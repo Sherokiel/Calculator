@@ -35,7 +35,7 @@
         "if_space": "Cant write space.",
         "if_separate_zero": "Cant separate on zero.",
         "history_wrong_input": "Please input a valid date in format DD-MM-YYYY (e.g. 25-12-2022).",
-        "undefined_command": "Undefined command %command%",
+        "undefined_command": "Undefined command.",
         "choice_error": "Wrong command. enter %info% for show available commands",
         "wrng_ext": "Wrong extension!",
         "wrong_pass": "Wrong password",
@@ -53,6 +53,7 @@
         "choice_language" : "To change language"
    },
     "exceptions": {
-        "CreateWithoutRequiredFieldsException": "One of required fields does not filled."
+        "CreateWithoutRequiredFieldsException": "One of required fields does not filled.",
+        "InvalidFieldException": "Field %field% is not valid."
     }
 }
