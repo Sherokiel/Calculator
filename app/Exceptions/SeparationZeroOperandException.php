@@ -3,11 +3,11 @@
 namespace App\Exceptions;
 
 use App\Exceptions\OperandException;
-use Traits\locale;
+use Traits\TranslationTrait;
 
 class SeparationZeroOperandException extends OperandException
 {
-    use locale;
+    use TranslationTrait;
     public function __construct()
     {
         $message = $this->getText('errors', 'if_separate_zero');

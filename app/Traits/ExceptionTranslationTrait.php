@@ -4,7 +4,7 @@ namespace Traits;
 
 use App\Repositories\SettingsRepository;
 
-trait locale {
+trait TranslationTrait {
 
     protected function getText($typeOfText, $text, $replacements = null)
     {

@@ -3,11 +3,11 @@
 namespace App\Exceptions;
 
 use Exception;
-use Traits\locale;
+use Traits\TranslationTrait;
 
 class UndefinedCalculatorCommandException extends Exception
 {
-    use locale;
+    use TranslationTrait;
 
     public function __construct()
     {
