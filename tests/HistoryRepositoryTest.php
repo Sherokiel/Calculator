@@ -5,6 +5,7 @@ namespace Tests;
 use App\Exceptions\CreateWithoutRequiredFieldsException;
 use App\Exceptions\InvalidFieldException;
 use App\Repositories\HistoryRepository;
+use App\Repositories\SettingsRepository;
 
 class HistoryRepositoryTest extends BaseTest
 {
@@ -13,6 +14,7 @@ class HistoryRepositoryTest extends BaseTest
         parent::__construct();
 
         $this->historyRepository = new HistoryRepository();
+        $this->settingRepository = new SettingsRepository();
     }
 
     public function testCreateCheckResult()
@@ -51,18 +53,46 @@ class HistoryRepositoryTest extends BaseTest
         $this->assertEquals($this->getJSONFixture('create_success_history_state.json'), $result);
     }
 
-    public function testCreateNotAllFields()
+    public function testCreateNotAllFieldsRus()
     {
-        $this->assertExceptionThrowed(CreateWithoutRequiredFieldsException::class, 'One of required fields does not filled.', function () {
+        $data = '[localization]' . PHP_EOL . 'locale = ru' . PHP_EOL;
+
+        file_put_contents("{$this->iniDirName}/settings.ini", $data);
+
+        $this->CreateNotAllFields('Одно поле не заполнено.');
+    }
+
+    public function testCreateNotAllFieldsEng()
+    {
+        $this->CreateNotAllFields('One of required fields does not filled.');
+    }
+
+    public function testGroupByInvalidFieldCheckThrowExceptionEng()
+    {
+        $this->GroupByInvalidFieldCheckThrowException('Field invalidField is not valid.');
+    }
+
+    public function testGroupByInvalidFieldCheckThrowExceptionRus()
+    {
+        $data = '[localization]' . PHP_EOL . 'locale = ru' . PHP_EOL;
+
+        file_put_contents("{$this->iniDirName}/settings.ini", $data);
+
+        $this->GroupByInvalidFieldCheckThrowException("Неверное поле invalidField.");
+    }
+
+    public function CreateNotAllFields($expectedMessage)
+    {
+        $this->assertExceptionThrowed(CreateWithoutRequiredFieldsException::class, $expectedMessage, function () {
             $data = $this->getJSONFixture('not_all_fields_create_data.json');
 
             $this->historyRepository->create($data);
         });
     }
 
-    public function testGroupByInvalidFieldCheckThrowException()
+    public function GroupByInvalidFieldCheckThrowException($expectedMessage)
     {
-        $this->assertExceptionThrowed(InvalidFieldException::class, 'Field invalidField is not valid.', function () {
+        $this->assertExceptionThrowed(InvalidFieldException::class, $expectedMessage, function () {
             $this->historyRepository->allGroupedBy('invalidField');
         });
     }

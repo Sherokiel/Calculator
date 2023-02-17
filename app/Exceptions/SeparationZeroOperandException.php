@@ -10,8 +10,8 @@ class SeparationZeroOperandException extends OperandException
     use locale;
     public function __construct()
     {
-        $message = $this->getLocaleText();
+        $message = $this->getText('errors', 'if_separate_zero');
 
-        parent::__construct($message['errors']['if_separate_zero']);
+        parent::__construct($message);
     }
 }

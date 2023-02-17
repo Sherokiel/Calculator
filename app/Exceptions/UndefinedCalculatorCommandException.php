@@ -11,8 +11,8 @@ class UndefinedCalculatorCommandException extends Exception
 
     public function __construct()
     {
-        $message = $this->getLocaleText();
+        $message = $this->getText('errors', 'undefined_command');
 
-        parent::__construct($message['errors']['undefined_command']);
+        parent::__construct($message);
     }
 }

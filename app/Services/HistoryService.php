@@ -50,7 +50,7 @@ class HistoryService
         }
     }
 
-    public function setUser($user)
+    public function setUser(array $user)
     {
         $this->user = $user;
     }

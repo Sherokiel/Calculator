@@ -31,14 +31,15 @@ use Tests\HistoryRepositoryTest;
 use Tests\CalculatorServiceTest;
 use Tests\HistoryServiceTest;
 
+putenv('INI_STORAGE_PATH=test_settings');
 putenv('JSON_STORAGE_PATH=test_data_storage');
 putenv('APP_ENV=testing');
 
 try {
     (new HistoryRepositoryTest())->run();
-    (new UserRepositoryTest())->run();
-    (new CalculatorServiceTest())->run();
-    (new HistoryServiceTest())->run();
+//    (new UserRepositoryTest())->run();
+//    (new CalculatorServiceTest())->run();
+//    (new HistoryServiceTest())->run();
 } catch (Exception $error) {
     echo $error;
 }

@@ -11,8 +11,8 @@ class LetterOperandException extends OperandException
 
     public function __construct()
     {
-        $message = $this->getLocaleText();
+        $message = $this->getText('errors', 'if_letter');
 
-        parent::__construct($message['errors']['if_letter']);
+        parent::__construct($message);
     }
 }
