@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Exceptions\HistoryServiceUserNullException;
+use App\Exceptions\CreateHistoryEmptyUserException;
 use App\Repositories\HistoryRepository;
 use App\Exporters\HistoryConsoleExporter;
 use App\Exporters\HistoryTxtExporter;
@@ -26,8 +26,8 @@ class HistoryService
 
     public function create($argument1, $argument2, $command, $result)
     {
-        if (is_null($this->user)) {
-            throw new HistoryServiceUserNullException();
+        if (empty($this->user)) {
+            throw new CreateHistoryEmptyUserException();
         }
 
         return $this->historyRepository->create([

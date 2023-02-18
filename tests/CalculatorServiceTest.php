@@ -27,15 +27,15 @@ class CalculatorServiceTest extends BaseTest
 
         file_put_contents("{$this->iniDirName}/settings.ini", $data);
 
-        $this-> CalculateUndefinedCommandsException('Нераспознаная команда.');
+        $this->assertUndefinedCalculatorCommandExceptionCatched('Нераспознаная команда.');
     }
 
     public function testCreateNotAllFieldsEng()
     {
-        $this->CalculateUndefinedCommandsException('Undefined command.');
+        $this->assertUndefinedCalculatorCommandExceptionCatched('Undefined command.');
     }
 
-    protected function CalculateUndefinedCommandsException($expectedMessage)
+    protected function assertUndefinedCalculatorCommandExceptionCatched($expectedMessage)
     {
         $this->assertExceptionThrowed(UndefinedCalculatorCommandException::class, $expectedMessage, function () {
             $this->CalculationService->calculate('1', '>', '2');

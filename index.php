@@ -27,7 +27,7 @@ require prepare_file_path('app/Exceptions/SeparationZeroOperandException.php');
 require prepare_file_path('libraries/console_helpers.php');
 require prepare_file_path('constants.php');
 
-putenv ("INI_STORAGE_PATH=settings");
+putenv('INI_STORAGE_PATH=settings');
 putenv('JSON_STORAGE_PATH=data_storage');
 putenv('APP_ENV=locale');
 

@@ -4,14 +4,15 @@ namespace Traits;
 
 use App\Repositories\SettingsRepository;
 
-trait TranslationTrait {
+trait TranslationTrait
+{
 
     protected function getText($typeOfText, $text, $replacements = null)
     {
         $settingRepository = new SettingsRepository();
         $lang = $settingRepository->getSetting('localization', 'locale');
-        $message = json_decode(file_get_contents(prepare_file_path("locale/$lang.json")), true);;
-        $message = $message[$typeOfText][$text];
+        $messages = json_decode(file_get_contents(prepare_file_path("locale/$lang.json")), true);;
+        $message = $messages[$typeOfText][$text];
 
         if (!is_null($replacements)) {
             foreach ($replacements as $key => $value) {

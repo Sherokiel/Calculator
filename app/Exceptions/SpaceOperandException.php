@@ -8,6 +8,7 @@ use Traits\TranslationTrait;
 class SpaceOperandException extends OperandException
 {
     use TranslationTrait;
+
     public function __construct()
     {
         $message = $this->getText('errors', 'if_space');

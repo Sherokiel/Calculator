@@ -31,7 +31,6 @@ class HistoryServiceTest extends BaseTest
 
     public function testCreateWithoutUser()
     {
-        readline('До вот этого момента доходит');
         $this->assertExceptionThrowed(CreateHistoryEmptyUserException::class, 'History can not been created without auth user.', function () {
             $this->historyService->create('5', '6', '*', '30');
         });
