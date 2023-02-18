@@ -11,7 +11,7 @@ class CreateWithoutRequiredFieldsException extends Exception
 
     public function __construct()
     {
-        $message = $this->getText('exceptions', 'CreateWithoutRequiredFieldsException');
+        $message = $this->getText('exceptions', 'create_without_required_fields');
 
         parent::__construct($message);
     }

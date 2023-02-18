@@ -14,8 +14,8 @@ require prepare_file_path('app/Repositories/SettingsRepository.php');
 require prepare_file_path('app/Repositories/HistoryRepository.php');
 require prepare_file_path('app/Services/CalculatorService.php');
 require prepare_file_path('app/Services/HistoryService.php');
-require prepare_file_path('app/Traits/ExceptionTranslationTrait.php');
-require prepare_file_path('app/Exceptions/HistoryServiceUserNullException.php');
+require prepare_file_path('app/Traits/TranslationTrait.php');
+require prepare_file_path('app/Exceptions/CreateHistoryEmptyUserException.php');
 require prepare_file_path('app/Exceptions/UndefinedCalculatorCommandException.php');
 require prepare_file_path('app/Exceptions/InvalidFieldException.php');
 require prepare_file_path('app/Exceptions/CreateWithoutRequiredFieldsException.php');
@@ -25,7 +25,6 @@ require prepare_file_path('tests/UserRepositoryTest.php');
 require prepare_file_path('tests/HistoryRepositoryTest.php');
 require prepare_file_path('tests/CalculatorServiceTest.php');
 require prepare_file_path('tests/HistoryServiceTest.php');
-
 
 use Tests\UserRepositoryTest;
 use Tests\HistoryRepositoryTest;

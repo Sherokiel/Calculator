@@ -11,7 +11,7 @@ class InvalidFieldException extends Exception
 
     public function __construct($field)
     {
-        $message = $this->getText('exceptions', 'InvalidFieldException', ['field' => $field]);
+        $message = $this->getText('exceptions', 'invalid_field', ['field' => $field]);
 
         parent::__construct($message);
     }

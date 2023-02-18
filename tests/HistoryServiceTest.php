@@ -3,7 +3,7 @@
 namespace Tests;
 
 use App\Services\HistoryService;
-use App\Exceptions\HistoryServiceUserNullException;
+use App\Exceptions\CreateHistoryEmptyUserException;
 
 class HistoryServiceTest extends BaseTest
 {
@@ -20,12 +20,6 @@ class HistoryServiceTest extends BaseTest
 
     }
 
-    public function testCreateWithoutUser()
-    {
-        $this->assertExceptionThrowed(HistoryServiceUserNullException::class, 'Field user cant be empty or null.', function () {
-            $this->historyService->create('5', '6', '*', '30');
-        });
-    }
     public function testCreateUserFieldExist()
     {
         $this->historyService->setUser(['user_name' => 'testUser']);
@@ -33,5 +27,13 @@ class HistoryServiceTest extends BaseTest
         $result = $this->historyService->create('5', '6', '*', '30');
 
         $this->assertEquals($this->getJSONFixture('create_user_field_exist.json'), $result);
+    }
+
+    public function testCreateWithoutUser()
+    {
+        readline('До вот этого момента доходит');
+        $this->assertExceptionThrowed(CreateHistoryEmptyUserException::class, 'History can not been created without auth user.', function () {
+            $this->historyService->create('5', '6', '*', '30');
+        });
     }
 }

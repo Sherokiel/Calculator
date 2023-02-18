@@ -53,7 +53,7 @@
         "choice_language" : "Выбор языка"
     },
     "exceptions": {
-        "CreateWithoutRequiredFieldsException": "Одно поле не заполнено.",
-        "InvalidFieldException": "Неверное поле %field%."
+        "create_without_required_fields": "Одно поле не заполнено.",
+        "invalid_field": "Неверное поле %field%."
     }
 }

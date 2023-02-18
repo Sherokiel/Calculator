@@ -53,7 +53,7 @@
         "choice_language" : "To change language"
    },
     "exceptions": {
-        "CreateWithoutRequiredFieldsException": "One of required fields does not filled.",
-        "InvalidFieldException": "Field %field% is not valid."
+        "create_without_required_fields": "One of required fields does not filled.",
+        "invalid_field": "Field %field% is not valid."
     }
 }
