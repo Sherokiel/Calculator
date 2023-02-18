@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
+use App\Exceptions\HistoryServiceUserNullException;
 use App\Repositories\HistoryRepository;
 use App\Exporters\HistoryConsoleExporter;
 use App\Exporters\HistoryTxtExporter;
+use Exception;
 
 class HistoryService
 {
@@ -24,8 +26,12 @@ class HistoryService
 
     public function create($argument1, $argument2, $command, $result)
     {
+        if (is_null($this->user)) {
+            throw new HistoryServiceUserNullException();
+        }
+
         return $this->historyRepository->create([
-            'user_name' => $this->user,
+            'user_name' => $this->user['user_name'],
             'date' => $this->now(),
             'first_operand' => $argument1,
             'second_operand' => $argument2,
@@ -33,6 +39,7 @@ class HistoryService
             'result' => $result,
         ]);
     }
+
     public function export($output, $date, $fullPathName)
     {
         $condition = (is_null($date))
@@ -40,7 +47,7 @@ class HistoryService
             : ['date' => $date];
 
         if ($this->user['role'] !== 'admin') {
-            $condition['user_name'] = $this->user['username'];
+            $condition['user_name'] = $this->user['user_name'];
         }
 
         if ($output === EXPORT_HISTORY) {

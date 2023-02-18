@@ -233,7 +233,7 @@ class Application
     {
         do {
             $userName = readline($this->messages['info']['enter_user']);
-            $user = $this->userRepository->first(['username' => $userName]);
+            $user = $this->userRepository->first(['user_name' => $userName]);
 
             if (empty($user)) {
                 do {
@@ -247,8 +247,9 @@ class Application
                     }
 
                     $user = $this->userRepository->create([
-                        'username' => $userName,
-                        'password' => $password
+                        'user_name' => $userName,
+                        'password' => $password,
+                        'role' => 'basic'
                     ]);
 
                     info($this->messages['info']['reg_in']);
@@ -266,7 +267,7 @@ class Application
 
         info($this->messages['info']['logged_in']);
 
-        return $user['username'];
+        return $user['user_name'];
     }
 
     protected function getCommandList()

@@ -21,9 +21,23 @@ class CalculatorServiceTest extends BaseTest
         $this->assertEquals(11, $result);
     }
 
-    protected function testCalculateUndefinedCommandsException()
+    public function testCreateNotAllFieldsRus()
     {
-        $this->assertExceptionThrowed(UndefinedCalculatorCommandException::class, 'Undefined command.', function () {
+        $data = '[localization]' . PHP_EOL . 'locale = ru' . PHP_EOL;
+
+        file_put_contents("{$this->iniDirName}/settings.ini", $data);
+
+        $this-> CalculateUndefinedCommandsException('Нераспознаная команда.');
+    }
+
+    public function testCreateNotAllFieldsEng()
+    {
+        $this->CalculateUndefinedCommandsException('Undefined command.');
+    }
+
+    protected function CalculateUndefinedCommandsException($expectedMessage)
+    {
+        $this->assertExceptionThrowed(UndefinedCalculatorCommandException::class, $expectedMessage, function () {
             $this->CalculationService->calculate('1', '>', '2');
         });
     }

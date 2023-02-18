@@ -11,6 +11,6 @@ class UserRepository extends JsonBaseRepository
 
     protected function getEntityFields(): array
     {
-        return ['username', 'password'];
+        return ['user_name', 'password'];
     }
 }

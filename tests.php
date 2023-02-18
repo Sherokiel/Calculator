@@ -14,7 +14,8 @@ require prepare_file_path('app/Repositories/SettingsRepository.php');
 require prepare_file_path('app/Repositories/HistoryRepository.php');
 require prepare_file_path('app/Services/CalculatorService.php');
 require prepare_file_path('app/Services/HistoryService.php');
-require prepare_file_path('app/Traits/ExceptionLocale.php');
+require prepare_file_path('app/Traits/ExceptionTranslationTrait.php');
+require prepare_file_path('app/Exceptions/HistoryServiceUserNullException.php');
 require prepare_file_path('app/Exceptions/UndefinedCalculatorCommandException.php');
 require prepare_file_path('app/Exceptions/InvalidFieldException.php');
 require prepare_file_path('app/Exceptions/CreateWithoutRequiredFieldsException.php');
@@ -37,9 +38,9 @@ putenv('APP_ENV=testing');
 
 try {
     (new HistoryRepositoryTest())->run();
-//    (new UserRepositoryTest())->run();
-//    (new CalculatorServiceTest())->run();
-//    (new HistoryServiceTest())->run();
+    (new UserRepositoryTest())->run();
+    (new CalculatorServiceTest())->run();
+    (new HistoryServiceTest())->run();
 } catch (Exception $error) {
     echo $error;
 }

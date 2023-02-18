@@ -46,23 +46,50 @@ class UserRepositoryTest extends BaseTest
         $dataTest = $this->getJSONFixture('extra_fields_create_data.json');
         $this->userRepository->create($dataTest);
 
-
         $result = $this->getDataSet('test_data_storage/users.json');
         $this->assertEquals([$this->getJSONFixture('valid_create_data.json')], $result);
     }
 
-    public function testCreateNotAllFields()
+    public function testCreateNotAllFieldsRus()
     {
-        $this->assertExceptionThrowed(CreateWithoutRequiredFieldsException::class, 'One of required fields does not filled.', function () {
+        $data = '[localization]' . PHP_EOL . 'locale = ru' . PHP_EOL;
+
+        file_put_contents("{$this->iniDirName}/settings.ini", $data);
+
+        $this->CreateNotAllFields('Одно поле не заполнено.');
+    }
+
+    public function testCreateNotAllFieldsEng()
+    {
+        $this->CreateNotAllFields('One of required fields does not filled.');
+    }
+
+    public function CreateNotAllFields($expectedMessage)
+    {
+        $this->assertExceptionThrowed(CreateWithoutRequiredFieldsException::class, $expectedMessage, function () {
             $data = $this->getJSONFixture('not_all_fields_create_data.json');
 
             $this->userRepository->create($data);
         });
     }
 
-    public function testGroupByInvalidFieldCheckThrowException()
+    public function testGroupByInvalidFieldCheckThrowExceptionEng()
     {
-        $this->assertExceptionThrowed(InvalidFieldException::class, 'Field invalidField is not valid.', function () {
+        $this->GroupByInvalidFieldCheckThrowException('Field invalidField is not valid.');
+    }
+
+    public function testGroupByInvalidFieldCheckThrowExceptionRus()
+    {
+        $data = '[localization]' . PHP_EOL . 'locale = ru' . PHP_EOL;
+
+        file_put_contents("{$this->iniDirName}/settings.ini", $data);
+
+        $this->GroupByInvalidFieldCheckThrowException("Неверное поле invalidField.");
+    }
+
+    public function GroupByInvalidFieldCheckThrowException($expectedMessage)
+    {
+        $this->assertExceptionThrowed(InvalidFieldException::class, $expectedMessage, function () {
             $this->userRepository->allGroupedBy('invalidField');
         });
     }

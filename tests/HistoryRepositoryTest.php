@@ -5,7 +5,6 @@ namespace Tests;
 use App\Exceptions\CreateWithoutRequiredFieldsException;
 use App\Exceptions\InvalidFieldException;
 use App\Repositories\HistoryRepository;
-use App\Repositories\SettingsRepository;
 
 class HistoryRepositoryTest extends BaseTest
 {
@@ -14,7 +13,6 @@ class HistoryRepositoryTest extends BaseTest
         parent::__construct();
 
         $this->historyRepository = new HistoryRepository();
-        $this->settingRepository = new SettingsRepository();
     }
 
     public function testCreateCheckResult()
