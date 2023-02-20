@@ -249,7 +249,7 @@ class Application
                     $user = $this->userRepository->create([
                         'user_name' => $userName,
                         'password' => $password,
-                        'role' => 'basic'
+                        'role' => UserRepository::ROLE_BASIC
                     ]);
 
                     info($this->messages['info']['reg_in']);

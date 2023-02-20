@@ -115,4 +115,11 @@ class BaseTest
             }
         }
     }
+
+    protected function setLocale($locale)
+    {
+        $data = '[localization]' . PHP_EOL . "locale = {$locale}" . PHP_EOL;
+
+        file_put_contents("{$this->iniDirName}/settings.ini", $data);
+    }
 }

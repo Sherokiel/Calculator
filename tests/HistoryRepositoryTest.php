@@ -72,9 +72,7 @@ class HistoryRepositoryTest extends BaseTest
 
     public function testGroupByInvalidFieldCheckThrowExceptionRus()
     {
-        $data = '[localization]' . PHP_EOL . 'locale = ru' . PHP_EOL;
-
-        file_put_contents("{$this->iniDirName}/settings.ini", $data);
+        $this->setLocale('ru');
 
         $this->GroupByInvalidFieldCheckThrowException("Неверное поле invalidField.");
     }
