@@ -11,12 +11,12 @@ class CalculatorServiceTest extends BaseTest
     {
         parent::__construct();
 
-        $this->CalculationService = new CalculatorService();
+        $this->calculationService = new CalculatorService();
     }
 
     protected function testCalculate()
     {
-        $result = $this->CalculationService->calculate(5, '+', 6);
+        $result = $this->calculationService->calculate(5, '+', 6);
 
         $this->assertEquals(11, $result);
     }
@@ -36,7 +36,7 @@ class CalculatorServiceTest extends BaseTest
     protected function assertUndefinedCalculatorCommandExceptionCatched($expectedMessage)
     {
         $this->assertExceptionThrowed(UndefinedCalculatorCommandException::class, $expectedMessage, function () {
-            $this->CalculationService->calculate('1', '>', '2');
+            $this->calculationService->calculate('1', '>', '2');
         });
     }
 }

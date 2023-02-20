@@ -53,31 +53,29 @@ class HistoryRepositoryTest extends BaseTest
 
     public function testCreateNotAllFieldsRus()
     {
-        $data = '[localization]' . PHP_EOL . 'locale = ru' . PHP_EOL;
+        $this->setLocale('ru');
 
-        file_put_contents("{$this->iniDirName}/settings.ini", $data);
-
-        $this->CreateNotAllFields('Одно поле не заполнено.');
+        $this->assertCreateNotAllFieldsExceptionCaught('Одно поле не заполнено.');
     }
 
     public function testCreateNotAllFieldsEng()
     {
-        $this->CreateNotAllFields('One of required fields does not filled.');
+        $this->assertCreateNotAllFieldsExceptionCaught('One of required fields does not filled.');
     }
 
     public function testGroupByInvalidFieldCheckThrowExceptionEng()
     {
-        $this->GroupByInvalidFieldCheckThrowException('Field invalidField is not valid.');
+        $this->assertGroupByInvalidFieldExceptionThrowed('Field invalidField is not valid.');
     }
 
     public function testGroupByInvalidFieldCheckThrowExceptionRus()
     {
         $this->setLocale('ru');
 
-        $this->GroupByInvalidFieldCheckThrowException("Неверное поле invalidField.");
+        $this->assertGroupByInvalidFieldExceptionThrowed("Неверное поле invalidField.");
     }
 
-    public function CreateNotAllFields($expectedMessage)
+    public function assertCreateNotAllFieldsExceptionCaught(string $expectedMessage)
     {
         $this->assertExceptionThrowed(CreateWithoutRequiredFieldsException::class, $expectedMessage, function () {
             $data = $this->getJSONFixture('not_all_fields_create_data.json');
@@ -86,7 +84,7 @@ class HistoryRepositoryTest extends BaseTest
         });
     }
 
-    public function GroupByInvalidFieldCheckThrowException($expectedMessage)
+    public function assertGroupByInvalidFieldExceptionThrowed(string $expectedMessage)
     {
         $this->assertExceptionThrowed(InvalidFieldException::class, $expectedMessage, function () {
             $this->historyRepository->allGroupedBy('invalidField');
