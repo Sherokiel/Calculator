@@ -52,9 +52,7 @@ class UserRepositoryTest extends BaseTest
 
     public function testCreateNotAllFieldsRus()
     {
-        $data = '[localization]' . PHP_EOL . 'locale = ru' . PHP_EOL;
-
-        file_put_contents("{$this->iniDirName}/settings.ini", $data);
+        $this->setLocale('ru');
 
         $this->assertCreateNotAllFieldsExceptionThrowed('Одно поле не заполнено.');
     }
