@@ -132,6 +132,10 @@ class Application
             $nameOfFile = readline($this->getText('info', 'name_of_file_create', ['defaultPath' => $defaultFileName]));
             $pathToFile = readline($this->messages['info']['name_of_directory_create']);
 
+            if (empty($nameOfFile)) {
+                $nameOfFile = $defaultFileName;
+            }
+
             $fullPathName = "{$pathToFile}{$nameOfFile}";
 
             $ext = pathinfo($fullPathName, PATHINFO_EXTENSION);
@@ -229,7 +233,7 @@ class Application
     {
         do {
             $userName = readline($this->messages['info']['enter_user']);
-            $user = $this->userRepository->first(['username' => $userName]);
+            $user = $this->userRepository->first(['user_name' => $userName]);
 
             if (empty($user)) {
                 do {
@@ -243,8 +247,9 @@ class Application
                     }
 
                     $user = $this->userRepository->create([
-                        'username' => $userName,
-                        'password' => $password
+                        'user_name' => $userName,
+                        'password' => $password,
+                        'role' => UserRepository::ROLE_BASIC
                     ]);
 
                     info($this->messages['info']['reg_in']);
@@ -262,7 +267,7 @@ class Application
 
         info($this->messages['info']['logged_in']);
 
-        return $user['username'];
+        return $user['user_name'];
     }
 
     protected function getCommandList()

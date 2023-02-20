@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 class UserRepository extends JsonBaseRepository
 {
+    const ROLE_BASIC = 'basic';
+
     public function __construct()
     {
         return parent::__construct('users');
@@ -11,6 +13,6 @@ class UserRepository extends JsonBaseRepository
 
     protected function getEntityFields(): array
     {
-        return ['username', 'password'];
+        return ['user_name', 'password'];
     }
 }

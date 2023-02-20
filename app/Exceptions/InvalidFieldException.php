@@ -3,11 +3,16 @@
 namespace App\Exceptions;
 
 use Exception;
+use Traits\TranslationTrait;
 
 class InvalidFieldException extends Exception
 {
+    use TranslationTrait;
+
     public function __construct($field)
     {
-        parent::__construct("Field {$field} is not valid.");
+        $message = $this->getText('exceptions', 'invalid_field', ['field' => $field]);
+
+        parent::__construct($message);
     }
 }

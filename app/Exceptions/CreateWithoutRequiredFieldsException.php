@@ -3,11 +3,16 @@
 namespace App\Exceptions;
 
 use Exception;
+use Traits\TranslationTrait;
 
 class CreateWithoutRequiredFieldsException extends Exception
 {
+    use TranslationTrait;
+
     public function __construct()
     {
-        parent::__construct('One of required fields does not filled.');
+        $message = $this->getText('exceptions', 'create_without_required_fields');
+
+        parent::__construct($message);
     }
 }

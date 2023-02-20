@@ -10,7 +10,8 @@ class BaseTest
 {
     public function __construct()
     {
-        $this->dirName = getenv('JSON_STORAGE_PATH');
+        $this->iniDirName = getenv('INI_STORAGE_PATH');
+        $this->jsonDirName = getenv('JSON_STORAGE_PATH');
         $this->testClassName = substr(strrchr(get_class($this), '\\'), 1);
     }
 
@@ -64,7 +65,13 @@ class BaseTest
                 if (file_exists("tests/fixtures/{$this->testClassName}/dumps/{$dump}")) {
                     $data = $this->getDataSet("tests/fixtures/{$this->testClassName}/dumps/{$dump}");
 
-                    $this->putJSONFixture("{$this->dirName}/{$dump}", $data);
+                    if(pathinfo($dump, PATHINFO_EXTENSION) === 'ini') {
+                        $data = file_get_contents("tests/fixtures/{$this->testClassName}/dumps/{$dump}");
+
+                        file_put_contents("{$this->iniDirName}/{$dump}", $data);
+                    } else {
+                        $this->putJSONFixture("{$this->jsonDirName}/{$dump}", $data);
+                    }
                 }
             }
         }
@@ -102,10 +109,17 @@ class BaseTest
             $callback();
         } catch (Exception $error) {
             if ($error instanceof $expectedExceptionClass){
-                $this->assertEquals($error->getMessage(), $expectedMessage);
+                $this->assertEquals($expectedMessage, $error->getMessage());
             } else {
                 throw new AssertionExceptionExpectException($expectedExceptionClass);
             }
         }
+    }
+
+    protected function setLocale($locale)
+    {
+        $data = '[localization]' . PHP_EOL . "locale = {$locale}" . PHP_EOL;
+
+        file_put_contents("{$this->iniDirName}/settings.ini", $data);
     }
 }

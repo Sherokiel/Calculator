@@ -9,9 +9,13 @@ require prepare_file_path('app/Exporters/HistoryTxtExporter.php');
 require prepare_file_path('app/Repositories/FileBaseRepository.php');
 require prepare_file_path('app/Repositories/JsonBaseRepository.php');
 require prepare_file_path('app/Repositories/UserRepository.php');
+require prepare_file_path('app/Repositories/IniBaseRepository.php');
+require prepare_file_path('app/Repositories/SettingsRepository.php');
 require prepare_file_path('app/Repositories/HistoryRepository.php');
 require prepare_file_path('app/Services/CalculatorService.php');
 require prepare_file_path('app/Services/HistoryService.php');
+require prepare_file_path('app/Traits/TranslationTrait.php');
+require prepare_file_path('app/Exceptions/CreateHistoryEmptyUserException.php');
 require prepare_file_path('app/Exceptions/UndefinedCalculatorCommandException.php');
 require prepare_file_path('app/Exceptions/InvalidFieldException.php');
 require prepare_file_path('app/Exceptions/CreateWithoutRequiredFieldsException.php');
@@ -27,6 +31,7 @@ use Tests\HistoryRepositoryTest;
 use Tests\CalculatorServiceTest;
 use Tests\HistoryServiceTest;
 
+putenv('INI_STORAGE_PATH=test_settings');
 putenv('JSON_STORAGE_PATH=test_data_storage');
 putenv('APP_ENV=testing');
 

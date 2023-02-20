@@ -11,20 +11,32 @@ class CalculatorServiceTest extends BaseTest
     {
         parent::__construct();
 
-        $this->CalculationService = new CalculatorService();
+        $this->calculationService = new CalculatorService();
     }
 
     protected function testCalculate()
     {
-        $result = $this->CalculationService->calculate(5, '+', 6);
+        $result = $this->calculationService->calculate(5, '+', 6);
 
         $this->assertEquals(11, $result);
     }
 
-    protected function testCalculateUndefinedCommandsException()
+    public function testCreateNotAllFieldsRus()
     {
-        $this->assertExceptionThrowed(UndefinedCalculatorCommandException::class, 'Undefined command.', function () {
-            $this->CalculationService->calculate('1', '>', '2');
+        $this->setLocale('ru');
+
+        $this->assertUndefinedCalculatorCommandExceptionCatched('Нераспознаная команда.');
+    }
+
+    public function testCreateNotAllFieldsEng()
+    {
+        $this->assertUndefinedCalculatorCommandExceptionCatched('Undefined command.');
+    }
+
+    protected function assertUndefinedCalculatorCommandExceptionCatched($expectedMessage)
+    {
+        $this->assertExceptionThrowed(UndefinedCalculatorCommandException::class, $expectedMessage, function () {
+            $this->calculationService->calculate('1', '>', '2');
         });
     }
 }

@@ -51,18 +51,42 @@ class HistoryRepositoryTest extends BaseTest
         $this->assertEquals($this->getJSONFixture('create_success_history_state.json'), $result);
     }
 
-    public function testCreateNotAllFields()
+    public function testCreateNotAllFieldsRus()
     {
-        $this->assertExceptionThrowed(CreateWithoutRequiredFieldsException::class, 'One of required fields does not filled.', function () {
+        $this->setLocale('ru');
+
+        $this->assertCreateNotAllFieldsExceptionCaught('Одно поле не заполнено.');
+    }
+
+    public function testCreateNotAllFieldsEng()
+    {
+        $this->assertCreateNotAllFieldsExceptionCaught('One of required fields does not filled.');
+    }
+
+    public function testGroupByInvalidFieldCheckThrowExceptionEng()
+    {
+        $this->assertGroupByInvalidFieldExceptionThrowed('Field invalidField is not valid.');
+    }
+
+    public function testGroupByInvalidFieldCheckThrowExceptionRus()
+    {
+        $this->setLocale('ru');
+
+        $this->assertGroupByInvalidFieldExceptionThrowed("Неверное поле invalidField.");
+    }
+
+    public function assertCreateNotAllFieldsExceptionCaught(string $expectedMessage)
+    {
+        $this->assertExceptionThrowed(CreateWithoutRequiredFieldsException::class, $expectedMessage, function () {
             $data = $this->getJSONFixture('not_all_fields_create_data.json');
 
             $this->historyRepository->create($data);
         });
     }
 
-    public function testGroupByInvalidFieldCheckThrowException()
+    public function assertGroupByInvalidFieldExceptionThrowed(string $expectedMessage)
     {
-        $this->assertExceptionThrowed(InvalidFieldException::class, 'Field invalidField is not valid.', function () {
+        $this->assertExceptionThrowed(InvalidFieldException::class, $expectedMessage, function () {
             $this->historyRepository->allGroupedBy('invalidField');
         });
     }

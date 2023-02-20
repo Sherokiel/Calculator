@@ -6,7 +6,9 @@ class IniBaseRepository extends FileBaseRepository
 {
     public function __construct($fileName)
     {
-        return parent::__construct("{$fileName}.ini", 'settings');
+        $dirName = getenv('INI_STORAGE_PATH');
+
+        return parent::__construct("{$fileName}.ini", $dirName);
     }
 
     public function all()

@@ -46,23 +46,46 @@ class UserRepositoryTest extends BaseTest
         $dataTest = $this->getJSONFixture('extra_fields_create_data.json');
         $this->userRepository->create($dataTest);
 
-
         $result = $this->getDataSet('test_data_storage/users.json');
         $this->assertEquals([$this->getJSONFixture('valid_create_data.json')], $result);
     }
 
-    public function testCreateNotAllFields()
+    public function testCreateNotAllFieldsRus()
     {
-        $this->assertExceptionThrowed(CreateWithoutRequiredFieldsException::class, 'One of required fields does not filled.', function () {
+        $this->setLocale('ru');
+
+        $this->assertCreateNotAllFieldsExceptionThrowed('Одно поле не заполнено.');
+    }
+
+    public function testCreateNotAllFieldsEng()
+    {
+        $this->assertCreateNotAllFieldsExceptionThrowed('One of required fields does not filled.');
+    }
+
+    public function assertCreateNotAllFieldsExceptionThrowed(string $expectedMessage)
+    {
+        $this->assertExceptionThrowed(CreateWithoutRequiredFieldsException::class, $expectedMessage, function () {
             $data = $this->getJSONFixture('not_all_fields_create_data.json');
 
             $this->userRepository->create($data);
         });
     }
 
-    public function testGroupByInvalidFieldCheckThrowException()
+    public function testGroupByInvalidFieldCheckThrowExceptionEng()
     {
-        $this->assertExceptionThrowed(InvalidFieldException::class, 'Field invalidField is not valid.', function () {
+        $this->assertGroupByInvalidFieldExceptionThrowed('Field invalidField is not valid.');
+    }
+
+    public function testGroupByInvalidFieldCheckThrowExceptionRus()
+    {
+        $this->setLocale('ru');
+
+        $this->assertGroupByInvalidFieldExceptionThrowed("Неверное поле invalidField.");
+    }
+
+    public function assertGroupByInvalidFieldExceptionThrowed(string $expectedMessage)
+    {
+        $this->assertExceptionThrowed(InvalidFieldException::class, $expectedMessage, function () {
             $this->userRepository->allGroupedBy('invalidField');
         });
     }

@@ -15,7 +15,9 @@ require prepare_file_path('app/Repositories/JsonBaseRepository.php');
 require prepare_file_path('app/Repositories/UserRepository.php');
 require prepare_file_path('app/Repositories/HistoryRepository.php');
 require prepare_file_path('app/Repositories/SettingsRepository.php');
+require prepare_file_path('app/Traits/TranslationTrait.php');
 require prepare_file_path('app/Exceptions/InvalidFieldException.php');
+require prepare_file_path('app/Exceptions/CreateHistoryEmptyUserException.php');
 require prepare_file_path('app/Exceptions/CreateWithoutRequiredFieldsException.php');
 require prepare_file_path('app/Exceptions/UndefinedCalculatorCommandException.php');
 require prepare_file_path('app/Exceptions/OperandException.php');
@@ -25,6 +27,7 @@ require prepare_file_path('app/Exceptions/SeparationZeroOperandException.php');
 require prepare_file_path('libraries/console_helpers.php');
 require prepare_file_path('constants.php');
 
+putenv('INI_STORAGE_PATH=settings');
 putenv('JSON_STORAGE_PATH=data_storage');
 putenv('APP_ENV=locale');
 
