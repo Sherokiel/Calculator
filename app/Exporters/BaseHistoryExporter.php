@@ -3,7 +3,7 @@
 namespace App\Exporters;
 
 use App\Repositories\HistoryRepository;
-use Interface\ExporterInterface;
+use App\Interfaces\ExporterInterface;
 
 abstract class BaseHistoryExporter implements ExporterInterface
 {

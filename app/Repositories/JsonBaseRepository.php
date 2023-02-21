@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Exceptions\CreateWithoutRequiredFieldsException;
 use App\Exceptions\InvalidFieldException;
-use Interface\BaseRepositoryInterface;
+use App\Interfaces\BaseRepositoryInterface;
 
 abstract class JsonBaseRepository extends FileBaseRepository implements BaseRepositoryInterface
 {

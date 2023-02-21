@@ -3,8 +3,8 @@
 require 'libraries' . DIRECTORY_SEPARATOR . 'helpers.php';
 
 require prepare_file_path('tests/BaseTest.php');
-require prepare_file_path('app/interface/ExporterInterface.php');
-require prepare_file_path('app/interface/BaseRepositoryInterface.php');
+require prepare_file_path('app/interfaces/ExporterInterface.php');
+require prepare_file_path('app/interfaces/BaseRepositoryInterface.php');
 require prepare_file_path('app/Exporters/BaseHistoryExporter.php');
 require prepare_file_path('app/Exporters/HistoryConsoleExporter.php');
 require prepare_file_path('app/Exporters/HistoryTxtExporter.php');
@@ -27,7 +27,6 @@ require prepare_file_path('tests/UserRepositoryTest.php');
 require prepare_file_path('tests/HistoryRepositoryTest.php');
 require prepare_file_path('tests/CalculatorServiceTest.php');
 require prepare_file_path('tests/HistoryServiceTest.php');
-
 
 use Tests\UserRepositoryTest;
 use Tests\HistoryRepositoryTest;

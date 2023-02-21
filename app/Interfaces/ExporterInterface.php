@@ -1,7 +1,8 @@
 <?php
-namespace Interface;
+namespace App\Interfaces;
 
 interface ExporterInterface
+
 {
     public function export($condition);
 }
