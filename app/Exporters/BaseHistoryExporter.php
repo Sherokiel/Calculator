@@ -3,8 +3,9 @@
 namespace App\Exporters;
 
 use App\Repositories\HistoryRepository;
+use App\Interfaces\ExporterInterface;
 
-abstract class BaseHistoryExporter
+abstract class BaseHistoryExporter implements ExporterInterface
 {
     protected $historyRepository;
 
@@ -13,7 +14,7 @@ abstract class BaseHistoryExporter
         $this->historyRepository = new HistoryRepository();
     }
 
-    public function export($condition)
+    public function export($condition = [])
     {
         $data = $this->historyRepository->getGroupedBy('date', $condition);
 
