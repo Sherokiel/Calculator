@@ -1,8 +1,8 @@
 <?php
+
 namespace App\Interfaces;
 
 interface ExporterInterface
-
 {
-    public function export($condition);
+    public function export(array $condition = []);
 }

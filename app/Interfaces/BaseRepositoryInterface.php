@@ -1,19 +1,20 @@
 <?php
+
 namespace App\Interfaces;
 
 interface BaseRepositoryInterface
 {
-    public function all();
+    public function all(): array;
 
-    public function create($item);
+    public function create(array $item): array;
 
-    public function allGroupedBy($field);
+    public function allGroupedBy(string $field): array;
 
-    public function isExist($condition = []);
+    public function isExist(array $condition = []): bool;
 
-    public function first($condition = []);
+    public function first(array $condition = []): array;
 
-    public function get($condition);
+    public function get(array $condition): array;
 
-    public function getGroupedBy($field, $condition = []);
+    public function getGroupedBy(string $field, array $condition = []): array;
 }
