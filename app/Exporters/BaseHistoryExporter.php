@@ -14,7 +14,7 @@ abstract class BaseHistoryExporter implements ExporterInterface
         $this->historyRepository = new HistoryRepository();
     }
 
-    public function export($condition)
+    public function export($condition = [])
     {
         $data = $this->historyRepository->getGroupedBy('date', $condition);
 

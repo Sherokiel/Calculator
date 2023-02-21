@@ -12,7 +12,7 @@ interface BaseRepositoryInterface
 
     public function isExist(array $condition = []): bool;
 
-    public function first(array $condition = []): array;
+    public function first(array $condition = []): ?array;
 
     public function get(array $condition): array;
 
