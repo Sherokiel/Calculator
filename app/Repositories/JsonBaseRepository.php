@@ -15,7 +15,7 @@ abstract class JsonBaseRepository extends FileBaseRepository implements BaseRepo
         return parent::__construct("{$fileName}.json", $dirName);
     }
 
-    public function all(): array
+    public function all(): ?array
     {
         $content = file_get_contents($this->filePath);
 

@@ -4,7 +4,7 @@ namespace App\Interfaces;
 
 interface BaseRepositoryInterface
 {
-    public function all(): array;
+    public function all(): ?array;
 
     public function create(array $item): array;
 
