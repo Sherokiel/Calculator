@@ -3,8 +3,9 @@
 namespace App\Exporters;
 
 use App\Repositories\HistoryRepository;
+use Interface\ExporterInterface;
 
-abstract class BaseHistoryExporter
+abstract class BaseHistoryExporter implements ExporterInterface
 {
     protected $historyRepository;
 

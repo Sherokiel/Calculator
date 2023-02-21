@@ -4,8 +4,9 @@ namespace App\Repositories;
 
 use App\Exceptions\CreateWithoutRequiredFieldsException;
 use App\Exceptions\InvalidFieldException;
+use Interface\BaseRepositoryInterface;
 
-abstract class JsonBaseRepository extends FileBaseRepository
+abstract class JsonBaseRepository extends FileBaseRepository implements BaseRepositoryInterface
 {
     public function __construct($fileName)
     {
